@@ -103,7 +103,16 @@ function FilterDropdown({
   renderOption?: (option: { value: string; label: string; color?: string }, isSelected: boolean) => React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Check if mobile on mount and resize
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -145,7 +154,8 @@ function FilterDropdown({
                 key={option.value}
                 onClick={() => {
                   onSelect(option.value);
-                  if (!multiSelect) setIsOpen(false);
+                  // Close after selection on mobile, or if not multiSelect
+                  if (!multiSelect || isMobile) setIsOpen(false);
                 }}
                 className={`
                   w-full px-3 py-2 text-left text-sm transition-colors flex items-center gap-2
