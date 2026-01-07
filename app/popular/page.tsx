@@ -1,21 +1,21 @@
 import * as fs from "fs";
 import path from "path";
 import { Pokemon } from "@/util/CachePokemons";
-import PokemonList from "./components/PokemonList";
+import PokemonList from "../components/PokemonList";
 
-export default async function Home() {
+export default function PopularPage() {
   const filePath = path.join(process.cwd(), "app/data/AllPokemons.json");
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const allPokemons: Record<string, Pokemon> = JSON.parse(fileContent);
 
-  const pokemons = Object.values(allPokemons);
+  const popular = Object.values(allPokemons);
 
   return (
     <div className="max-w-[80rem] mx-auto p-10 pt-[8rem]">
       <h1 className="text-4xl font-bold mb-8 text-center text-slate-800">
-        Pokemon CRM ({pokemons.length} Pokemons)
+        Popular Pokemons
       </h1>
-      <PokemonList initialPokemons={pokemons} />
+      <PokemonList initialPokemons={popular} />
     </div>
   );
 }
