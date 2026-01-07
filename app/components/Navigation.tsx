@@ -32,7 +32,7 @@ export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(var(--electric)/0.5)] to-transparent" />
 
       {/* Main nav bar */}
-      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 max-w-95rem mx-auto">
         {/* Logo */}
         <Link href="/" onClick={() => clearSelectedPokemons()} className="flex-shrink-0 group">
           <div className="flex items-center gap-2">

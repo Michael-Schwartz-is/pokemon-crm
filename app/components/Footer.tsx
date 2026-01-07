@@ -70,7 +70,7 @@ export default function Footer() {
   return (
     <footer className="bg-background/95 backdrop-blur-xl border-t border-border/50">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 py-12 md:px-6">
+      <div className="max-w-95rem mx-auto px-4 py-12 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-1">
@@ -206,7 +206,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-border/30">
-        <div className="max-w-7xl mx-auto px-4 py-6 md:px-6">
+        <div className="max-w-95rem mx-auto px-4 py-6 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-muted-foreground">
               © {currentYear} Pokemon CRM. Built with ❤️ for Pokemon trainers.
