@@ -34,7 +34,7 @@ function PokemonImage({ pokemon }: { pokemon: PokemonBasic }) {
           alt={pokemon.name}
           fill
           sizes="64px"
-          className="object-contain transition-transform duration-300 group-hover:scale-[1.6] origin-bottom"
+          className="object-contain scale-[1.6] origin-bottom"
           onError={() => setErrorCount((prev) => prev + 1)}
           unoptimized={errorCount > 0} // Skip optimization for fallbacks to reduce console noise
         />
@@ -45,16 +45,16 @@ function PokemonImage({ pokemon }: { pokemon: PokemonBasic }) {
 
 export default function FightCombinationsSlider({ combinations }: FightCombinationsSliderProps) {
   return (
-    <div className="w-full py-12 mt-12 border-t border-gray-100 overflow-hidden">
+    <div className="w-full py-12 mt-12 border-t border-gray-100">
       <h3 className="text-2xl font-bold mb-6 px-4 text-center text-gray-800">
         More Fight Combinations
       </h3>
-      <div className="flex overflow-x-auto gap-6 px-4 pb-6 no-scrollbar snap-x snap-mandatory">
+      <div className="flex overflow-x-auto overflow-y-visible gap-6 px-4 pt-8 pb-6 no-scrollbar snap-x snap-mandatory">
         {combinations.map(([p1, p2], i) => (
           <Link
             key={i}
             href={`/compare/${p1.name}/${p2.name}`}
-            className="flex-shrink-0 w-64 p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:border-blue-400 hover:shadow-md transition-all group snap-center overflow-hidden"
+            className="flex-shrink-0 w-64 p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all group snap-center"
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex flex-col items-center flex-1">
