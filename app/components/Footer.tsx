@@ -71,9 +71,9 @@ export default function Footer() {
     <footer className="bg-background/95 backdrop-blur-xl border-t border-border/50">
       {/* Main Footer Content */}
       <div className="max-w-95rem mx-auto px-4 py-12 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex flex-col lg:flex-row justify-between gap-8">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
+          <div className="max-w-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--electric))] to-[hsl(var(--fire))] flex items-center justify-center shadow-lg shadow-[hsl(var(--electric)/0.3)]">
                 <Swords className="w-5 h-5 text-background" />
@@ -106,97 +106,100 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Main Links */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Navigation</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.main.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                    >
-                      <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--electric))] transition-colors" />
-                      <div>
-                        <span className="font-medium">{link.label}</span>
-                        <span className="block text-xs text-muted-foreground/70">
-                          {link.description}
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          {/* Links Section */}
+          <div className="max-w-2xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Main Links */}
+            <div className="max-w-sm">
+              <h3 className="font-semibold text-foreground mb-4">Navigation</h3>
+              <ul className="space-y-3">
+                {FOOTER_LINKS.main.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--electric))] transition-colors" />
+                        <div>
+                          <span className="font-medium">{link.label}</span>
+                          <span className="block text-xs text-muted-foreground/70">
+                            {link.description}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
-          {/* Browse Categories */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Browse</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.browse.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                    >
-                      <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--grass))] transition-colors" />
-                      <div>
-                        <span className="font-medium">{link.label}</span>
-                        <span className="block text-xs text-muted-foreground/70">
-                          {link.description}
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+            {/* Browse Categories */}
+            <div className="max-w-sm">
+              <h3 className="font-semibold text-foreground mb-4">Browse</h3>
+              <ul className="space-y-3">
+                {FOOTER_LINKS.browse.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--grass))] transition-colors" />
+                        <div>
+                          <span className="font-medium">{link.label}</span>
+                          <span className="block text-xs text-muted-foreground/70">
+                            {link.description}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
-          {/* Resources & SEO */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Resources</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.resources.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                    >
-                      <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--water))] transition-colors" />
-                      <div>
-                        <span className="font-medium">{link.label}</span>
-                        <span className="block text-xs text-muted-foreground/70">
-                          {link.description}
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            {/* Resources & SEO */}
+            <div className="max-w-sm">
+              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
+              <ul className="space-y-3">
+                {FOOTER_LINKS.resources.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <Icon className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(var(--water))] transition-colors" />
+                        <div>
+                          <span className="font-medium">{link.label}</span>
+                          <span className="block text-xs text-muted-foreground/70">
+                            {link.description}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
 
-            {/* SEO Stats */}
-            <div className="mt-6 pt-4 border-t border-border/30">
-              <div className="text-xs text-muted-foreground space-y-1">
-                <div className="flex justify-between">
-                  <span>Pokemon:</span>
-                  <span className="font-mono">898+</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Comparisons:</span>
-                  <span className="font-mono">400K+</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Types:</span>
-                  <span className="font-mono">18</span>
+              {/* SEO Stats */}
+              <div className="mt-6 pt-4 border-t max-w-40 border-border/30">
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <div className="flex justify-between">
+                    <span>Pokemon:</span>
+                    <span className="font-mono">1000+</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Comparisons:</span>
+                    <span className="font-mono">520K+</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Types:</span>
+                    <span className="font-mono">18</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -207,16 +210,18 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-border/30">
         <div className="max-w-95rem mx-auto px-4 py-6 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-muted-foreground">
-              © {currentYear} Pokemon CRM. Built with ❤️ for Pokemon trainers.
-            </div>
-            <div className="flex items-center gap-6 text-xs text-muted-foreground">
-              <span>Powered by Next.js</span>
-              <span>•</span>
-              <span>SEO Optimized</span>
-              <span>•</span>
-              <span>Mobile Friendly</span>
+          <div className="flex justify-center items-center">
+            <div className="text-sm text-muted-foreground text-center max-w-4xl">
+              Made with love ❤️{" "}
+              <a
+                href="https://gushon.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground hover:text-[hsl(var(--electric))] transition-colors"
+              >
+                studio gushon
+              </a>{" "}
+              — putting the Pokemon ⚡ in pSEO. 500K+ pages. Gotta index 'em all 💪.
             </div>
           </div>
         </div>
