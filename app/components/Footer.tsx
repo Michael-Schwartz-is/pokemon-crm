@@ -107,7 +107,7 @@ export default function Footer() {
           </div>
 
           {/* Links Section */}
-          <div className="max-w-4xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="min-w-[48rem] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Main Links */}
             <div className="max-w-sm">
               <h3 className="font-semibold text-foreground mb-4">Navigation</h3>
