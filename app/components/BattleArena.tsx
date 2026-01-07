@@ -65,9 +65,9 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
   };
 
   return (
-    <div className="relative flex flex-row gap-2 sm:gap-4 md:gap-6 justify-center items-start">
+    <div className="relative flex flex-row gap-2 sm:gap-4 md:gap-6 justify-center items-start overflow-visible">
       {/* Left Pokemon with Lock */}
-      <div className="relative">
+      <div className="relative overflow-visible">
         <button
           onClick={() => toggleLock("left")}
           className={`absolute -top-2 -right-2 z-20 p-1.5 sm:p-2 rounded-full transition-all ${
@@ -105,7 +105,7 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
       </div>
 
       {/* Right Pokemon with Lock */}
-      <div className="relative">
+      <div className="relative overflow-visible">
         <button
           onClick={() => toggleLock("right")}
           className={`absolute -top-2 -left-2 z-20 p-1.5 sm:p-2 rounded-full transition-all ${

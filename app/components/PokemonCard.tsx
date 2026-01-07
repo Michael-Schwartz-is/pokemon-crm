@@ -112,7 +112,7 @@ export default function PokemonCard({
       onMouseLeave={() => setIsHovered(false)}
       className={`
         group relative p-3 sm:p-4 rounded-2xl w-full min-w-0 max-w-[320px] cursor-pointer
-        bg-card border transition-all duration-300
+        bg-card border transition-all duration-300 overflow-visible
         ${
           isSelected
             ? "border-[hsl(var(--electric))] shadow-[0_0_30px_hsl(var(--electric)/0.3)] ring-pulse scale-[1.02] z-10"
@@ -141,13 +141,13 @@ export default function PokemonCard({
           <div className="absolute inset-0 bg-gradient-radial from-[hsl(var(--electric)/0.2)] via-transparent to-transparent" />
         </div>
 
-        <div className="relative w-full h-full rounded-xl overflow-hidden">
+        <div className="relative w-full h-full rounded-xl overflow-visible">
           <Image
             src={
               imgSrc ||
               "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
             }
-            className="scale-105 sm:scale-110 object-contain transition-transform duration-500 group-hover:scale-115"
+            className="scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
             fill
             sizes="(max-width: 400px) 140px, (max-width: 640px) 180px, 300px"
             alt={poke.name}
