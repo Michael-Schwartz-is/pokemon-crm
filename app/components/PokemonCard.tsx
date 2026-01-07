@@ -14,12 +14,12 @@ type PokemonCardProps = {
 
 // Stat color mapping - using actual HSL values that match CSS variables
 const statColors: Record<string, string> = {
-  hp: "hsl(15, 100%, 55%)",           // --fire
-  attack: "hsl(47, 100%, 50%)",        // --electric
-  defense: "hsl(195, 100%, 60%)",      // --ice
+  hp: "hsl(15, 100%, 55%)", // --fire
+  attack: "hsl(47, 100%, 50%)", // --electric
+  defense: "hsl(195, 100%, 60%)", // --ice
   "special-attack": "hsl(280, 100%, 65%)", // --plasma
   "special-defense": "hsl(145, 80%, 45%)", // --toxic
-  speed: "hsl(195, 100%, 60%)",        // --chart-3 (ice)
+  speed: "hsl(195, 100%, 60%)", // --chart-3 (ice)
 };
 
 const statAbbreviations: Record<string, string> = {
