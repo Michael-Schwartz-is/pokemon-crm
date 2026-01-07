@@ -9,6 +9,9 @@ import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import BattleArena from "@/app/components/BattleArena";
 import { Metadata } from "next";
 
+// Force dynamic rendering to get fresh random Pokemon on each page load
+export const dynamic = "force-dynamic";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
 
 export const metadata: Metadata = {
