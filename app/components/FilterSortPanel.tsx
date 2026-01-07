@@ -213,30 +213,6 @@ export default function FilterSortPanel() {
     <div className="w-full mb-6">
       {/* Main Filter Row */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* Sort Dropdown */}
-        <div className="relative">
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value as SortOption)}
-            className="
-              appearance-none pl-9 pr-8 py-2 rounded-lg font-medium text-sm
-              bg-secondary/50 text-foreground border border-transparent
-              hover:bg-secondary focus:border-[hsl(var(--electric)/0.3)] focus:ring-1 focus:ring-[hsl(var(--electric)/0.2)]
-              cursor-pointer transition-all
-            "
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
-        </div>
-
-        <div className="w-px h-6 bg-border/50 mx-1" />
-
         {/* Type Filter */}
         <FilterDropdown
           label="Type"
@@ -344,6 +320,31 @@ export default function FilterSortPanel() {
             <span className="hidden sm:inline">Clear</span>
           </button>
         )}
+
+        {/* Spacer to push sort to right */}
+        <div className="flex-1" />
+
+        {/* Sort Dropdown */}
+        <div className="relative">
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value as SortOption)}
+            className="
+              appearance-none pl-9 pr-8 py-2 rounded-lg font-medium text-sm
+              bg-secondary/50 text-foreground border border-transparent
+              hover:bg-secondary focus:border-[hsl(var(--electric)/0.3)] focus:ring-1 focus:ring-[hsl(var(--electric)/0.2)]
+              cursor-pointer transition-all
+            "
+          >
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+        </div>
       </div>
 
       {/* Active Filter Tags */}

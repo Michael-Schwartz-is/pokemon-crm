@@ -3,7 +3,6 @@ import path from "path";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
 import { Metadata } from "next";
-import { Zap } from "lucide-react";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
 
@@ -67,12 +66,13 @@ export default async function Home() {
       />
       <div className="max-w-[80rem] mx-auto px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8">
         {/* Hero Section - Compact */}
-        <div className="text-center mb-6">
+        <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground mb-1">
             Choose Your <span className="gradient-text">Fighters</span>
           </h1>
           <p className="text-sm text-muted-foreground">
-            Select 2 Pokemon to battle • <span className="font-mono">{pokemons.length}</span> fighters available
+            Select 2 Pokemon to battle • <span className="font-mono">{pokemons.length}</span>{" "}
+            fighters available
           </p>
         </div>
 
