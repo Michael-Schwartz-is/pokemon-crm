@@ -104,17 +104,7 @@ export default async function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[60rem] mx-auto px-2 sm:px-6 pt-24 sm:pt-28 pb-8">
-        <div className="text-center mb-4 sm:mb-8">
-          <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-slate-800 capitalize">
-            {pokemonData1?.name || "{{poke1}}"} vs {pokemonData2?.name || "{{poke2}}"}
-          </h1>
-          <p className="text-sm sm:text-lg text-slate-600 pt-1 sm:pt-2">
-            ⚔️ Battle of the Titans — Who will win?
-          </p>
-          <p className="text-xs sm:text-sm text-slate-500 pt-1">
-            Analyze stats, abilities, and strengths to predict the victor
-          </p>
-        </div>
+        <h1 className="text-center text-sm sm:text-base font-semibold text-slate-600 capitalize mb-3">⚔️ {pokemonData1?.name || "{{poke1}}"} vs {pokemonData2?.name || "{{poke2}}"}</h1>
 
         {/* Pokemon cards with lock/shuffle */}
         {pokemonData1 && pokemonData2 && (
