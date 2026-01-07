@@ -38,21 +38,21 @@ export default function PokemonCard({
   return (
     <div
       onClick={onSelect}
-      className={`px-4 pt-4 bg-slate-50 border relative border-red-100 rounded-md max-w-[320px] transition-all cursor-pointer ${
+      className={`p-2 sm:p-3 md:p-4 bg-slate-50 border relative border-red-100 rounded-md w-full min-w-0 max-w-[320px] transition-all cursor-pointer ${
         isSelected
-          ? "ring-4 ring-red-500 border-transparent shadow-lg scale-105 z-10"
+          ? "ring-2 sm:ring-4 ring-red-500 border-transparent shadow-lg scale-[1.02] sm:scale-105 z-10"
           : "hover:border-red-300"
       }`}
     >
-      <h3 className=" text-4xl font-bold text-slate-600">{poke?.name}</h3>
-      <div className="relative w-[300px] h-[300px]">
+      <div className="relative w-full aspect-square">
         <Image
           src={
             imgSrc ||
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
           }
-          className="scale-110 object-contain"
+          className="scale-105 sm:scale-110 object-contain"
           fill
+          sizes="(max-width: 400px) 140px, (max-width: 640px) 180px, 300px"
           alt={poke.name}
           onError={() =>
             setImgSrc(
@@ -61,9 +61,12 @@ export default function PokemonCard({
           }
         />
       </div>
+      <p className="text-xs sm:text-sm md:text-base text-center text-slate-600 font-medium capitalize mt-1 truncate">
+        {poke?.name}
+      </p>
       {showChart && <StatChart chartData={pokeChartData} name={poke.name} />}
       {isSelected && (
-        <div className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
+        <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-red-500 text-white rounded-full w-5 h-5 sm:w-8 sm:h-8 flex items-center justify-center font-bold text-xs sm:text-base">
           ✓
         </div>
       )}

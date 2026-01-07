@@ -2,6 +2,53 @@ import * as fs from "fs";
 import path from "path";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
+import { Metadata } from "next";
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+
+export const metadata: Metadata = {
+  title: "All Pokemon - Browse & Compare Stats",
+  description:
+    "Browse all Pokemon with detailed stats. Compare abilities, strengths, and weaknesses. Find your favorite Pokemon and discover new battle strategies.",
+  alternates: {
+    canonical: baseUrl,
+  },
+  openGraph: {
+    title: "All Pokemon - Browse & Compare Stats",
+    description:
+      "Browse all Pokemon with detailed stats. Compare abilities, strengths, and weaknesses.",
+    url: baseUrl,
+    type: "website",
+  },
+};
+
+// Generate CollectionPage JSON-LD schema
+function generateHomeSchema(pokemonCount: number) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "All Pokemon",
+    description: `Browse and compare ${pokemonCount} Pokemon with detailed stats, abilities, and battle analysis.`,
+    url: baseUrl,
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Pokemon Collection",
+      description: `Complete list of ${pokemonCount} Pokemon`,
+      numberOfItems: pokemonCount,
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: baseUrl,
+        },
+      ],
+    },
+  };
+}
 
 export default async function Home() {
   const filePath = path.join(process.cwd(), "app/data/AllPokemons.json");
@@ -9,13 +56,20 @@ export default async function Home() {
   const allPokemons: Record<string, Pokemon> = JSON.parse(fileContent);
 
   const pokemons = Object.values(allPokemons);
+  const jsonLd = generateHomeSchema(pokemons.length);
 
   return (
-    <div className="max-w-[80rem] mx-auto p-10 pt-[8rem]">
-      <h1 className="text-4xl font-bold mb-8 text-center text-slate-800">
-        Pokemon CRM ({pokemons.length} Pokemons)
-      </h1>
-      <PokemonList initialPokemons={pokemons} />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="max-w-[80rem] mx-auto px-4 sm:px-6 md:px-10 pt-24 sm:pt-28 md:pt-32 pb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center text-slate-800">
+          Pokemon CRM ({pokemons.length} Pokemons)
+        </h1>
+        <PokemonList initialPokemons={pokemons} />
+      </div>
+    </>
   );
 }

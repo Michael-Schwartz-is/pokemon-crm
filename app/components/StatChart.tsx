@@ -47,14 +47,15 @@ const chartData = [
 export function StatChart({ chartData, name }: statChartProps) {
   return (
     <>
-      <Card>
-        {/* <CardHeader>
-   
-          <CardTitle>{name}</CardTitle>{" "}
-        </CardHeader> */}
-        <CardContent className="pt-6">
-          <ChartContainer config={chartConfig}>
-            <BarChart accessibilityLayer data={chartData} layout="vertical" margin={{ right: 16 }}>
+      <Card className="mt-2">
+        <CardContent className="pt-4 sm:pt-6 px-2 sm:px-4">
+          <ChartContainer config={chartConfig} className="h-[180px] sm:h-[220px] w-full">
+            <BarChart 
+              accessibilityLayer 
+              data={chartData} 
+              layout="vertical" 
+              margin={{ right: 12, left: 0 }}
+            >
               <CartesianGrid horizontal={false} />
               <YAxis
                 dataKey="name"
@@ -71,24 +72,21 @@ export function StatChart({ chartData, name }: statChartProps) {
                 <LabelList
                   dataKey="name"
                   position="insideLeft"
-                  offset={8}
-                  className="fill-[--color-label]"
-                  fontSize={14}
+                  offset={4}
+                  className="fill-[--color-label] text-[10px] sm:text-xs md:text-sm"
+                  fontSize={11}
                 />
                 <LabelList
                   dataKey="base_stat"
                   position="right"
-                  offset={8}
-                  className="fill-foreground"
-                  fontSize={12}
+                  offset={4}
+                  className="fill-foreground text-[10px] sm:text-xs"
+                  fontSize={10}
                 />
               </Bar>
             </BarChart>
           </ChartContainer>
         </CardContent>
-        {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-          maybe some data here later
-        </CardFooter> */}
       </Card>
     </>
   );
