@@ -24,8 +24,8 @@ const chartConfig = {
 
 type PlotStat = {
   statname: string;
-  pokemon1: string;
-  pokemon2: string;
+  pokemon1: number | string;
+  pokemon2: number | string;
 };
 
 type PokemonPlotProps = {

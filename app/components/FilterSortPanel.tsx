@@ -252,8 +252,8 @@ export default function FilterSortPanel() {
                 style={{
                   backgroundColor: option.color,
                   color: ["electric", "normal", "ground", "ice", "steel"].includes(option.value) ? "#1a1a2e" : "#fff",
-                  ringColor: option.color,
-                }}
+                  "--tw-ring-color": option.color,
+                } as React.CSSProperties}
               >
                 {isSelected && "✓"}
               </span>
@@ -285,8 +285,8 @@ export default function FilterSortPanel() {
                 style={{
                   backgroundColor: option.color,
                   color: "#fff",
-                  ringColor: option.color,
-                }}
+                  "--tw-ring-color": option.color,
+                } as React.CSSProperties}
               >
                 {isSelected && "✓"}
               </span>
