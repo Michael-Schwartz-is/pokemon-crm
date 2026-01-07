@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 import { getRandomPokemonName } from "@/util/pokemons";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
@@ -50,6 +51,12 @@ function generateSiteSchema() {
       url: baseUrl,
       logo: `${baseUrl}/favicon.ico`,
       description: "Compare Pokemon stats, abilities, and battle potential.",
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "contact@pokemon-crm.com",
+        contactType: "customer service",
+      },
+      sameAs: ["https://github.com", "https://twitter.com"],
     },
     {
       "@context": "https://schema.org",
@@ -66,6 +73,57 @@ function generateSiteSchema() {
         },
         "query-input": "required name=search_term_string",
       },
+    },
+    // Footer navigation structured data
+    {
+      "@context": "https://schema.org",
+      "@type": "SiteNavigationElement",
+      name: "Pokemon CRM Navigation",
+      url: baseUrl,
+      mainEntity: [
+        {
+          "@type": "SiteNavigationElement",
+          name: "Home",
+          url: `${baseUrl}/`,
+          description: "Browse all Pokemon",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Compare Pokemon",
+          url: `${baseUrl}/compare`,
+          description: "Head-to-head Pokemon battles",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Popular Pokemon",
+          url: `${baseUrl}/popular`,
+          description: "Most searched Pokemon",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Pokemon Types",
+          url: `${baseUrl}/types`,
+          description: "18 elemental Pokemon types",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Pokemon Generations",
+          url: `${baseUrl}/generations`,
+          description: "Pokemon from Gen I to IX",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Pokemon Roles",
+          url: `${baseUrl}/roles`,
+          description: "Battle roles and strategies",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          name: "Pokemon Rarity",
+          url: `${baseUrl}/rarity`,
+          description: "Common to Mythical Pokemon",
+        },
+      ],
     },
   ];
 }
@@ -99,9 +157,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
       </head>
-      <body className="min-h-screen">
+      <body className="min-h-screen flex flex-col">
         <Navigation randomR1={r1} randomR2={r2} />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );

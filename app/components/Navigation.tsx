@@ -169,17 +169,6 @@ export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
             <Swords className="w-4 h-4" />
             Battle
           </Link>
-          <Link
-            href="/popular"
-            className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-              isActive("/popular")
-                ? "bg-[hsl(var(--plasma)/0.15)] text-[hsl(var(--plasma))]"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <Flame className="w-4 h-4" />
-            Popular
-          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -270,18 +259,6 @@ export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
             >
               <Swords className="w-5 h-5" />
               Battle
-            </Link>
-            <Link
-              href="/popular"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`py-3 px-4 rounded-xl font-medium transition-all flex items-center gap-3 ${
-                isActive("/popular")
-                  ? "bg-[hsl(var(--plasma)/0.15)] text-[hsl(var(--plasma))]"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-              }`}
-            >
-              <Flame className="w-5 h-5" />
-              Popular
             </Link>
           </div>
         </div>
