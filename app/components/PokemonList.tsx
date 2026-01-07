@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonCard from "./PokemonCard";
 import useStore from "../stores/pokemonStore";
 import { useRouter } from "next/navigation";
-import { Swords, X, ChevronDown, Zap } from "lucide-react";
+import { Swords, X, Zap, Loader2 } from "lucide-react";
 
 type PokemonListProps = {
   initialPokemons: Pokemon[];
@@ -15,7 +15,9 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
   const { searchQuery, selectedPokemonIds, toggleSelectedPokemon, clearSelectedPokemons } =
     useStore();
   const [displayLimit, setDisplayLimit] = useState(40);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedPokemonIds.length === 2) {
@@ -32,11 +34,44 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
     }
   }, [selectedPokemonIds, router, clearSelectedPokemons]);
 
+  const loadMore = useCallback(() => {
+    setIsLoading(true);
+    // Small delay for smoother UX
+    setTimeout(() => {
+      setDisplayLimit((prev) => prev + 40);
+      setIsLoading(false);
+    }, 200);
+  }, []);
+
+  // Reset display limit when search query changes
+  useEffect(() => {
+    setDisplayLimit(40);
+  }, [searchQuery]);
+
   const filteredPokemons = initialPokemons.filter((poke) =>
     poke.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const displayed = filteredPokemons.slice(0, displayLimit);
+  const hasMore = filteredPokemons.length > displayLimit;
+
+  // IntersectionObserver for infinite scroll
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading) {
+          loadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, isLoading, loadMore]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -96,18 +131,14 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
         </div>
       )}
 
-      {/* Load More Button */}
-      {filteredPokemons.length > displayLimit && (
-        <button
-          onClick={() => setDisplayLimit((prev) => prev + 40)}
-          className="mt-10 sm:mt-12 group flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl btn-neon text-sm sm:text-base"
-        >
-          <span>Load More</span>
-          <span className="px-2 py-0.5 rounded-md bg-background/20 text-xs font-mono">
-            {filteredPokemons.length - displayLimit}
-          </span>
-          <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
-        </button>
+      {/* Auto Load More Sentinel */}
+      {hasMore && (
+        <div ref={loadMoreRef} className="w-full flex justify-center py-10 sm:py-12">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span className="text-sm font-medium">Loading more...</span>
+          </div>
+        </div>
       )}
     </div>
   );
