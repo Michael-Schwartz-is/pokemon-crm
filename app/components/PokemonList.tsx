@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonCard from "./PokemonCard";
-import useStore from "../stores/pokemonStore";
+import FilterSortPanel from "./FilterSortPanel";
+import useStore, { SortOption, Filters } from "../stores/pokemonStore";
 import { useRouter } from "next/navigation";
 import { Swords, X, Zap, Loader2 } from "lucide-react";
 
@@ -11,9 +12,75 @@ type PokemonListProps = {
   initialPokemons: Pokemon[];
 };
 
+// Filter function
+function applyFilters(pokemons: Pokemon[], filters: Filters): Pokemon[] {
+  return pokemons.filter((poke) => {
+    // Type filter - Pokemon must have at least one matching type
+    if (filters.types.length > 0) {
+      const hasMatchingType = poke.types.some((type) => filters.types.includes(type));
+      if (!hasMatchingType) return false;
+    }
+
+    // Generation filter
+    if (filters.generations.length > 0) {
+      if (!filters.generations.includes(poke.generation)) return false;
+    }
+
+    // Rarity tier filter
+    if (filters.rarityTiers.length > 0) {
+      if (!filters.rarityTiers.includes(poke.rarity_tier)) return false;
+    }
+
+    // Stat category filter
+    if (filters.statCategories.length > 0) {
+      if (!filters.statCategories.includes(poke.stat_category)) return false;
+    }
+
+    // Legendary filter
+    if (filters.isLegendary === true && !poke.is_legendary) return false;
+
+    // Mythical filter
+    if (filters.isMythical === true && !poke.is_mythical) return false;
+
+    return true;
+  });
+}
+
+// Sort function
+function applySorting(pokemons: Pokemon[], sortOption: SortOption): Pokemon[] {
+  const sorted = [...pokemons];
+
+  switch (sortOption) {
+    case "id-asc":
+      return sorted.sort((a, b) => a.id - b.id);
+    case "id-desc":
+      return sorted.sort((a, b) => b.id - a.id);
+    case "name-asc":
+      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+    case "name-desc":
+      return sorted.sort((a, b) => b.name.localeCompare(a.name));
+    case "total-stats-desc":
+      return sorted.sort((a, b) => b.total_stats - a.total_stats);
+    case "total-stats-asc":
+      return sorted.sort((a, b) => a.total_stats - b.total_stats);
+    case "base-exp-desc":
+      return sorted.sort((a, b) => b.base_experience - a.base_experience);
+    case "base-exp-asc":
+      return sorted.sort((a, b) => a.base_experience - b.base_experience);
+    default:
+      return sorted;
+  }
+}
+
 export default function PokemonList({ initialPokemons }: PokemonListProps) {
-  const { searchQuery, selectedPokemonIds, toggleSelectedPokemon, clearSelectedPokemons } =
-    useStore();
+  const {
+    searchQuery,
+    selectedPokemonIds,
+    toggleSelectedPokemon,
+    clearSelectedPokemons,
+    sortOption,
+    filters,
+  } = useStore();
   const [displayLimit, setDisplayLimit] = useState(40);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -43,17 +110,29 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
     }, 200);
   }, []);
 
-  // Reset display limit when search query changes
+  // Reset display limit when search query or filters change
   useEffect(() => {
     setDisplayLimit(40);
-  }, [searchQuery]);
+  }, [searchQuery, filters, sortOption]);
 
-  const filteredPokemons = initialPokemons.filter((poke) =>
-    poke.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Memoized filtered and sorted pokemons
+  const processedPokemons = useMemo(() => {
+    // First apply search filter
+    let result = initialPokemons.filter((poke) =>
+      poke.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  const displayed = filteredPokemons.slice(0, displayLimit);
-  const hasMore = filteredPokemons.length > displayLimit;
+    // Then apply other filters
+    result = applyFilters(result, filters);
+
+    // Finally apply sorting
+    result = applySorting(result, sortOption);
+
+    return result;
+  }, [initialPokemons, searchQuery, filters, sortOption]);
+
+  const displayed = processedPokemons.slice(0, displayLimit);
+  const hasMore = processedPokemons.length > displayLimit;
 
   // IntersectionObserver for infinite scroll
   useEffect(() => {
@@ -75,6 +154,17 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* Filter & Sort Panel */}
+      <FilterSortPanel />
+
+      {/* Results count */}
+      <div className="w-full flex items-center justify-between mb-4">
+        <p className="text-sm text-muted-foreground">
+          Showing <span className="font-semibold text-foreground">{displayed.length}</span> of{" "}
+          <span className="font-semibold text-foreground">{processedPokemons.length}</span> fighters
+        </p>
+      </div>
+
       {/* Floating Selection Bar */}
       {selectedPokemonIds.length > 0 && (
         <div className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 animate-fade-up">
@@ -119,14 +209,16 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
       </div>
 
       {/* Empty State */}
-      {filteredPokemons.length === 0 && (
+      {processedPokemons.length === 0 && (
         <div className="text-center mt-12 sm:mt-16 px-4">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-secondary/50 flex items-center justify-center">
             <Swords className="w-8 h-8 text-muted-foreground" />
           </div>
           <p className="text-lg font-semibold text-foreground mb-1">No fighters found</p>
           <p className="text-sm text-muted-foreground">
-            No Pokemon matching &quot;{searchQuery}&quot; — try another name!
+            {searchQuery
+              ? `No Pokemon matching "${searchQuery}" with current filters`
+              : "No Pokemon match your current filters — try adjusting them!"}
           </p>
         </div>
       )}

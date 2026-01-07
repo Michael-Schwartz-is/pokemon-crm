@@ -104,7 +104,9 @@ export default async function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[60rem] mx-auto px-2 sm:px-6 pt-24 sm:pt-28 pb-8">
-        <h1 className="text-center text-sm sm:text-base font-semibold text-slate-600 capitalize mb-3">⚔️ {pokemonData1?.name || "{{poke1}}"} vs {pokemonData2?.name || "{{poke2}}"}</h1>
+        <h1 className="text-center text-sm sm:text-base font-semibold text-slate-600 capitalize mb-3">
+          ⚔️ {pokemonData1?.name || "{{poke1}}"} vs {pokemonData2?.name || "{{poke2}}"}
+        </h1>
 
         {/* Pokemon cards with lock/shuffle */}
         {pokemonData1 && pokemonData2 && (
