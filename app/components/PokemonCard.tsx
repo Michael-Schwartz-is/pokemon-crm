@@ -12,14 +12,14 @@ type PokemonCardProps = {
   showChart?: boolean;
 };
 
-// Stat color mapping - using actual HSL values that match CSS variables
+// Stat color mapping - using hex values for proper inline style support
 const statColors: Record<string, string> = {
-  hp: "hsl(15, 100%, 55%)", // --fire
-  attack: "hsl(47, 100%, 50%)", // --electric
-  defense: "hsl(195, 100%, 60%)", // --ice
-  "special-attack": "hsl(280, 100%, 65%)", // --plasma
-  "special-defense": "hsl(145, 80%, 45%)", // --toxic
-  speed: "hsl(195, 100%, 60%)", // --chart-3 (ice)
+  hp: "#ff5722", // fire orange
+  attack: "#ffc107", // electric yellow
+  defense: "#29b6f6", // ice blue
+  "special-attack": "#ba68c8", // plasma purple
+  "special-defense": "#4caf50", // toxic green
+  speed: "#00bcd4", // cyan
 };
 
 const statAbbreviations: Record<string, string> = {

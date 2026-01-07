@@ -127,7 +127,7 @@ export default async function Page() {
           />
         )}
 
-        <FightCombinationsSlider combinations={combinations} />
+        <FightCombinationsSlider combinations={combinations} allPokemon={allPokemon} />
       </div>
     </>
   );
