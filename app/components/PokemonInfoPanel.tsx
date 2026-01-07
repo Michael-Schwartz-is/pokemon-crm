@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Pokemon } from "@/util/CachePokemons";
 import {
   Crown,
@@ -14,6 +15,8 @@ import {
   Star,
   Gauge,
 } from "lucide-react";
+import TypeBadge from "./TypeBadge";
+import { RarityBadge, RoleBadge, GenerationBadge } from "./CategoryBadge";
 
 // Type color mapping
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
@@ -96,17 +99,9 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
     <div className="w-full max-w-[320px] space-y-3">
       {/* Types */}
       <div className="flex flex-wrap gap-1.5 justify-center">
-        {pokemon.types.map((type) => {
-          const colors = typeColors[type] || typeColors.normal;
-          return (
-            <span
-              key={type}
-              className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${colors.bg} ${colors.text} ${colors.border}`}
-            >
-              {type}
-            </span>
-          );
-        })}
+        {pokemon.types.map((type) => (
+          <TypeBadge key={type} type={type} size="md" />
+        ))}
       </div>
 
       {/* Legendary/Mythical Badge */}
@@ -129,25 +124,15 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
       <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-3 space-y-2.5">
         {/* Rarity & Generation Row */}
         <div className="flex justify-between items-center text-xs">
-          <span
-            className={`flex items-center gap-1 px-2 py-0.5 rounded-md ${rarityStyle.bg} ${rarityStyle.text} font-semibold ${rarityStyle.glow ? `shadow-md ${rarityStyle.glow}` : ""}`}
-          >
-            <Star className="w-3 h-3" />
-            {capitalize(pokemon.rarity_tier)}
-          </span>
+          <RarityBadge rarity={pokemon.rarity_tier} size="md" />
           {pokemon.generation && (
-            <span className="text-muted-foreground font-mono">
-              {formatGeneration(pokemon.generation)}
-            </span>
+            <GenerationBadge generation={pokemon.generation} size="md" />
           )}
         </div>
 
         {/* Stat Category */}
         <div className="flex items-center justify-center gap-1.5 text-xs">
-          <span className={`flex items-center gap-1 ${statCategory.color} font-semibold`}>
-            {statCategory.icon}
-            {statCategory.label}
-          </span>
+          <RoleBadge role={pokemon.stat_category} size="md" />
         </div>
 
         {/* Physical Stats */}

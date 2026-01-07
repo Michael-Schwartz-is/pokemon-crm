@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "name": "generation-i",
+    "display_name": "Generation I",
+    "region": "Kanto",
+    "version_groups": [
+      "red-blue",
+      "yellow",
+      "red-green-japan",
+      "blue-japan"
+    ],
+    "pokemon_count": 151,
+    "starters": [
+      "bulbasaur",
+      "charmander",
+      "squirtle"
+    ],
+    "legendaries": [
+      "articuno",
+      "zapdos",
+      "moltres",
+      "mewtwo",
+      "mew"
+    ],
+    "year_released": 1996,
+    "description": "The original 151 Pokémon that started it all. Set in the Kanto region, this generation introduced the world to Pokémon through Red, Blue, and Yellow versions."
+  },
+  {
+    "id": 2,
+    "name": "generation-ii",
+    "display_name": "Generation II",
+    "region": "Johto",
+    "version_groups": [
+      "gold-silver",
+      "crystal"
+    ],
+    "pokemon_count": 100,
+    "starters": [
+      "chikorita",
+      "cyndaquil",
+      "totodile"
+    ],
+    "legendaries": [
+      "raikou",
+      "entei",
+      "suicune",
+      "lugia",
+      "ho-oh",
+      "celebi"
+    ],
+    "year_released": 1999,
+    "description": "Expanded the Pokémon world with 100 new species in the Johto region. Introduced breeding, day/night cycles, and held items."
+  },
+  {
+    "id": 3,
+    "name": "generation-iii",
+    "display_name": "Generation III",
+    "region": "Hoenn",
+    "version_groups": [
+      "ruby-sapphire",
+      "emerald",
+      "firered-leafgreen",
+      "colosseum",
+      "xd"
+    ],
+    "pokemon_count": 135,
+    "starters": [
+      "treecko",
+      "torchic",
+      "mudkip"
+    ],
+    "legendaries": [
+      "regirock",
+      "regice",
+      "registeel",
+      "latias",
+      "latios",
+      "kyogre",
+      "groudon",
+      "rayquaza",
+      "jirachi",
+      "deoxys-normal"
+    ],
+    "year_released": 2002,
+    "description": "Set in the tropical Hoenn region with 135 new Pokémon. Introduced abilities, natures, and double battles."
+  },
+  {
+    "id": 4,
+    "name": "generation-iv",
+    "display_name": "Generation IV",
+    "region": "Sinnoh",
+    "version_groups": [
+      "diamond-pearl",
+      "platinum",
+      "heartgold-soulsilver"
+    ],
+    "pokemon_count": 107,
+    "starters": [
+      "turtwig",
+      "chimchar",
+      "piplup"
+    ],
+    "legendaries": [
+      "uxie",
+      "mesprit",
+      "azelf",
+      "dialga",
+      "palkia",
+      "heatran",
+      "regigigas",
+      "giratina-altered",
+      "cresselia",
+      "phione",
+      "manaphy",
+      "darkrai",
+      "shaymin-land",
+      "arceus"
+    ],
+    "year_released": 2006,
+    "description": "Explored the Sinnoh region with 107 new Pokémon. Introduced the physical/special split and online trading."
+  },
+  {
+    "id": 5,
+    "name": "generation-v",
+    "display_name": "Generation V",
+    "region": "Unova",
+    "version_groups": [
+      "black-white",
+      "black-2-white-2"
+    ],
+    "pokemon_count": 156,
+    "starters": [
+      "snivy",
+      "tepig",
+      "oshawott"
+    ],
+    "legendaries": [
+      "cobalion",
+      "terrakion",
+      "virizion",
+      "tornadus-incarnate",
+      "thundurus-incarnate",
+      "reshiram",
+      "zekrom",
+      "landorus-incarnate",
+      "kyurem",
+      "keldeo-ordinary",
+      "meloetta-aria",
+      "genesect"
+    ],
+    "year_released": 2010,
+    "description": "Unova region brought 156 new Pokémon - the most of any generation. Featured an entirely new Pokédex and animated sprites."
+  },
+  {
+    "id": 6,
+    "name": "generation-vi",
+    "display_name": "Generation VI",
+    "region": "Kalos",
+    "version_groups": [
+      "x-y",
+      "omega-ruby-alpha-sapphire"
+    ],
+    "pokemon_count": 72,
+    "starters": [
+      "chespin",
+      "fennekin",
+      "froakie"
+    ],
+    "legendaries": [
+      "xerneas",
+      "yveltal",
+      "zygarde-50",
+      "diancie",
+      "hoopa",
+      "volcanion"
+    ],
+    "year_released": 2013,
+    "description": "Kalos region introduced 72 new Pokémon and the Fairy type. First generation with full 3D graphics and Mega Evolution."
+  },
+  {
+    "id": 7,
+    "name": "generation-vii",
+    "display_name": "Generation VII",
+    "region": "Alola",
+    "version_groups": [
+      "sun-moon",
+      "ultra-sun-ultra-moon",
+      "lets-go-pikachu-lets-go-eevee"
+    ],
+    "pokemon_count": 88,
+    "starters": [
+      "rowlet",
+      "litten",
+      "popplio"
+    ],
+    "legendaries": [
+      "tapu-koko",
+      "tapu-lele",
+      "tapu-bulu",
+      "tapu-fini",
+      "cosmog",
+      "cosmoem",
+      "solgaleo",
+      "lunala",
+      "nihilego",
+      "buzzwole",
+      "pheromosa",
+      "xurkitree",
+      "celesteela",
+      "kartana",
+      "guzzlord",
+      "necrozma",
+      "magearna",
+      "marshadow",
+      "poipole",
+      "naganadel",
+      "stakataka",
+      "blacephalon",
+      "zeraora"
+    ],
+    "year_released": 2016,
+    "description": "Alola region added 88 new Pokémon with a Hawaiian theme. Introduced regional forms, Z-Moves, and Ultra Beasts."
+  },
+  {
+    "id": 8,
+    "name": "generation-viii",
+    "display_name": "Generation VIII",
+    "region": "Galar",
+    "version_groups": [
+      "sword-shield",
+      "the-isle-of-armor",
+      "the-crown-tundra",
+      "brilliant-diamond-shining-pearl",
+      "legends-arceus"
+    ],
+    "pokemon_count": 96,
+    "starters": [
+      "grookey",
+      "scorbunny",
+      "sobble"
+    ],
+    "legendaries": [
+      "zacian",
+      "zamazenta",
+      "eternatus",
+      "kubfu",
+      "urshifu-single-strike",
+      "zarude",
+      "regieleki",
+      "regidrago",
+      "glastrier",
+      "spectrier",
+      "calyrex"
+    ],
+    "year_released": 2019,
+    "description": "Galar region brought 96 new Pokémon with British inspiration. Introduced Dynamax, Gigantamax, and the Wild Area."
+  },
+  {
+    "id": 9,
+    "name": "generation-ix",
+    "display_name": "Generation IX",
+    "region": "Paldea",
+    "version_groups": [
+      "scarlet-violet",
+      "the-teal-mask",
+      "the-indigo-disk",
+      "legends-za",
+      "mega-dimension"
+    ],
+    "pokemon_count": 120,
+    "starters": [
+      "sprigatito",
+      "fuecoco",
+      "quaxly"
+    ],
+    "legendaries": [
+      "koraidon",
+      "miraidon",
+      "wo-chien",
+      "chien-pao",
+      "ting-lu",
+      "chi-yu",
+      "roaring-moon",
+      "iron-valiant",
+      "walking-wake",
+      "iron-leaves",
+      "okidogi",
+      "munkidori",
+      "fezandipiti",
+      "ogerpon",
+      "gouging-fire",
+      "raging-bolt",
+      "iron-boulder",
+      "iron-crown",
+      "terapagos",
+      "pecharunt"
+    ],
+    "year_released": 2022,
+    "description": "Paldea region features 120 new Pokémon in an open-world setting. Introduced Terastallization and seamless multiplayer."
+  }
+]

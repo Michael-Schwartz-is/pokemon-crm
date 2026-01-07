@@ -1,0 +1,80 @@
+[
+  {
+    "id": "common",
+    "name": "Common",
+    "description": "Frequently encountered Pokémon found in most areas. They're easy to catch and often the first Pokémon trainers encounter on their journey.",
+    "color": "#888888",
+    "capture_rate_range": "200-255",
+    "examples": [
+      "rattata",
+      "pidgey",
+      "caterpie",
+      "weedle"
+    ]
+  },
+  {
+    "id": "uncommon",
+    "name": "Uncommon",
+    "description": "Pokémon that appear less frequently than common species. They may require specific conditions or locations to encounter.",
+    "color": "#4CAF50",
+    "capture_rate_range": "100-199",
+    "examples": [
+      "pikachu",
+      "eevee",
+      "growlithe",
+      "abra"
+    ]
+  },
+  {
+    "id": "rare",
+    "name": "Rare",
+    "description": "Elusive Pokémon that are difficult to find. Trainers often spend considerable time searching for these prized catches.",
+    "color": "#2196F3",
+    "capture_rate_range": "45-99",
+    "examples": [
+      "dratini",
+      "larvitar",
+      "beldum",
+      "gible"
+    ]
+  },
+  {
+    "id": "ultra-rare",
+    "name": "Ultra Rare",
+    "description": "Exceptionally rare Pokémon that few trainers ever encounter. Finding one is considered a significant achievement.",
+    "color": "#9C27B0",
+    "capture_rate_range": "3-44",
+    "examples": [
+      "dragonite",
+      "tyranitar",
+      "metagross",
+      "garchomp"
+    ]
+  },
+  {
+    "id": "legendary",
+    "name": "Legendary",
+    "description": "Legendary Pokémon are one-of-a-kind beings of immense power. They often play crucial roles in the lore of their regions.",
+    "color": "#FFC107",
+    "capture_rate_range": "3-45",
+    "examples": [
+      "mewtwo",
+      "lugia",
+      "rayquaza",
+      "arceus"
+    ]
+  },
+  {
+    "id": "mythical",
+    "name": "Mythical",
+    "description": "Mythical Pokémon are shrouded in mystery and typically only available through special events. They are among the rarest Pokémon in existence.",
+    "color": "#E91E63",
+    "capture_rate_range": "3-45",
+    "examples": [
+      "mew",
+      "celebi",
+      "jirachi",
+      "arceus"
+    ]
+  }
+]

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Pokemon, Stats } from "@/util/CachePokemons";
 import { useState, useEffect } from "react";
 import { Check, Zap, Activity } from "lucide-react";
+import TypeBadge from "./TypeBadge";
 
 type PokemonCardProps = {
   poke: Pokemon;
@@ -199,22 +200,31 @@ export default function PokemonCard({
       </div>
 
       {/* Pokemon Name */}
-      <div className="mt-3 flex items-center justify-center gap-2">
-        <p
-          className={`
-          text-sm sm:text-base font-semibold capitalize truncate transition-colors duration-300
-          ${
-            isSelected
-              ? "text-[hsl(var(--electric))]"
-              : "text-foreground group-hover:text-[hsl(var(--electric))]"
-          }
-        `}
-        >
-          {poke?.name}
-        </p>
-        {isSelected && (
-          <Zap className="w-4 h-4 text-[hsl(var(--electric))] fill-[hsl(var(--electric))]" />
-        )}
+      <div className="mt-3 flex flex-col items-center gap-1.5">
+        <div className="flex items-center justify-center gap-2">
+          <p
+            className={`
+            text-sm sm:text-base font-semibold capitalize truncate transition-colors duration-300
+            ${
+              isSelected
+                ? "text-[hsl(var(--electric))]"
+                : "text-foreground group-hover:text-[hsl(var(--electric))]"
+            }
+          `}
+          >
+            {poke?.name}
+          </p>
+          {isSelected && (
+            <Zap className="w-4 h-4 text-[hsl(var(--electric))] fill-[hsl(var(--electric))]" />
+          )}
+        </div>
+
+        {/* Type badges */}
+        <div className="flex items-center gap-1">
+          {poke.types.map((type) => (
+            <TypeBadge key={type} type={type} size="sm" />
+          ))}
+        </div>
       </div>
 
       {/* Selection indicator */}

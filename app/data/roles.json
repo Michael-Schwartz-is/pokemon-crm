@@ -1,0 +1,56 @@
+[
+  {
+    "id": "physical-attacker",
+    "name": "Physical Attacker",
+    "description": "Pokémon that excel in dealing physical damage. They have high Attack stats and learn powerful physical moves like Earthquake, Close Combat, and Outrage.",
+    "stat_focus": "attack",
+    "color": "#F08030",
+    "icon": "sword",
+    "criteria": "Attack is the highest offensive stat and exceeds 100 base."
+  },
+  {
+    "id": "special-attacker",
+    "name": "Special Attacker",
+    "description": "Pokémon specializing in special moves. They possess high Special Attack stats and devastating moves like Thunderbolt, Psychic, and Flamethrower.",
+    "stat_focus": "special-attack",
+    "color": "#BA68C8",
+    "icon": "sparkles",
+    "criteria": "Special Attack is the highest offensive stat and exceeds 100 base."
+  },
+  {
+    "id": "physical-tank",
+    "name": "Physical Tank",
+    "description": "Defensive walls that absorb physical hits. High HP and Defense allow them to take repeated attacks while supporting their team.",
+    "stat_focus": "defense",
+    "color": "#29B6F6",
+    "icon": "shield",
+    "criteria": "Defense is the highest stat and HP is above average."
+  },
+  {
+    "id": "special-tank",
+    "name": "Special Tank",
+    "description": "Bulky Pokémon that shrug off special attacks. Their high Special Defense makes them ideal for tanking energy-based moves.",
+    "stat_focus": "special-defense",
+    "color": "#4CAF50",
+    "icon": "shield-plus",
+    "criteria": "Special Defense is the highest stat and HP is above average."
+  },
+  {
+    "id": "speedster",
+    "name": "Speedster",
+    "description": "Lightning-fast Pokémon that strike first. Their incredible Speed lets them outpace opponents and control the pace of battle.",
+    "stat_focus": "speed",
+    "color": "#00BCD4",
+    "icon": "zap",
+    "criteria": "Speed exceeds 100 base and is the highest stat."
+  },
+  {
+    "id": "balanced",
+    "name": "Balanced",
+    "description": "Well-rounded Pokémon with no glaring weaknesses. Their even stat distribution makes them adaptable to various battle situations.",
+    "stat_focus": "all",
+    "color": "#9E9E9E",
+    "icon": "scale",
+    "criteria": "No single stat significantly exceeds others."
+  }
+]
