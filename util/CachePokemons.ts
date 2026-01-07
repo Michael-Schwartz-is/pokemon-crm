@@ -71,42 +71,58 @@ export type Pokemon = {
 
 export let cachedPokemon: Record<string, Pokemon> = {};
 
+// Load enriched Pokemon data from JSON file
+import allPokemonsData from "@/app/data/AllPokemons.json";
+const enrichedPokemons: Record<string, Pokemon> = allPokemonsData as Record<string, Pokemon>;
+
 // DTO = Data Transfer Object
 
 export async function fetchPokemon(id: string): Promise<Pokemon | undefined> {
-  if (cachedPokemon[id]) return cachedPokemon[id];
-
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  const data = await res.json();
-
-  // For the simple fetch, we return basic data
-  // Full enrichment happens in FetchAllPokemonData.ts
-  const pokemonDTO: Pokemon = {
-    id: data.id,
-    name: data.name,
-    image: data.sprites.other.home.front_default || data.sprites.front_default || data.sprites.other['official-artwork'].front_default || "",
-    types: data.types.map((t: { type: { name: string } }) => t.type.name),
-    abilities: data.abilities.map((a: { ability: { name: string } }) => a.ability.name),
-    height: data.height,
-    weight: data.weight,
-    stats: data.stats,
-    base_experience: data.base_experience || 0,
-    total_stats: data.stats.reduce((sum: number, s: Stats) => sum + s.base_stat, 0),
-    stat_category: "balanced",
-    generation: "",
-    is_legendary: false,
-    is_mythical: false,
-    habitat: null,
-    color: "",
-    shape: "",
-    capture_rate: 0,
-    growth_rate: "",
-    egg_groups: [],
-    flavor_text: "",
-    rarity_tier: "common",
-    size_category: "medium",
-  };
+  const normalizedId = id.toLowerCase();
   
-  cachedPokemon[id] = pokemonDTO;
-  return pokemonDTO;
+  // First, try to get from enriched local data
+  if (enrichedPokemons[normalizedId]) {
+    return enrichedPokemons[normalizedId];
+  }
+  
+  // Check cache
+  if (cachedPokemon[normalizedId]) return cachedPokemon[normalizedId];
+
+  // Fallback to API for Pokemon not in local data
+  try {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${normalizedId}`);
+    if (!res.ok) return undefined;
+    const data = await res.json();
+
+    const pokemonDTO: Pokemon = {
+      id: data.id,
+      name: data.name,
+      image: data.sprites.other.home.front_default || data.sprites.front_default || data.sprites.other['official-artwork'].front_default || "",
+      types: data.types.map((t: { type: { name: string } }) => t.type.name),
+      abilities: data.abilities.map((a: { ability: { name: string } }) => a.ability.name),
+      height: data.height,
+      weight: data.weight,
+      stats: data.stats,
+      base_experience: data.base_experience || 0,
+      total_stats: data.stats.reduce((sum: number, s: Stats) => sum + s.base_stat, 0),
+      stat_category: "balanced",
+      generation: "",
+      is_legendary: false,
+      is_mythical: false,
+      habitat: null,
+      color: "",
+      shape: "",
+      capture_rate: 0,
+      growth_rate: "",
+      egg_groups: [],
+      flavor_text: "",
+      rarity_tier: "common",
+      size_category: "medium",
+    };
+    
+    cachedPokemon[normalizedId] = pokemonDTO;
+    return pokemonDTO;
+  } catch {
+    return undefined;
+  }
 }

@@ -7,6 +7,7 @@ import {
 } from "@/util/pokemons";
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import BattleArena from "@/app/components/BattleArena";
+import PokemonInfoPanel from "@/app/components/PokemonInfoPanel";
 import { Metadata } from "next";
 
 // Force dynamic rendering to get fresh random Pokemon on each page load
@@ -111,6 +112,14 @@ export default async function Page() {
         {/* Pokemon cards with lock/shuffle */}
         {pokemonData1 && pokemonData2 && (
           <BattleArena pokemon1={pokemonData1} pokemon2={pokemonData2} allPokemon={allPokemon} />
+        )}
+
+        {/* Pokemon Info Panels */}
+        {pokemonData1 && pokemonData2 && (
+          <div className="flex flex-row gap-3 sm:gap-6 md:gap-8 justify-center items-start mt-6">
+            <PokemonInfoPanel pokemon={pokemonData1} side="left" />
+            <PokemonInfoPanel pokemon={pokemonData2} side="right" />
+          </div>
         )}
 
         {/* Stats comparison radar chart */}

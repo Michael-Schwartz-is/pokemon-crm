@@ -1,4 +1,5 @@
 import PokemonCard from "@/app/components/PokemonCard";
+import PokemonInfoPanel from "@/app/components/PokemonInfoPanel";
 import { PokemonPlot } from "@/app/components/PokemonPlot";
 import RandomBTN from "@/app/components/RandomBTN";
 import { fetchPokemon, Stats, Pokemon } from "@/util/CachePokemons";
@@ -9,7 +10,7 @@ import {
 } from "@/util/pokemons";
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import { Metadata } from "next";
-import { Swords, Zap } from "lucide-react";
+import { Swords } from "lucide-react";
 
 type compareProps = {
   params: Promise<{
@@ -199,13 +200,22 @@ export default async function page({ params }: compareProps) {
           </p>
         </div>
 
-        {/* Pokemon cards - always side by side */}
+        {/* Pokemon cards with info panels - always side by side */}
         <div className="relative flex flex-row gap-3 sm:gap-6 md:gap-8 justify-center items-start">
-          {pokemonData1 && <PokemonCard poke={pokemonData1} showChart={false} />}
-          {pokemonData2 && <PokemonCard poke={pokemonData2} showChart={false} />}
+          {/* Left Pokemon */}
+          <div className="flex flex-col items-center gap-4">
+            {pokemonData1 && <PokemonCard poke={pokemonData1} showChart={false} />}
+            {pokemonData1 && <PokemonInfoPanel pokemon={pokemonData1} side="left" />}
+          </div>
 
-          {/* VS divider - floating centered */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
+          {/* Right Pokemon */}
+          <div className="flex flex-col items-center gap-4">
+            {pokemonData2 && <PokemonCard poke={pokemonData2} showChart={false} />}
+            {pokemonData2 && <PokemonInfoPanel pokemon={pokemonData2} side="right" />}
+          </div>
+
+          {/* VS divider - floating centered over cards */}
+          <div className="absolute left-1/2 top-[160px] sm:top-[200px] -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
             <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-card border-2 border-[hsl(var(--fire)/0.5)] flex items-center justify-center shadow-[0_0_30px_hsl(var(--fire)/0.3)]">
               <span className="text-lg sm:text-2xl font-black text-[hsl(var(--fire))] vs-badge">
                 VS
