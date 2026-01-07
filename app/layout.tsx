@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     "Compare Pokemon stats, abilities, and battle potential. Find the strongest Pokemon with detailed stat analysis and head-to-head comparisons.",
   keywords: ["pokemon", "pokemon comparison", "pokemon stats", "pokemon battle", "pokemon CRM"],
   authors: [{ name: "Pokemon CRM" }],
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
