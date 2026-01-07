@@ -50,10 +50,10 @@ export function StatChart({ chartData, name }: statChartProps) {
       <Card className="mt-2">
         <CardContent className="pt-4 sm:pt-6 px-2 sm:px-4">
           <ChartContainer config={chartConfig} className="h-[180px] sm:h-[220px] w-full">
-            <BarChart 
-              accessibilityLayer 
-              data={chartData} 
-              layout="vertical" 
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              layout="vertical"
               margin={{ right: 12, left: 0 }}
             >
               <CartesianGrid horizontal={false} />

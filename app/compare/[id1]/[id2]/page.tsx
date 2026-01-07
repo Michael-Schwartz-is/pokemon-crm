@@ -2,25 +2,20 @@ import PokemonCard from "@/app/components/PokemonCard";
 import { PokemonPlot } from "@/app/components/PokemonPlot";
 import RandomBTN from "@/app/components/RandomBTN";
 import { fetchPokemon, Stats, Pokemon } from "@/util/CachePokemons";
-import { getRandomPokemonName, getRandomPokemonCombinations } from "@/util/pokemons";
+import {
+  getRandomPokemonName,
+  getRandomPokemonCombinations,
+  getAllPokemonBasic,
+} from "@/util/pokemons";
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import { Metadata } from "next";
+import { Swords, Zap } from "lucide-react";
 
 type compareProps = {
   params: Promise<{
     id1: string;
     id2: string;
   }>;
-};
-
-type RandomBTNProps = {
-  r1: string;
-  r2: string;
-};
-
-type PokemonData = {
-  item1: Stats;
-  item2: Stats;
 };
 
 // Helper to capitalize Pokemon names
@@ -135,18 +130,24 @@ function generateJsonLd(pokemon1: Pokemon, pokemon2: Pokemon, id1: string, id2: 
 export default async function page({ params }: compareProps) {
   const { id1, id2 } = await params;
 
-  // const { id1, id2 } = useParams<{ id1: string; id2: string }>();
-
   const r1 = getRandomPokemonName();
   const r2 = getRandomPokemonName(r1);
 
   const pokemonData1 = await fetchPokemon(id1);
   const pokemonData2 = await fetchPokemon(id2);
 
-  // type narrowing
-
   if (!pokemonData1 || !pokemonData2) {
-    return <h3>pokemon not found</h3>;
+    return (
+      <div className="max-w-[60rem] mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-12 text-center">
+        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[hsl(var(--fire)/0.1)] border border-[hsl(var(--fire)/0.2)] flex items-center justify-center">
+          <Swords className="w-10 h-10 text-[hsl(var(--fire))]" />
+        </div>
+        <h3 className="text-2xl sm:text-3xl font-black text-foreground mb-3">Fighter Not Found!</h3>
+        <p className="text-muted-foreground max-w-md mx-auto">
+          Could not find one or both Pokemon for this battle. Check the names and try again.
+        </p>
+      </div>
+    );
   }
 
   const mergeStats = (item1: Stats[], item2: Stats[]) => {
@@ -162,6 +163,7 @@ export default async function page({ params }: compareProps) {
 
   const plotStats = mergeStats(pokemonData1.stats, pokemonData2.stats);
   const combinations = getRandomPokemonCombinations(20);
+  const allPokemon = getAllPokemonBasic();
 
   const jsonLd = generateJsonLd(pokemonData1, pokemonData2, id1, id2);
 
@@ -173,29 +175,47 @@ export default async function page({ params }: compareProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-[60rem] mx-auto px-2 sm:px-6 pt-24 sm:pt-28 pb-8">
-        <div className="text-center mb-4 sm:mb-8">
-          <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-slate-800">
-            {capitalize(pokemonData1?.name) || "POKEMON1"} vs{" "}
-            {capitalize(pokemonData2?.name) || "POKEMON2"}
+      <div className="max-w-[60rem] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-10">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--fire)/0.1)] border border-[hsl(var(--fire)/0.2)] mb-4">
+            <Swords className="w-4 h-4 text-[hsl(var(--fire))]" />
+            <span className="text-sm font-medium text-[hsl(var(--fire))]">Battle Mode</span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground mb-3">
+            <span className="gradient-text">{capitalize(pokemonData1?.name)}</span>
+            <span className="text-[hsl(var(--fire))] mx-3 vs-badge">vs</span>
+            <span className="gradient-text-plasma">{capitalize(pokemonData2?.name)}</span>
           </h1>
-          <p className="text-sm sm:text-lg text-slate-600 pt-1 sm:pt-2">which is better?</p>
+
+          <p className="text-base sm:text-lg text-muted-foreground">
+            Battle of the Titans — Who will win?
+          </p>
+          <p className="text-xs sm:text-sm text-muted-foreground/70 mt-1">
+            Analyze stats, abilities, and strengths to predict the victor
+          </p>
         </div>
 
         {/* Pokemon cards - always side by side */}
-        <div className="relative flex flex-row gap-2 sm:gap-4 md:gap-6 justify-center items-start">
+        <div className="relative flex flex-row gap-3 sm:gap-6 md:gap-8 justify-center items-start">
           {pokemonData1 && <PokemonCard poke={pokemonData1} showChart={false} />}
           {pokemonData2 && <PokemonCard poke={pokemonData2} showChart={false} />}
 
           {/* VS divider - floating centered */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
-            <span className="text-xl sm:text-3xl md:text-4xl font-black text-red-500 italic drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">
-              VS
-            </span>
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-card border-2 border-[hsl(var(--fire)/0.5)] flex items-center justify-center shadow-[0_0_30px_hsl(var(--fire)/0.3)]">
+              <span className="text-lg sm:text-2xl font-black text-[hsl(var(--fire))] vs-badge">
+                VS
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 sm:mt-8">
+        {/* Random Battle Button */}
+        <div className="mt-8 sm:mt-10">
           <RandomBTN r1={r1} r2={r2} />
         </div>
 
@@ -205,7 +225,8 @@ export default async function page({ params }: compareProps) {
           pokemon1Name={pokemonData1.name}
           pokemon2Name={pokemonData2.name}
         />
-        <FightCombinationsSlider combinations={combinations} />
+
+        <FightCombinationsSlider combinations={combinations} allPokemon={allPokemon} />
       </div>
     </>
   );

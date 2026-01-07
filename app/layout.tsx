@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import Navigation from "./components/Navigation";
-import { Inter } from "next/font/google";
 import { getRandomPokemonName } from "@/util/pokemons";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
@@ -36,11 +35,6 @@ export const metadata: Metadata = {
     follow: true,
   },
 };
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 // Organization and WebSite JSON-LD schema for site-wide SEO
 function generateSiteSchema() {
@@ -82,7 +76,7 @@ export default function RootLayout({
   const siteSchema = generateSiteSchema();
 
   return (
-    <html className={inter.className} lang="en">
+    <html lang="en">
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-GXG0KCFJHF"
@@ -101,9 +95,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
       </head>
-      <body>
+      <body className="min-h-screen">
         <Navigation randomR1={r1} randomR2={r2} />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );

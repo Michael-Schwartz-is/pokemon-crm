@@ -5,13 +5,15 @@ import { Pokemon } from "@/util/CachePokemons";
 import PokemonCard from "./PokemonCard";
 import useStore from "../stores/pokemonStore";
 import { useRouter } from "next/navigation";
+import { Swords, X, ChevronDown, Zap } from "lucide-react";
 
 type PokemonListProps = {
   initialPokemons: Pokemon[];
 };
 
 export default function PokemonList({ initialPokemons }: PokemonListProps) {
-  const { searchQuery, selectedPokemonIds, toggleSelectedPokemon, clearSelectedPokemons } = useStore();
+  const { searchQuery, selectedPokemonIds, toggleSelectedPokemon, clearSelectedPokemons } =
+    useStore();
   const [displayLimit, setDisplayLimit] = useState(40);
   const router = useRouter();
 
@@ -19,7 +21,7 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
     if (selectedPokemonIds.length === 2) {
       const [id1, id2] = selectedPokemonIds;
       router.push(`/compare/${id1}/${id2}`);
-      
+
       const timer = setTimeout(() => {
         clearSelectedPokemons();
       }, 1000);
@@ -38,42 +40,73 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* Floating Selection Bar */}
       {selectedPokemonIds.length > 0 && (
-        <div className="fixed bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-red-200 shadow-xl z-50 flex items-center gap-2 sm:gap-4 max-w-[90vw]">
-          <span className="text-slate-700 font-medium text-sm sm:text-base whitespace-nowrap">
-            {selectedPokemonIds.length} of 2 selected
-          </span>
-          <button 
-            onClick={clearSelectedPokemons}
-            className="text-sm text-red-500 hover:text-red-700 font-bold"
-          >
-            Clear
-          </button>
+        <div className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 animate-fade-up">
+          <div className="flex items-center gap-3 sm:gap-4 px-5 sm:px-6 py-3 sm:py-4 rounded-2xl bg-card/95 backdrop-blur-xl border border-[hsl(var(--electric)/0.3)] shadow-[0_8px_40px_hsl(var(--electric)/0.2)]">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(var(--electric))] to-[hsl(var(--fire))] flex items-center justify-center">
+                <Zap className="w-4 h-4 text-background" />
+              </div>
+              <span className="text-foreground font-semibold text-sm sm:text-base whitespace-nowrap">
+                {selectedPokemonIds.length}/2 selected
+              </span>
+            </div>
+
+            <div className="w-px h-6 bg-border" />
+
+            <button
+              onClick={clearSelectedPokemons}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+          </div>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 justify-items-center w-full">
-        {displayed.map((poke) => (
-          <PokemonCard 
-            key={poke.name} 
-            poke={poke} 
-            isSelected={selectedPokemonIds.includes(poke.name)}
-            onSelect={() => toggleSelectedPokemon(poke.name)}
-          />
+
+      {/* Pokemon Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 justify-items-center w-full">
+        {displayed.map((poke, index) => (
+          <div
+            key={poke.name}
+            className="w-full flex justify-center animate-fade-up"
+            style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}
+          >
+            <PokemonCard
+              poke={poke}
+              isSelected={selectedPokemonIds.includes(poke.name)}
+              onSelect={() => toggleSelectedPokemon(poke.name)}
+            />
+          </div>
         ))}
       </div>
-      
+
+      {/* Empty State */}
       {filteredPokemons.length === 0 && (
-        <p className="text-center text-slate-500 mt-8 sm:mt-10 text-sm sm:text-base px-4">
-          No pokemon found matching &quot;{searchQuery}&quot;
-        </p>
+        <div className="text-center mt-12 sm:mt-16 px-4">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-secondary/50 flex items-center justify-center">
+            <Swords className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <p className="text-lg font-semibold text-foreground mb-1">No fighters found</p>
+          <p className="text-sm text-muted-foreground">
+            No Pokemon matching &quot;{searchQuery}&quot; — try another name!
+          </p>
+        </div>
       )}
 
+      {/* Load More Button */}
       {filteredPokemons.length > displayLimit && (
         <button
           onClick={() => setDisplayLimit((prev) => prev + 40)}
-          className="mt-8 sm:mt-10 px-6 sm:px-8 py-2 sm:py-3 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition-colors text-sm sm:text-base"
+          className="mt-10 sm:mt-12 group flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl btn-neon text-sm sm:text-base"
         >
-          Load More ({filteredPokemons.length - displayLimit} remaining)
+          <span>Load More</span>
+          <span className="px-2 py-0.5 rounded-md bg-background/20 text-xs font-mono">
+            {filteredPokemons.length - displayLimit}
+          </span>
+          <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
         </button>
       )}
     </div>

@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import useStore from "../stores/pokemonStore";
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Search, Swords, Flame, Home, Menu, X } from "lucide-react";
 
 type NavigationProps = {
   randomR1: string;
@@ -13,50 +15,89 @@ type NavigationProps = {
 export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
   const { searchQuery, setSearchQuery, clearSelectedPokemons } = useStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+    if (value && pathname !== "/") {
+      router.push("/");
+    }
+  };
+
+  const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="fixed z-50 w-full bg-slate-100 border-b border-slate-200">
+    <nav className="fixed z-50 w-full bg-background/80 backdrop-blur-xl border-b border-border/50">
+      {/* Subtle top glow line */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(var(--electric)/0.5)] to-transparent" />
+
       {/* Main nav bar */}
-      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
+      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 max-w-7xl mx-auto">
         {/* Logo */}
-        <Link href="/" onClick={() => clearSelectedPokemons()} className="flex-shrink-0">
-          <div className="flex flex-col font-black gap-0 leading-4 text-slate-800">
-            <span>POKE</span>
-            <span>FIGHT</span>
+        <Link href="/" onClick={() => clearSelectedPokemons()} className="flex-shrink-0 group">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--electric))] to-[hsl(var(--fire))] flex items-center justify-center shadow-lg shadow-[hsl(var(--electric)/0.3)] group-hover:shadow-[hsl(var(--electric)/0.5)] transition-shadow">
+                <Swords className="w-5 h-5 text-background" />
+              </div>
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-xs font-bold tracking-wider text-muted-foreground">POKE</span>
+              <span className="text-lg font-black tracking-tight gradient-text">FIGHT</span>
+            </div>
           </div>
         </Link>
 
-        {/* Desktop Search - Hidden on mobile */}
-        <div className="hidden md:flex flex-1 max-w-md mx-6">
-          <Input
-            type="text"
-            id="search"
-            placeholder="Find any pokemon..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full"
-          />
+        {/* Desktop Search */}
+        <div className="hidden md:flex flex-1 max-w-md mx-8">
+          <div className="relative w-full group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-[hsl(var(--electric))] transition-colors" />
+            <Input
+              type="text"
+              id="search"
+              placeholder="Search fighters..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 bg-secondary/50 border-border/50 focus:border-[hsl(var(--electric)/0.5)] focus:ring-1 focus:ring-[hsl(var(--electric)/0.2)] placeholder:text-muted-foreground/60 rounded-xl"
+            />
+          </div>
         </div>
 
-        {/* Desktop Navigation - Hidden on mobile */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-6">
-          <Link 
-            href="/" 
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-1">
+          <Link
+            href="/"
             onClick={() => clearSelectedPokemons()}
-            className="text-slate-700 hover:text-red-500 font-medium transition-colors"
+            className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+              isActive("/")
+                ? "bg-[hsl(var(--electric)/0.15)] text-[hsl(var(--electric))]"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+            }`}
           >
+            <Home className="w-4 h-4" />
             Home
           </Link>
-          <Link 
+          <Link
             href={`/compare/${randomR1}/${randomR2}`}
-            className="text-slate-700 hover:text-red-500 font-medium transition-colors"
+            className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+              pathname.startsWith("/compare")
+                ? "bg-[hsl(var(--fire)/0.15)] text-[hsl(var(--fire))]"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+            }`}
           >
-            Compare
+            <Swords className="w-4 h-4" />
+            Battle
           </Link>
-          <Link 
+          <Link
             href="/popular"
-            className="text-slate-700 hover:text-red-500 font-medium transition-colors"
+            className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+              isActive("/popular")
+                ? "bg-[hsl(var(--plasma)/0.15)] text-[hsl(var(--plasma))]"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+            }`}
           >
+            <Flame className="w-4 h-4" />
             Popular
           </Link>
         </div>
@@ -64,74 +105,71 @@ export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg hover:bg-slate-200 transition-colors"
+          className="md:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors text-foreground"
           aria-label="Toggle menu"
         >
-          <svg
-            className="w-6 h-6 text-slate-700"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {mobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? "max-h-64 border-t border-slate-200" : "max-h-0"
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+          mobileMenuOpen ? "max-h-80 border-t border-border/50" : "max-h-0"
         }`}
       >
-        <div className="px-4 py-3 space-y-3 bg-slate-50">
+        <div className="px-4 py-4 space-y-4 bg-background/95 backdrop-blur-xl">
           {/* Mobile Search */}
-          <Input
-            type="text"
-            placeholder="Find any pokemon..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full"
-          />
-          
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search fighters..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 bg-secondary/50 border-border/50 rounded-xl"
+            />
+          </div>
+
           {/* Mobile Navigation Links */}
-          <div className="flex flex-col gap-2 pt-2">
-            <Link 
-              href="/" 
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/"
               onClick={() => {
                 clearSelectedPokemons();
                 setMobileMenuOpen(false);
               }}
-              className="py-2 px-3 rounded-lg text-slate-700 hover:bg-slate-200 font-medium transition-colors"
+              className={`py-3 px-4 rounded-xl font-medium transition-all flex items-center gap-3 ${
+                isActive("/")
+                  ? "bg-[hsl(var(--electric)/0.15)] text-[hsl(var(--electric))]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              }`}
             >
+              <Home className="w-5 h-5" />
               Home
             </Link>
-            <Link 
+            <Link
               href={`/compare/${randomR1}/${randomR2}`}
               onClick={() => setMobileMenuOpen(false)}
-              className="py-2 px-3 rounded-lg text-slate-700 hover:bg-slate-200 font-medium transition-colors"
+              className={`py-3 px-4 rounded-xl font-medium transition-all flex items-center gap-3 ${
+                pathname.startsWith("/compare")
+                  ? "bg-[hsl(var(--fire)/0.15)] text-[hsl(var(--fire))]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              }`}
             >
-              Compare
+              <Swords className="w-5 h-5" />
+              Battle
             </Link>
-            <Link 
+            <Link
               href="/popular"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-2 px-3 rounded-lg text-slate-700 hover:bg-slate-200 font-medium transition-colors"
+              className={`py-3 px-4 rounded-xl font-medium transition-all flex items-center gap-3 ${
+                isActive("/popular")
+                  ? "bg-[hsl(var(--plasma)/0.15)] text-[hsl(var(--plasma))]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              }`}
             >
+              <Flame className="w-5 h-5" />
               Popular
             </Link>
           </div>

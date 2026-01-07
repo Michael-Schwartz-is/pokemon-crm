@@ -65,6 +65,10 @@ export function getPokemonNames(): string[] {
   return pokemons.map((p) => p.name);
 }
 
+export function getAllPokemonBasic(): PokemonBasic[] {
+  return pokemons;
+}
+
 export async function readPokemons() {
   return pokemons.map((p) => p.name);
 }
