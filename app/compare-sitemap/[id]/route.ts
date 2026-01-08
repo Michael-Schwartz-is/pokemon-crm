@@ -3,14 +3,19 @@ import {
   getComparisonPairsForPage,
   getComparisonPriority,
   getSitemapPageCount,
+  getMaxComparisonUrls,
 } from "@/util/sitemapGenerator";
 
 /**
  * Dynamic sitemap route for comparison pages
  * Generates paginated XML sitemaps with 50,000 URLs each
  *
- * Route: /comparisons-sitemap/[id]
- * Example: /comparisons-sitemap/0 returns first 50k comparisons
+ * Route: /compare-sitemap/[id]
+ * Example: /compare-sitemap/0 returns first 50k comparisons
+ *
+ * Supports gradual rollout via MAX_COMPARISON_URLS environment variable:
+ * - If set: Exposes only first N comparisons, prioritized by iconic Pokemon & popular types
+ * - If not set: Exposes all ~845,650 comparison URLs in alphabetical order
  */
 
 export async function GET(
@@ -27,7 +32,7 @@ export async function GET(
   }
 
   const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
   // Get comparison pairs for this page
   const { pairs } = getComparisonPairsForPage(pageId, 50000);

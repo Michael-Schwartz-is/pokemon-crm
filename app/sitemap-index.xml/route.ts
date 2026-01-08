@@ -8,7 +8,7 @@ import { getSitemapPageCount } from "@/util/sitemapGenerator";
  */
 export async function GET() {
   const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
   const sitemapCount = getSitemapPageCount();
 
   const sitemapEntries = [];
@@ -22,7 +22,7 @@ export async function GET() {
   // Add all comparison sitemaps
   for (let i = 0; i < sitemapCount; i++) {
     sitemapEntries.push(`  <sitemap>
-    <loc>${baseUrl}/comparisons-sitemap/${i}</loc>
+    <loc>${baseUrl}/compare-sitemap/${i}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>`);
   }

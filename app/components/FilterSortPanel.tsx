@@ -308,7 +308,7 @@ export default function FilterSortPanel() {
         >
           <Sparkles className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Mythical</span>
-        </button>
+          </button>
 
         {/* Clear All */}
         {activeFilterCount > 0 && (
