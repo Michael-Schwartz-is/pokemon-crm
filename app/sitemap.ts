@@ -145,14 +145,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return sitemaps;
 }
 
-/**
- * Generate sitemap index entries for Google
- * This tells Google where to find all the paginated comparison sitemaps
- */
-export async function generateSitemaps() {
-  const sitemapCount = getSitemapPageCount();
-
-  // Generate array of sitemap IDs [0, 1, 2, ..., 10]
-  return Array.from({ length: sitemapCount }, (_, i) => ({ id: i }));
-}
 
