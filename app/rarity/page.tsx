@@ -75,20 +75,17 @@ export default function RarityPage() {
           <div className="flex flex-col gap-3">
             {[...rarityData].reverse().map((rarity, index) => {
               // Calculate width based on rarity (rarer = narrower)
-              // Mobile: wider pyramid (70-100%), Desktop: steeper pyramid (40-90%)
-              const totalTiers = rarityData.length;
-              const mobileWidthPercent = 70 + ((index / totalTiers) * 30);
-              const desktopWidthPercent = 40 + (index * 10);
+              // Mobile gets a gentler pyramid for better readability
+              const widthPercent = 55 + (index * 7.5);
 
               return (
                 <Link
                   key={rarity.id}
                   href={`/rarity/${rarity.id}`}
-                  className="group relative mx-auto transition-all duration-300 hover:scale-105 animate-fade-up pyramid-tier"
+                  className="group relative mx-auto transition-all duration-300 hover:scale-105 animate-fade-up"
                   style={{
-                    width: `${mobileWidthPercent}%`,
+                    width: `${widthPercent}%`,
                     animationDelay: `${index * 100}ms`,
-                    ['--desktop-width' as string]: `${desktopWidthPercent}%`,
                   }}
                 >
                   <div
@@ -133,14 +130,6 @@ export default function RarityPage() {
             })}
           </div>
         </div>
-
-        <style jsx global>{`
-          @media (min-width: 640px) {
-            .pyramid-tier {
-              width: var(--desktop-width) !important;
-            }
-          }
-        `}</style>
 
         {/* Rarity Cards Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
