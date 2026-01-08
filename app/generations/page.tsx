@@ -102,61 +102,61 @@ export default function GenerationsPage() {
                   {/* Card */}
                   <div
                     className={`
-                      flex-1 p-6 rounded-2xl bg-card border border-border transition-all duration-300
+                      flex-1 p-4 sm:p-6 rounded-2xl bg-card border border-border transition-all duration-300
                       group-hover:border-[hsl(var(--electric)/0.5)] group-hover:shadow-lg
                       ml-10 md:ml-0
                       ${isEven ? "md:mr-[52%]" : "md:ml-[52%]"}
                     `}
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-3 sm:gap-4">
                       {/* Gen Number Badge */}
-                      <div 
-                        className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0"
-                        style={{ 
+                      <div
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center shrink-0"
+                        style={{
                           backgroundColor: `${color}20`,
                           border: `2px solid ${color}`,
                         }}
                       >
-                        <span className="text-2xl font-black" style={{ color }}>
+                        <span className="text-xl sm:text-2xl font-black" style={{ color }}>
                           {gen.display_name.split(" ")[1]}
                         </span>
                       </div>
 
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="flex items-center gap-2 mb-1">
-                          <h2 className="text-xl font-bold text-foreground group-hover:text-[hsl(var(--electric))] transition-colors">
+                          <h2 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-[hsl(var(--electric))] transition-colors truncate">
                             {gen.display_name}
                           </h2>
-                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0" />
                         </div>
-                        
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-3">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
-                            {gen.region}
+
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground mb-3">
+                          <span className="flex items-center gap-1 shrink-0">
+                            <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <span className="truncate">{gen.region}</span>
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
+                          <span className="flex items-center gap-1 shrink-0">
+                            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                             {gen.year_released}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Users className="w-4 h-4" />
+                          <span className="flex items-center gap-1 shrink-0">
+                            <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                             {gen.pokemon_count} Pokemon
                           </span>
                         </div>
 
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                           {gen.description}
                         </p>
 
                         {/* Starters preview */}
-                        <div className="mt-3 flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">Starters:</span>
-                          <div className="flex gap-1">
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0">Starters:</span>
+                          <div className="flex flex-wrap gap-1">
                             {gen.starters.slice(0, 3).map((starter) => (
                               <span
                                 key={starter}
-                                className="px-2 py-0.5 rounded-md bg-secondary text-xs capitalize"
+                                className="px-2 py-0.5 rounded-md bg-secondary text-xs capitalize whitespace-nowrap"
                               >
                                 {starter}
                               </span>
