@@ -15,7 +15,6 @@ import {
   Star,
   Gauge,
 } from "lucide-react";
-import TypeBadge from "./TypeBadge";
 import { RarityBadge, RoleBadge, GenerationBadge } from "./CategoryBadge";
 
 // Type color mapping
@@ -97,13 +96,6 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
 
   return (
     <div className="w-full max-w-[160px] sm:max-w-[280px] md:max-w-[320px] space-y-2 sm:space-y-3">
-      {/* Types */}
-      <div className="flex flex-wrap gap-1 sm:gap-1.5 justify-center">
-        {pokemon.types.map((type) => (
-          <TypeBadge key={type} type={type} size="md" />
-        ))}
-      </div>
-
       {/* Legendary/Mythical Badge */}
       {(pokemon.is_legendary || pokemon.is_mythical) && (
         <div className="flex justify-center">
