@@ -96,34 +96,14 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
 
   return (
     <div className="w-full max-w-[160px] sm:max-w-[280px] md:max-w-[320px] space-y-2 sm:space-y-3">
-      {/* Legendary/Mythical Badge */}
-      {(pokemon.is_legendary || pokemon.is_mythical) && (
-        <div className="flex justify-center">
-          <span
-            className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold ${
-              pokemon.is_mythical
-                ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white shadow-lg shadow-pink-500/30"
-                : "bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/30"
-            }`}
-          >
-            {pokemon.is_mythical ? <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> : <Crown className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
-            {pokemon.is_mythical ? "Mythical" : "Legendary"}
-          </span>
-        </div>
-      )}
-
       {/* Info Grid */}
       <div className="bg-card/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-border/50 p-2 sm:p-3 space-y-2 sm:space-y-2.5">
-        {/* Rarity & Generation Row */}
-        <div className="flex justify-between items-center text-xs">
+        {/* Badges Row */}
+        <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 text-xs">
           <RarityBadge rarity={pokemon.rarity_tier} size="md" />
           {pokemon.generation && (
             <GenerationBadge generation={pokemon.generation} size="md" />
           )}
-        </div>
-
-        {/* Stat Category */}
-        <div className="flex items-center justify-center">
           <RoleBadge role={pokemon.stat_category} size="md" />
         </div>
 
