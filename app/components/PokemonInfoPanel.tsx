@@ -136,7 +136,7 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         </div>
 
         {/* Physical Stats */}
-        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
           <div className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground">
             <Ruler className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-500 flex-shrink-0" />
             <span className="font-medium truncate">{formatHeight(pokemon.height)}</span>
@@ -172,7 +172,7 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         )}
 
         {/* Habitat & Egg Groups */}
-        <div className="pt-1 border-t border-border/30 flex flex-col sm:grid sm:grid-cols-2 gap-1.5 sm:gap-2 text-[9px] sm:text-[10px]">
+        <div className="pt-1 border-t border-border/30 flex flex-col md:grid md:grid-cols-2 gap-1.5 sm:gap-2 text-[9px] sm:text-[10px]">
           {pokemon.habitat && (
             <div>
               <div className="flex items-center gap-0.5 sm:gap-1 text-muted-foreground uppercase tracking-wider mb-0.5 sm:mb-1">
@@ -196,7 +196,7 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         </div>
 
         {/* Capture Rate & Base XP */}
-        <div className="pt-1 border-t border-border/30 flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2 text-[9px] sm:text-[10px] text-muted-foreground">
+        <div className="pt-1 border-t border-border/30 flex flex-col md:flex-row md:justify-between gap-1 sm:gap-2 text-[9px] sm:text-[10px] text-muted-foreground">
           <span className="truncate">
             Catch Rate: <span className="font-bold text-foreground">{pokemon.capture_rate}</span>
           </span>
