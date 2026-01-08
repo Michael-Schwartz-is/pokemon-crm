@@ -160,10 +160,10 @@ export default function PokemonCard({
           />
         </div>
 
-        {/* Stats Hover Overlay */}
+        {/* Stats Hover Overlay - Desktop only */}
         <div
           className={`
-            absolute inset-0 rounded-xl z-20 transition-all duration-300 pointer-events-none
+            hidden md:block absolute inset-0 rounded-xl z-20 transition-all duration-300 pointer-events-none
             ${isHovered && !isSelected ? "opacity-100 scale-100" : "opacity-0 scale-95"}
           `}
         >
@@ -223,6 +223,33 @@ export default function PokemonCard({
         <div className="flex items-center gap-1">
           {poke.types.map((type) => (
             <TypeBadge key={type} type={type} size="sm" />
+          ))}
+        </div>
+      </div>
+
+      {/* Stats Section - Mobile only */}
+      <div className="md:hidden mt-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-2">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-1.5">
+            <div className="p-1 rounded-md bg-[hsl(var(--electric)/0.15)]">
+              <Activity className="w-2.5 h-2.5 text-[hsl(var(--electric))]" />
+            </div>
+            <span className="text-[9px] font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
+              Base Stats
+            </span>
+          </div>
+          <div className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-[hsl(var(--electric)/0.2)] to-[hsl(var(--fire)/0.2)] border border-[hsl(var(--electric)/0.3)]">
+            <span className="text-[9px] font-mono font-bold text-[hsl(var(--electric))]">
+              Σ {totalStats}
+            </span>
+          </div>
+        </div>
+
+        {/* Stat bars */}
+        <div className="flex flex-col gap-1">
+          {pokeChartData.map((stat) => (
+            <MiniStatBar key={stat.name} name={stat.name} value={Number(stat.base_stat)} />
           ))}
         </div>
       </div>
