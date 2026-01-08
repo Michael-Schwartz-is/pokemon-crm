@@ -8,6 +8,7 @@ import {
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import BattleArena from "@/app/components/BattleArena";
 import PokemonInfoPanel from "@/app/components/PokemonInfoPanel";
+import StickyCompareHeader from "@/app/components/StickyCompareHeader";
 import { Metadata } from "next";
 
 // Force dynamic rendering to get fresh random Pokemon on each page load
@@ -104,6 +105,12 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Sticky header for mobile scrolling */}
+      {pokemonData1 && pokemonData2 && (
+        <StickyCompareHeader pokemon1={pokemonData1} pokemon2={pokemonData2} />
+      )}
+
       <div className="max-w-[60rem] mx-auto px-2 sm:px-6 pt-24 sm:pt-28 pb-8">
         <h1 className="text-center text-sm sm:text-base font-semibold text-slate-600 capitalize mb-3">
           ⚔️ {pokemonData1?.name || "{{poke1}}"} vs {pokemonData2?.name || "{{poke2}}"}

@@ -15,7 +15,6 @@ import {
   Star,
   Gauge,
 } from "lucide-react";
-import TypeBadge from "./TypeBadge";
 import { RarityBadge, RoleBadge, GenerationBadge } from "./CategoryBadge";
 
 // Type color mapping
@@ -96,32 +95,25 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
   const statCategory = statCategoryDisplay[pokemon.stat_category] || statCategoryDisplay.balanced;
 
   return (
-    <div className="w-full max-w-[320px] space-y-3">
-      {/* Types */}
-      <div className="flex flex-wrap gap-1.5 justify-center">
-        {pokemon.types.map((type) => (
-          <TypeBadge key={type} type={type} size="md" />
-        ))}
-      </div>
-
+    <div className="w-full max-w-[160px] sm:max-w-[280px] md:max-w-[320px] space-y-2 sm:space-y-3">
       {/* Legendary/Mythical Badge */}
       {(pokemon.is_legendary || pokemon.is_mythical) && (
         <div className="flex justify-center">
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+            className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold ${
               pokemon.is_mythical
                 ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white shadow-lg shadow-pink-500/30"
                 : "bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/30"
             }`}
           >
-            {pokemon.is_mythical ? <Sparkles className="w-3 h-3" /> : <Crown className="w-3 h-3" />}
+            {pokemon.is_mythical ? <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> : <Crown className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
             {pokemon.is_mythical ? "Mythical" : "Legendary"}
           </span>
         </div>
       )}
 
       {/* Info Grid */}
-      <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-3 space-y-2.5">
+      <div className="bg-card/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-border/50 p-2 sm:p-3 space-y-2 sm:space-y-2.5">
         {/* Rarity & Generation Row */}
         <div className="flex justify-between items-center text-xs">
           <RarityBadge rarity={pokemon.rarity_tier} size="md" />
@@ -131,34 +123,34 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         </div>
 
         {/* Stat Category */}
-        <div className="flex items-center justify-center gap-1.5 text-xs">
+        <div className="flex items-center justify-center">
           <RoleBadge role={pokemon.stat_category} size="md" />
         </div>
 
         {/* Physical Stats */}
-        <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Ruler className="w-3.5 h-3.5 text-blue-500" />
-            <span className="font-medium">{formatHeight(pokemon.height)}</span>
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
+          <div className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground">
+            <Ruler className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-500 flex-shrink-0" />
+            <span className="font-medium truncate">{formatHeight(pokemon.height)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Scale className="w-3.5 h-3.5 text-amber-500" />
-            <span className="font-medium">{formatWeight(pokemon.weight)}</span>
+          <div className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground">
+            <Scale className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 flex-shrink-0" />
+            <span className="font-medium truncate">{formatWeight(pokemon.weight)}</span>
           </div>
         </div>
 
         {/* Abilities */}
         {pokemon.abilities.length > 0 && (
           <div className="pt-1 border-t border-border/30">
-            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-              <Zap className="w-3 h-3" />
+            <div className="flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider mb-1 sm:mb-1.5">
+              <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
               <span>Abilities</span>
             </div>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-0.5 sm:gap-1">
               {pokemon.abilities.map((ability, idx) => (
                 <span
                   key={ability}
-                  className={`px-2 py-0.5 rounded text-[10px] font-medium ${
+                  className={`px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-medium truncate max-w-full ${
                     idx === 0
                       ? "bg-[hsl(var(--electric)/0.15)] text-[hsl(var(--electric))] border border-[hsl(var(--electric)/0.3)]"
                       : "bg-secondary text-muted-foreground"
@@ -172,23 +164,23 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         )}
 
         {/* Habitat & Egg Groups */}
-        <div className="pt-1 border-t border-border/30 grid grid-cols-2 gap-2 text-[10px]">
+        <div className="pt-1 border-t border-border/30 flex flex-col md:grid md:grid-cols-2 gap-1.5 sm:gap-2 text-[9px] sm:text-[10px]">
           {pokemon.habitat && (
             <div>
-              <div className="flex items-center gap-1 text-muted-foreground uppercase tracking-wider mb-1">
-                <Leaf className="w-3 h-3" />
+              <div className="flex items-center gap-0.5 sm:gap-1 text-muted-foreground uppercase tracking-wider mb-0.5 sm:mb-1">
+                <Leaf className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
                 <span>Habitat</span>
               </div>
-              <span className="font-medium text-foreground">{capitalize(pokemon.habitat)}</span>
+              <span className="font-medium text-foreground truncate block">{capitalize(pokemon.habitat)}</span>
             </div>
           )}
           {pokemon.egg_groups.length > 0 && (
             <div>
-              <div className="flex items-center gap-1 text-muted-foreground uppercase tracking-wider mb-1">
-                <Dna className="w-3 h-3" />
+              <div className="flex items-center gap-0.5 sm:gap-1 text-muted-foreground uppercase tracking-wider mb-0.5 sm:mb-1">
+                <Dna className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
                 <span>Egg Groups</span>
               </div>
-              <span className="font-medium text-foreground">
+              <span className="font-medium text-foreground truncate block">
                 {pokemon.egg_groups.map(capitalize).join(", ")}
               </span>
             </div>
@@ -196,11 +188,11 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
         </div>
 
         {/* Capture Rate & Base XP */}
-        <div className="pt-1 border-t border-border/30 flex justify-between text-[10px] text-muted-foreground">
-          <span>
+        <div className="pt-1 border-t border-border/30 flex flex-col md:flex-row md:justify-between gap-1 sm:gap-2 text-[9px] sm:text-[10px] text-muted-foreground">
+          <span className="truncate">
             Catch Rate: <span className="font-bold text-foreground">{pokemon.capture_rate}</span>
           </span>
-          <span>
+          <span className="truncate">
             Base XP: <span className="font-bold text-foreground">{pokemon.base_experience}</span>
           </span>
         </div>
@@ -208,8 +200,8 @@ export default function PokemonInfoPanel({ pokemon, side = "left" }: PokemonInfo
 
       {/* Flavor Text */}
       {pokemon.flavor_text && (
-        <div className="bg-secondary/30 rounded-lg p-3 border border-border/30">
-          <p className="text-xs text-muted-foreground italic leading-relaxed text-center">
+        <div className="bg-secondary/30 rounded-lg p-2 sm:p-3 border border-border/30">
+          <p className="text-[9px] sm:text-xs text-muted-foreground italic leading-relaxed text-center">
             "{pokemon.flavor_text}"
           </p>
         </div>
