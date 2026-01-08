@@ -5,6 +5,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import { getRandomPokemonName } from "@/util/pokemons";
+import { PHProvider } from './providers/posthog';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
 
@@ -159,10 +160,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <Navigation randomR1={r1} randomR2={r2} />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <Analytics />
+        <PHProvider>
+          <Navigation randomR1={r1} randomR2={r2} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Analytics />
+        </PHProvider>
       </body>
     </html>
   );
