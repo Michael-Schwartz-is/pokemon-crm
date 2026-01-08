@@ -75,21 +75,25 @@ export default function RarityPage() {
           <div className="flex flex-col gap-3">
             {[...rarityData].reverse().map((rarity, index) => {
               // Calculate width based on rarity (rarer = narrower)
-              const widthPercent = 40 + (index * 10);
-              
+              // Mobile: wider pyramid (70-100%), Desktop: steeper pyramid (40-90%)
+              const totalTiers = rarityData.length;
+              const mobileWidthPercent = 70 + ((index / totalTiers) * 30);
+              const desktopWidthPercent = 40 + (index * 10);
+
               return (
                 <Link
                   key={rarity.id}
                   href={`/rarity/${rarity.id}`}
-                  className="group relative mx-auto transition-all duration-300 hover:scale-105 animate-fade-up"
-                  style={{ 
-                    width: `${widthPercent}%`,
+                  className="group relative mx-auto transition-all duration-300 hover:scale-105 animate-fade-up pyramid-tier"
+                  style={{
+                    width: `${mobileWidthPercent}%`,
                     animationDelay: `${index * 100}ms`,
+                    ['--desktop-width' as string]: `${desktopWidthPercent}%`,
                   }}
                 >
-                  <div 
+                  <div
                     className="relative overflow-hidden rounded-xl p-4 sm:p-5 border-2 transition-all duration-300 group-hover:shadow-2xl"
-                    style={{ 
+                    style={{
                       backgroundColor: `${rarity.color}15`,
                       borderColor: `${rarity.color}50`,
                       boxShadow: `0 4px 20px ${rarity.color}20`,
@@ -97,29 +101,29 @@ export default function RarityPage() {
                   >
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-                    
-                    <div className="relative flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <div 
-                          className="w-10 h-10 rounded-lg flex items-center justify-center"
-                          style={{ 
+
+                    <div className="relative flex items-center justify-between gap-2 sm:gap-4">
+                      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                        <div
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center shrink-0"
+                          style={{
                             backgroundColor: `${rarity.color}30`,
                             color: rarity.color,
                           }}
                         >
                           {RARITY_ICONS[rarity.id]}
                         </div>
-                        <div>
-                          <h2 className="text-lg font-bold text-foreground group-hover:text-[hsl(var(--electric))] transition-colors">
+                        <div className="min-w-0 flex-1">
+                          <h2 className="text-base sm:text-lg font-bold text-foreground group-hover:text-[hsl(var(--electric))] transition-colors">
                             {rarity.name}
                           </h2>
-                          <p className="text-xs text-muted-foreground hidden sm:block">
-                            Capture Rate: {rarity.capture_rate_range}
+                          <p className="text-xs text-muted-foreground">
+                            {rarity.capture_rate_range}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight 
-                        className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform"
+                      <ChevronRight
+                        className="w-5 h-5 shrink-0 text-muted-foreground group-hover:translate-x-1 transition-transform"
                         style={{ color: rarity.color }}
                       />
                     </div>
@@ -129,6 +133,14 @@ export default function RarityPage() {
             })}
           </div>
         </div>
+
+        <style jsx global>{`
+          @media (min-width: 640px) {
+            .pyramid-tier {
+              width: var(--desktop-width) !important;
+            }
+          }
+        `}</style>
 
         {/* Rarity Cards Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -231,4 +243,5 @@ export default function RarityPage() {
     </>
   );
 }
+
 

@@ -76,7 +76,7 @@ export default function GenerationsPage() {
         {/* Timeline */}
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[hsl(var(--electric))] via-[hsl(var(--fire))] to-[hsl(var(--plasma))] hidden sm:block" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[hsl(var(--electric))] via-[hsl(var(--fire))] to-[hsl(var(--plasma))]" />
 
           <div className="space-y-8">
             {generationsData.map((gen, index) => {
@@ -94,17 +94,17 @@ export default function GenerationsPage() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {/* Timeline dot */}
-                  <div 
-                    className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full border-4 border-background -translate-x-1/2 z-10 hidden sm:block transition-transform group-hover:scale-150"
+                  <div
+                    className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full border-4 border-background -translate-x-1/2 z-10 transition-transform group-hover:scale-150"
                     style={{ backgroundColor: color }}
                   />
 
                   {/* Card */}
-                  <div 
+                  <div
                     className={`
                       flex-1 p-6 rounded-2xl bg-card border border-border transition-all duration-300
                       group-hover:border-[hsl(var(--electric)/0.5)] group-hover:shadow-lg
-                      sm:ml-16 md:ml-0
+                      ml-10 md:ml-0
                       ${isEven ? "md:mr-[52%]" : "md:ml-[52%]"}
                     `}
                   >
@@ -195,4 +195,5 @@ export default function GenerationsPage() {
     </>
   );
 }
+
 
