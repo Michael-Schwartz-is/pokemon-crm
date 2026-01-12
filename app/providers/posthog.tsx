@@ -2,17 +2,11 @@
 
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
-import { useEffect, Suspense } from 'react'
+import { useEffect, Suspense, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
-if (typeof window !== 'undefined') {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    person_profiles: 'identified_only',
-    capture_pageview: false, // Disable automatic pageview capture, as we capture manually
-    capture_pageleave: true,
-  })
-}
+// Defer PostHog initialization to reduce main thread blocking
+let posthogInitialized = false;
 
 function PostHogPageView(): null {
   const pathname = usePathname()
@@ -34,11 +28,30 @@ function PostHogPageView(): null {
 }
 
 export function PHProvider({ children }: { children: React.ReactNode }) {
+  const [isReady, setIsReady] = useState(posthogInitialized)
+
+  useEffect(() => {
+    if (!posthogInitialized && typeof window !== 'undefined') {
+      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+        person_profiles: 'identified_only',
+        capture_pageview: false,
+        capture_pageleave: true,
+        loaded: () => {
+          posthogInitialized = true
+          setIsReady(true)
+        }
+      })
+    }
+  }, [])
+
   return (
     <PostHogProvider client={posthog}>
-      <Suspense fallback={null}>
-        <PostHogPageView />
-      </Suspense>
+      {isReady && (
+        <Suspense fallback={null}>
+          <PostHogPageView />
+        </Suspense>
+      )}
       {children}
     </PostHogProvider>
   )

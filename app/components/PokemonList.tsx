@@ -197,7 +197,7 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
           <div
             key={poke.name}
             className="w-full flex justify-center animate-fade-up"
-            style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}
+            style={{ animationDelay: `${Math.min(index * 20, 150)}ms` }}
           >
             <PokemonCard
               poke={poke}

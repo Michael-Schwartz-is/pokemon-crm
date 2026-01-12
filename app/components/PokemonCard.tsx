@@ -146,10 +146,13 @@ export default function PokemonCard({
         <div className="relative w-full h-full rounded-xl overflow-visible flex items-center justify-center">
           <img
             src={imgSrc || getFallbackImageUrl()}
+            width={200}
+            height={200}
             className="w-full h-full scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
             alt={poke.name}
             loading={priority ? "eager" : "lazy"}
             fetchPriority={priority ? "high" : undefined}
+            decoding={priority ? "sync" : "async"}
             onError={() => setImgSrc(getFallbackImageUrl())}
           />
         </div>
