@@ -1,7 +1,7 @@
 "use client";
 
 import { Pokemon, Stats } from "@/util/CachePokemons";
-import { useState, useEffect } from "react";
+import { useState, memo } from "react";
 import { Check, Zap, Activity } from "lucide-react";
 import TypeBadge from "./TypeBadge";
 import Image from "next/image";
@@ -82,20 +82,16 @@ function MiniStatBar({
   );
 }
 
-export default function PokemonCard({
+function PokemonCardComponent({
   poke,
   isSelected,
   onSelect,
   showChart = false,
   priority = false,
 }: PokemonCardProps) {
-  // Use R2-hosted optimized images if available, fallback to original
-  const [imgSrc, setImgSrc] = useState(() => getPokemonImageUrl(poke.id));
+  // Use R2-hosted optimized images - compute URL directly, no state needed
+  const [imgSrc, setImgSrc] = useState(getPokemonImageUrl(poke.id));
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    setImgSrc(getPokemonImageUrl(poke.id));
-  }, [poke.id]);
 
   const handleChartData = (arr: Stats[]) => {
     const chartData = arr.map((item: Stats) => ({
@@ -252,3 +248,7 @@ export default function PokemonCard({
     </div>
   );
 }
+
+// Memoize to prevent unnecessary re-renders during scrolling/filtering
+const PokemonCard = memo(PokemonCardComponent);
+export default PokemonCard;

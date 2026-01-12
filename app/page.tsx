@@ -59,12 +59,13 @@ export default async function Home() {
   const pokemons = Object.values(allPokemons);
   const jsonLd = generateHomeSchema(pokemons.length);
 
-  // Preload first 4 Pokemon images for LCP optimization
-  const preloadImages = pokemons.slice(0, 4).map((p) => getPokemonImageUrl(p.id));
+  // Preload only the first 2 Pokemon images for LCP optimization (above the fold on mobile)
+  // Using fewer preloads reduces bandwidth contention
+  const preloadImages = pokemons.slice(0, 2).map((p) => getPokemonImageUrl(p.id));
 
   return (
     <>
-      {/* Preload LCP images with proper type hints */}
+      {/* Preload LCP images - only first 2 for mobile viewport */}
       {preloadImages.map((src, index) => (
         <link
           key={src}
@@ -73,7 +74,7 @@ export default async function Home() {
           href={src}
           type="image/avif"
           // @ts-expect-error - fetchPriority is valid HTML attribute
-          fetchpriority={index === 0 ? "high" : "auto"}
+          fetchpriority={index === 0 ? "high" : "low"}
         />
       ))}
       <script

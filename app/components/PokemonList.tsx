@@ -81,7 +81,8 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
     sortOption,
     filters,
   } = useStore();
-  const [displayLimit, setDisplayLimit] = useState(40);
+  // Start with 20 items for faster initial render, then load more
+  const [displayLimit, setDisplayLimit] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const loadMoreRef = useRef<HTMLDivElement>(null);
