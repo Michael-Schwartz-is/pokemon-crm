@@ -12,6 +12,7 @@ import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import { Metadata } from "next";
 import { Swords } from "lucide-react";
 import ComparisonView from "@/app/components/ComparisonView";
+import { getPokemonImageUrl } from "@/util/pokemonImage";
 
 type compareProps = {
   params: Promise<{
@@ -87,7 +88,7 @@ function generateJsonLd(pokemon1: Pokemon, pokemon2: Pokemon, id1: string, id2: 
           item: {
             "@type": "Thing",
             name: capitalize(pokemon1.name),
-            image: pokemon1.image,
+            image: getPokemonImageUrl(pokemon1.id),
             description: `${capitalize(pokemon1.name)} Pokemon with stats comparison`,
           },
         },
@@ -97,7 +98,7 @@ function generateJsonLd(pokemon1: Pokemon, pokemon2: Pokemon, id1: string, id2: 
           item: {
             "@type": "Thing",
             name: capitalize(pokemon2.name),
-            image: pokemon2.image,
+            image: getPokemonImageUrl(pokemon2.id),
             description: `${capitalize(pokemon2.name)} Pokemon with stats comparison`,
           },
         },
