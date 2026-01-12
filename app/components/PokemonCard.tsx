@@ -104,9 +104,6 @@ export default function PokemonCard({
 
   const pokeChartData = handleChartData(poke.stats);
 
-  // Calculate total stats
-  const totalStats = poke.stats.reduce((sum, stat) => sum + Number(stat.base_stat), 0);
-
   return (
     <div
       onClick={onSelect}
@@ -175,11 +172,6 @@ export default function PokemonCard({
                   Base Stats
                 </span>
               </div>
-              <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-gradient-to-r from-[hsl(var(--electric)/0.2)] to-[hsl(var(--fire)/0.2)] border border-[hsl(var(--electric)/0.3)]">
-                <span className="text-[9px] sm:text-[10px] font-mono font-bold text-[hsl(var(--electric))]">
-                  Σ {totalStats}
-                </span>
-              </div>
             </div>
 
             {/* Stat bars */}
@@ -230,11 +222,6 @@ export default function PokemonCard({
             </div>
             <span className="text-[9px] font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
               Base Stats
-            </span>
-          </div>
-          <div className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-[hsl(var(--electric)/0.2)] to-[hsl(var(--fire)/0.2)] border border-[hsl(var(--electric)/0.3)]">
-            <span className="text-[9px] font-mono font-bold text-[hsl(var(--electric))]">
-              Σ {totalStats}
             </span>
           </div>
         </div>
