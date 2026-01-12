@@ -7,10 +7,13 @@ import Footer from "./components/Footer";
 import { getRandomPokemonName } from "@/util/pokemons";
 import { PHProvider } from './providers/posthog';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "Pokemon CRM - Compare Pokemon Stats & Abilities",
     template: "%s | Pokemon CRM",

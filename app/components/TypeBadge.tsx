@@ -78,3 +78,4 @@ export default function TypeBadge({
 // Export the colors for use in other components
 export { TYPE_COLORS };
 
+

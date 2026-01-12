@@ -9,7 +9,7 @@ import PokemonCard from "@/app/components/PokemonCard";
 import rolesData from "@/app/data/roles.json";
 import { ArrowLeft, Sword, Sparkles, Shield, ShieldPlus, Zap, Scale, ChevronRight, Target } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 type RolePageProps = {
   params: Promise<{ role: string }>;
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: RolePageProps): Promise<Metad
     title: `${roleData.name} Pokemon - Best ${roleData.name}s for Your Team`,
     description: roleData.description,
     alternates: {
-      canonical: `${baseUrl}/roles/${role}`,
+      canonical: `/roles/${role}`,
     },
     openGraph: {
       title: `${roleData.name} Pokemon`,

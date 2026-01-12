@@ -3,13 +3,13 @@ import { Metadata } from "next";
 import rolesData from "@/app/data/roles.json";
 import { Sword, Sparkles, Shield, ShieldPlus, Zap, Scale, ChevronRight } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Pokemon Battle Roles - Team Building Guide",
   description: "Understand Pokemon battle roles: Physical Attackers, Special Attackers, Tanks, Speedsters, and more. Build balanced teams with the right roles.",
   alternates: {
-    canonical: `${baseUrl}/roles`,
+    canonical: "/roles",
   },
   openGraph: {
     title: "Pokemon Battle Roles - Team Building Guide",
@@ -172,4 +172,5 @@ export default function RolesPage() {
     </>
   );
 }
+
 

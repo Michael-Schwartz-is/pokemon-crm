@@ -3,13 +3,13 @@ import { Metadata } from "next";
 import typesData from "@/app/data/types.json";
 import { Flame, Droplets, Zap, Leaf, Snowflake, Sword, Skull, Mountain, Wind, Brain, Bug, Gem, Ghost, Sparkles, Moon, Shield, Heart } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Pokemon Types - All 18 Types Explained",
   description: "Explore all 18 Pokemon types with damage relations, strengths, weaknesses, and Pokemon lists. Master type matchups for battle strategy.",
   alternates: {
-    canonical: `${baseUrl}/types`,
+    canonical: "/types",
   },
   openGraph: {
     title: "Pokemon Types - All 18 Types Explained",
@@ -170,4 +170,5 @@ export default function TypesPage() {
     </>
   );
 }
+
 

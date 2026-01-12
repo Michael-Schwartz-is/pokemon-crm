@@ -14,14 +14,14 @@ import { Metadata } from "next";
 // Force dynamic rendering to get fresh random Pokemon on each page load
 export const dynamic = "force-dynamic";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Compare Pokemon - Head-to-Head Battle Analysis",
   description:
     "Compare any two Pokemon side by side. Analyze stats, abilities, strengths and weaknesses to determine which Pokemon would win in battle.",
   alternates: {
-    canonical: `${baseUrl}/compare`,
+    canonical: "/compare",
   },
   openGraph: {
     title: "Compare Pokemon - Head-to-Head Battle Analysis",

@@ -5,14 +5,14 @@ import PokemonList from "../components/PokemonList";
 import { Metadata } from "next";
 import { Flame, Trophy } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Popular Pokemon - Most Searched & Compared",
   description:
     "Discover the most popular Pokemon. See which Pokemon are trending, most compared, and fan favorites with detailed stats and abilities.",
   alternates: {
-    canonical: `${baseUrl}/popular`,
+    canonical: "/popular",
   },
   openGraph: {
     title: "Popular Pokemon - Most Searched & Compared",

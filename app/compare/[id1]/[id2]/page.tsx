@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: compareProps): Promise<Metada
   const name1 = capitalize(id1);
   const name2 = capitalize(id2);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
   const canonicalUrl = `${baseUrl}/compare/${id1}/${id2}`;
 
   return {
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: compareProps): Promise<Metada
       "pokemon comparison",
     ],
     alternates: {
-      canonical: canonicalUrl,
+      canonical: `/compare/${id1}/${id2}`,
     },
     openGraph: {
       title: `${name1} vs ${name2} - Who Would Win?`,
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: compareProps): Promise<Metada
 
 // JSON-LD structured data for rich snippets
 function generateJsonLd(pokemon1: Pokemon, pokemon2: Pokemon, id1: string, id2: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
   return {
     "@context": "https://schema.org",

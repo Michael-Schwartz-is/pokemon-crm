@@ -3,13 +3,13 @@ import { Metadata } from "next";
 import rarityData from "@/app/data/rarity.json";
 import { Gem, ChevronRight, Crown, Sparkles } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Pokemon Rarity Tiers - From Common to Mythical",
   description: "Explore Pokemon rarity tiers from Common to Mythical. Understand capture rates, discover rare Pokemon, and plan your collection strategy.",
   alternates: {
-    canonical: `${baseUrl}/rarity`,
+    canonical: "/rarity",
   },
   openGraph: {
     title: "Pokemon Rarity Tiers - From Common to Mythical",

@@ -3,13 +3,13 @@ import { Metadata } from "next";
 import generationsData from "@/app/data/generations.json";
 import { MapPin, Calendar, Gamepad2, Users, ChevronRight } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "Pokemon Generations - Complete History from Gen I to IX",
   description: "Explore all 9 Pokemon generations from Kanto to Paldea. Discover each region's starters, legendaries, and the Pokemon introduced in each era.",
   alternates: {
-    canonical: `${baseUrl}/generations`,
+    canonical: "/generations",
   },
   openGraph: {
     title: "Pokemon Generations - Complete History",

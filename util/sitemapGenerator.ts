@@ -347,3 +347,4 @@ export function getComparisonPriority(name1: string, name2: string): number {
   return 0.5; // Default priority
 }
 
+

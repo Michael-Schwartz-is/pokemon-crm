@@ -8,7 +8,7 @@ import CategoryPokemonGrid from "@/app/components/CategoryPokemonGrid";
 import rarityData from "@/app/data/rarity.json";
 import { ArrowLeft, Gem, Crown, Sparkles, ChevronRight, Target } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 type RarityPageProps = {
   params: Promise<{ tier: string }>;
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: RarityPageProps): Promise<Met
     title: `${tierData.name} Pokemon - All ${tierData.name} Tier Pokemon`,
     description: tierData.description,
     alternates: {
-      canonical: `${baseUrl}/rarity/${tier}`,
+      canonical: `/rarity/${tier}`,
     },
     openGraph: {
       title: `${tierData.name} Pokemon`,

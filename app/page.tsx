@@ -4,14 +4,14 @@ import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
 import { Metadata } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 export const metadata: Metadata = {
   title: "All Pokemon - Browse & Compare Stats",
   description:
     "Browse all Pokemon with detailed stats. Compare abilities, strengths, and weaknesses. Find your favorite Pokemon and discover new battle strategies.",
   alternates: {
-    canonical: baseUrl,
+    canonical: "/",
   },
   openGraph: {
     title: "All Pokemon - Browse & Compare Stats",

@@ -193,3 +193,4 @@ export function GenerationBadge({ generation, size = "sm", clickable = true }: G
 
 export { RARITY_COLORS, ROLE_COLORS, GEN_COLORS };
 
+

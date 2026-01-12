@@ -8,7 +8,7 @@ import CategoryPokemonGrid from "@/app/components/CategoryPokemonGrid";
 import typesData from "@/app/data/types.json";
 import { ArrowLeft, Swords, Shield, Slash, ChevronRight } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 type TypePageProps = {
   params: Promise<{ type: string }>;
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: TypePageProps): Promise<Metad
     title: `${capitalizedType} Type Pokemon - Strengths, Weaknesses & Pokemon List`,
     description: typeData.description,
     alternates: {
-      canonical: `${baseUrl}/types/${type}`,
+      canonical: `/types/${type}`,
     },
     openGraph: {
       title: `${capitalizedType} Type Pokemon`,

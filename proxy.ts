@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Middleware to enforce canonical URLs for Pokemon comparisons.
+ * Proxy to enforce canonical URLs for Pokemon comparisons.
  * Ensures alphabetical ordering: /compare/bulbasaur/pikachu (not /compare/pikachu/bulbasaur)
  * This prevents duplicate content issues for SEO.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Only process /compare/[id1]/[id2] routes
@@ -46,4 +46,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: "/compare/:id1/:id2",
 };
-
