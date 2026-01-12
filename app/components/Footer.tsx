@@ -110,7 +110,7 @@ export default function Footer() {
           <div className="min-w-[48rem] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Main Links */}
             <div className="max-w-sm">
-              <h3 className="font-semibold text-foreground mb-4">Navigation</h3>
+              <h2 className="font-semibold text-foreground mb-4">Navigation</h2>
               <ul className="space-y-3">
                 {FOOTER_LINKS.main.map((link) => {
                   const Icon = link.icon;
@@ -136,7 +136,7 @@ export default function Footer() {
 
             {/* Browse Categories */}
             <div className="max-w-sm">
-              <h3 className="font-semibold text-foreground mb-4">Browse</h3>
+              <h2 className="font-semibold text-foreground mb-4">Browse</h2>
               <ul className="space-y-3">
                 {FOOTER_LINKS.browse.map((link) => {
                   const Icon = link.icon;
@@ -162,7 +162,7 @@ export default function Footer() {
 
             {/* Resources & SEO */}
             <div className="max-w-sm">
-              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
+              <h2 className="font-semibold text-foreground mb-4">Resources</h2>
               <ul className="space-y-3">
                 {FOOTER_LINKS.resources.map((link) => {
                   const Icon = link.icon;

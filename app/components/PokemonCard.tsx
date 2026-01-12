@@ -11,6 +11,8 @@ type PokemonCardProps = {
   isSelected?: boolean;
   onSelect?: () => void;
   showChart?: boolean;
+  /** Set to true for LCP/hero images to disable lazy loading and add fetchpriority="high" */
+  priority?: boolean;
 };
 
 // Stat color mapping - using hex values for proper inline style support
@@ -84,6 +86,7 @@ export default function PokemonCard({
   isSelected,
   onSelect,
   showChart = false,
+  priority = false,
 }: PokemonCardProps) {
   // Use R2-hosted optimized images if available, fallback to original
   const [imgSrc, setImgSrc] = useState(() => getPokemonImageUrl(poke.id));
@@ -145,7 +148,8 @@ export default function PokemonCard({
             src={imgSrc || getFallbackImageUrl()}
             className="w-full h-full scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
             alt={poke.name}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : undefined}
             onError={() => setImgSrc(getFallbackImageUrl())}
           />
         </div>

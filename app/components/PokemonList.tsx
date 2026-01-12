@@ -203,6 +203,7 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
               poke={poke}
               isSelected={selectedPokemonIds.includes(poke.name)}
               onSelect={() => toggleSelectedPokemon(poke.name)}
+              priority={index < 4}
             />
           </div>
         ))}

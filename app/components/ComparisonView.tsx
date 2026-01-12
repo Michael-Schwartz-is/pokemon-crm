@@ -20,13 +20,13 @@ export default function ComparisonView({ pokemonData1, pokemonData2 }: Compariso
       <div className="relative flex flex-row gap-3 sm:gap-6 md:gap-8 justify-center items-start">
         {/* Left Pokemon */}
         <div className="flex flex-col items-center gap-4">
-          {pokemonData1 && <PokemonCard poke={pokemonData1} showChart={false} />}
+          {pokemonData1 && <PokemonCard poke={pokemonData1} showChart={false} priority />}
           {pokemonData1 && <PokemonInfoPanel pokemon={pokemonData1} side="left" />}
         </div>
 
         {/* Right Pokemon */}
         <div className="flex flex-col items-center gap-4">
-          {pokemonData2 && <PokemonCard poke={pokemonData2} showChart={false} />}
+          {pokemonData2 && <PokemonCard poke={pokemonData2} showChart={false} priority />}
           {pokemonData2 && <PokemonInfoPanel pokemon={pokemonData2} side="right" />}
         </div>
 

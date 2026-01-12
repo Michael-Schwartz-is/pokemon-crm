@@ -145,7 +145,7 @@ export default async function page({ params }: compareProps) {
         <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[hsl(var(--fire)/0.1)] border border-[hsl(var(--fire)/0.2)] flex items-center justify-center">
           <Swords className="w-10 h-10 text-[hsl(var(--fire))]" />
         </div>
-        <h3 className="text-2xl sm:text-3xl font-black text-foreground mb-3">Fighter Not Found!</h3>
+        <h1 className="text-2xl sm:text-3xl font-black text-foreground mb-3">Fighter Not Found!</h1>
         <p className="text-muted-foreground max-w-md mx-auto">
           Could not find one or both Pokemon for this battle. Check the names and try again.
         </p>

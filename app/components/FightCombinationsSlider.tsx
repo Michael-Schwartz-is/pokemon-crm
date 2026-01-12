@@ -92,7 +92,7 @@ export default function FightCombinationsSlider({
           <Swords className="w-4 h-4 text-[hsl(var(--fire))]" />
           <span className="text-sm font-medium text-[hsl(var(--fire))]">More Battles</span>
         </div>
-        <h3 className="text-xl sm:text-2xl font-black text-foreground mb-2">Epic Matchups</h3>
+        <h2 className="text-xl sm:text-2xl font-black text-foreground mb-2">Epic Matchups</h2>
         <p className="text-sm text-muted-foreground">
           Pick your next battle — who will emerge victorious?
         </p>
