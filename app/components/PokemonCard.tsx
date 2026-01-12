@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { Pokemon, Stats } from "@/util/CachePokemons";
 import { useState, useEffect } from "react";
 import { Check, Zap, Activity } from "lucide-react";
 import TypeBadge from "./TypeBadge";
+import { getPokemonImageUrl, getFallbackImageUrl } from "@/util/pokemonImage";
 
 type PokemonCardProps = {
   poke: Pokemon;
@@ -85,12 +85,13 @@ export default function PokemonCard({
   onSelect,
   showChart = false,
 }: PokemonCardProps) {
-  const [imgSrc, setImgSrc] = useState(poke.image);
+  // Use R2-hosted optimized images if available, fallback to original
+  const [imgSrc, setImgSrc] = useState(() => getPokemonImageUrl(poke.id));
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    setImgSrc(poke.image);
-  }, [poke.image]);
+    setImgSrc(getPokemonImageUrl(poke.id));
+  }, [poke.id]);
 
   const handleChartData = (arr: Stats[]) => {
     const chartData = arr.map((item: Stats) => ({
@@ -142,21 +143,13 @@ export default function PokemonCard({
           <div className="absolute inset-0 bg-gradient-radial from-[hsl(var(--electric)/0.2)] via-transparent to-transparent" />
         </div>
 
-        <div className="relative w-full h-full rounded-xl overflow-visible">
-          <Image
-            src={
-              imgSrc ||
-              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
-            }
-            className="scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
-            fill
-            sizes="(max-width: 400px) 140px, (max-width: 640px) 180px, 300px"
+        <div className="relative w-full h-full rounded-xl overflow-visible flex items-center justify-center">
+          <img
+            src={imgSrc || getFallbackImageUrl()}
+            className="w-full h-full scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
             alt={poke.name}
-            onError={() =>
-              setImgSrc(
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
-              )
-            }
+            loading="lazy"
+            onError={() => setImgSrc(getFallbackImageUrl())}
           />
         </div>
 

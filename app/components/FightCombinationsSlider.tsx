@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Lock, Unlock, Shuffle, Swords, Zap } from "lucide-react";
+import { getPokemonImageUrl, getFallbackImageUrl } from "@/util/pokemonImage";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -27,35 +27,18 @@ function PokemonImage({
   pokemon: PokemonBasic;
   size?: "normal" | "large";
 }) {
-  const [errorCount, setErrorCount] = useState(0);
-  const sources = [
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png`,
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`,
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`,
-  ];
-
-  const placeholder =
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
-
+  const [hasError, setHasError] = useState(false);
   const sizeClasses = size === "large" ? "w-20 h-20 sm:w-28 sm:h-28" : "w-14 h-14 sm:w-16 sm:h-16";
 
   return (
     <div className={`relative ${sizeClasses} flex items-center justify-center`}>
-      {errorCount >= sources.length ? (
-        <img src={placeholder} alt="placeholder" className="w-10 h-10 object-contain opacity-30" />
-      ) : (
-        <Image
-          src={sources[errorCount]}
-          alt={pokemon.name}
-          fill
-          sizes={
-            size === "large" ? "(max-width: 640px) 80px, 112px" : "(max-width: 640px) 56px, 64px"
-          }
-          className="object-contain"
-          onError={() => setErrorCount((prev) => prev + 1)}
-          unoptimized={errorCount > 0}
-        />
-      )}
+      <img
+        src={hasError ? getFallbackImageUrl() : getPokemonImageUrl(Number(pokemon.id))}
+        alt={pokemon.name}
+        className="w-full h-full object-contain"
+        loading="lazy"
+        onError={() => setHasError(true)}
+      />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { Pokemon } from "@/util/CachePokemons";
+import { getPokemonImageUrl } from "@/util/pokemonImage";
 
 interface StickyCompareHeaderProps {
   pokemon1: Pokemon;
@@ -33,13 +33,12 @@ export default function StickyCompareHeader({ pokemon1, pokemon2 }: StickyCompar
       <div className="flex items-center justify-between px-4 py-2 gap-2">
         {/* Left Pokemon */}
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <div className="relative w-10 h-10 flex-shrink-0">
-            <Image
-              src={pokemon1.image}
+          <div className="w-10 h-10 flex-shrink-0">
+            <img
+              src={getPokemonImageUrl(pokemon1.id)}
               alt={pokemon1.name}
-              fill
-              className="object-contain"
-              sizes="40px"
+              className="w-full h-full object-contain"
+              loading="lazy"
             />
           </div>
           <span className="text-sm font-semibold capitalize truncate">
@@ -54,13 +53,12 @@ export default function StickyCompareHeader({ pokemon1, pokemon2 }: StickyCompar
 
         {/* Right Pokemon */}
         <div className="flex items-center gap-2 flex-1 min-w-0 flex-row-reverse">
-          <div className="relative w-10 h-10 flex-shrink-0">
-            <Image
-              src={pokemon2.image}
+          <div className="w-10 h-10 flex-shrink-0">
+            <img
+              src={getPokemonImageUrl(pokemon2.id)}
               alt={pokemon2.name}
-              fill
-              className="object-contain"
-              sizes="40px"
+              className="w-full h-full object-contain"
+              loading="lazy"
             />
           </div>
           <span className="text-sm font-semibold capitalize truncate text-right">

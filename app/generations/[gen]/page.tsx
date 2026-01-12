@@ -1,15 +1,15 @@
 import * as fs from "fs";
 import path from "path";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Pokemon } from "@/util/CachePokemons";
 import CategoryPokemonGrid from "@/app/components/CategoryPokemonGrid";
 import generationsData from "@/app/data/generations.json";
 import { ArrowLeft, MapPin, Calendar, Gamepad2, Crown, Sparkles, ChevronRight } from "lucide-react";
+import { getPokemonImageUrl } from "@/util/pokemonImage";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://pokemon-crm.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
 type GenerationPageProps = {
   params: Promise<{ gen: string }>;
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: GenerationPageProps): Promise
     title: `${genData.display_name} Pokemon - ${genData.region} Region Guide`,
     description: genData.description,
     alternates: {
-      canonical: `${baseUrl}/generations/${gen}`,
+      canonical: `/generations/${gen}`,
     },
     openGraph: {
       title: `${genData.display_name} Pokemon - ${genData.region} Region`,
@@ -91,12 +91,12 @@ function PokemonPreview({ pokemon }: { pokemon: Pokemon }) {
       href={`/compare/${pokemon.name}/${pokemon.name}`}
       className="group flex flex-col items-center p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
     >
-      <div className="relative w-16 h-16 mb-2">
-        <Image
-          src={pokemon.image}
+      <div className="w-16 h-16 mb-2">
+        <img
+          src={getPokemonImageUrl(pokemon.id)}
           alt={pokemon.name}
-          fill
-          className="object-contain group-hover:scale-110 transition-transform"
+          className="w-full h-full object-contain group-hover:scale-110 transition-transform"
+          loading="lazy"
         />
       </div>
       <span className="text-xs font-medium capitalize text-foreground">{pokemon.name}</span>

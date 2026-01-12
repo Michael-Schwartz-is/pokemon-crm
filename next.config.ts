@@ -1,17 +1,5 @@
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "raw.githubusercontent.com",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3000",
-      },
-    ],
-  },
+  // No image optimization needed - using pre-optimized AVIF/WebP from R2
 };
 
 export default nextConfig;
