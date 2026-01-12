@@ -4,6 +4,7 @@ import { Pokemon, Stats } from "@/util/CachePokemons";
 import { useState, useEffect } from "react";
 import { Check, Zap, Activity } from "lucide-react";
 import TypeBadge from "./TypeBadge";
+import Image from "next/image";
 import { getPokemonImageUrl, getFallbackImageUrl } from "@/util/pokemonImage";
 
 type PokemonCardProps = {
@@ -50,7 +51,7 @@ function MiniStatBar({
 
   return (
     <div className="flex items-center gap-1.5 sm:gap-2">
-      <span className="text-[9px] sm:text-[10px] font-mono font-medium text-muted-foreground w-10 sm:w-12 text-right uppercase tracking-tight">
+      <span className="text-[11px] sm:text-xs font-mono font-medium text-muted-foreground w-10 sm:w-12 text-right uppercase tracking-tight">
         {abbr}
       </span>
       <div className="flex-1 h-2.5 sm:h-3 bg-secondary/80 rounded-md overflow-hidden relative">
@@ -74,7 +75,7 @@ function MiniStatBar({
           <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent h-1/2" />
         </div>
       </div>
-      <span className="text-[9px] sm:text-[10px] font-mono font-bold text-foreground w-6 sm:w-7 tabular-nums">
+      <span className="text-[11px] sm:text-xs font-mono font-bold text-foreground w-6 sm:w-7 tabular-nums">
         {value}
       </span>
     </div>
@@ -144,16 +145,17 @@ export default function PokemonCard({
         </div>
 
         <div className="relative w-full h-full rounded-xl overflow-visible flex items-center justify-center">
-          <img
+          <Image
             src={imgSrc || getFallbackImageUrl()}
             width={200}
             height={200}
             className="w-full h-full scale-125 sm:scale-130 object-contain transition-transform duration-500 group-hover:scale-135 -translate-y-[10%]"
-            alt={poke.name}
+            alt={`${poke.name} - Pokemon with ${poke.types.join(' and ')} type`}
+            priority={priority}
             loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : undefined}
-            decoding={priority ? "sync" : "async"}
+            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
             onError={() => setImgSrc(getFallbackImageUrl())}
+            unoptimized
           />
         </div>
 
@@ -173,9 +175,9 @@ export default function PokemonCard({
             <div className="flex items-center justify-between mb-1.5 sm:mb-2">
               <div className="flex items-center gap-1.5">
                 <div className="p-1 rounded-md bg-[hsl(var(--electric)/0.15)]">
-                  <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[hsl(var(--electric))]" />
+                  <Activity className="w-3 h-3 text-[hsl(var(--electric))]" aria-hidden="true" />
                 </div>
-                <span className="text-[9px] sm:text-[10px] font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
+                <span className="text-[11px] sm:text-xs font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
                   Base Stats
                 </span>
               </div>
@@ -225,9 +227,9 @@ export default function PokemonCard({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
             <div className="p-1 rounded-md bg-[hsl(var(--electric)/0.15)]">
-              <Activity className="w-2.5 h-2.5 text-[hsl(var(--electric))]" />
+              <Activity className="w-3 h-3 text-[hsl(var(--electric))]" aria-hidden="true" />
             </div>
-            <span className="text-[9px] font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
+            <span className="text-[11px] font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
               Base Stats
             </span>
           </div>

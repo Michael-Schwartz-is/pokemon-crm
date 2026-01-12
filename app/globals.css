@@ -65,7 +65,7 @@
     --secondary: 240 10% 18%;
     --secondary-foreground: 60 10% 95%;
     --muted: 240 10% 20%;
-    --muted-foreground: 240 5% 55%;
+    --muted-foreground: 240 5% 65%;
     --accent: 280 100% 65%;
     --accent-foreground: 60 10% 95%;
     --destructive: 0 85% 60%;
@@ -142,13 +142,10 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Better tap targets on mobile */
-@media (max-width: 640px) {
-  button,
-  a {
-    min-height: 44px;
-    min-width: 44px;
-  }
+/* Better tap targets on mobile - applied via class to avoid layout issues */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* Safe area padding for notched devices */
@@ -284,13 +281,13 @@ html {
   color: hsl(var(--electric));
 }
 
-/* Card hover lift */
+/* Card hover scale */
 .card-lift {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-lift:hover {
-  transform: translateY(-8px);
+  transform: scale(1.03);
   box-shadow: 0 20px 40px hsl(240 15% 0% / 0.4), 0 0 30px hsl(var(--electric) / 0.1);
 }
 
@@ -326,19 +323,17 @@ html {
 }
 
 /* Stagger animation for grid items */
-@keyframes fade-up {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .animate-fade-up {
-  animation: fade-up 0.5s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
 }
 
 /* Selection ring pulse */

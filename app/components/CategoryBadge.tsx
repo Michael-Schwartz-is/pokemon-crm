@@ -33,14 +33,14 @@ const ROLE_NAMES: Record<string, string> = {
   "balanced": "Balanced",
 };
 
-// Generation colors
+// Generation colors - adjusted for better contrast
 const GEN_COLORS: Record<string, string> = {
   "generation-i": "#FF1111",
   "generation-ii": "#E6C317",
   "generation-iii": "#00A8FF",
   "generation-iv": "#4A90D9",
-  "generation-v": "#3C3C3C",
-  "generation-vi": "#025DA6",
+  "generation-v": "#5C5C5C",
+  "generation-vi": "#1E90FF",
   "generation-vii": "#F4A100",
   "generation-viii": "#00D4AA",
   "generation-ix": "#E74C3C",
@@ -69,7 +69,7 @@ export function RarityBadge({ rarity, size = "sm", clickable = true }: RarityBad
   const color = RARITY_COLORS[rarity] || "#888";
   
   const sizeClasses = {
-    sm: "px-1.5 py-0.5 text-[9px] gap-0.5",
+    sm: "px-1.5 py-0.5 text-[11px] gap-0.5",
     md: "px-2 py-1 text-xs gap-1",
   };
 
@@ -118,7 +118,7 @@ export function RoleBadge({ role, size = "sm", clickable = true }: RoleBadgeProp
   const displayName = ROLE_NAMES[role] || role;
   
   const sizeClasses = {
-    sm: "px-1.5 py-0.5 text-[9px]",
+    sm: "px-1.5 py-0.5 text-[11px]",
     md: "px-2 py-1 text-xs",
   };
 
@@ -160,7 +160,7 @@ export function GenerationBadge({ generation, size = "sm", clickable = true }: G
   const displayName = GEN_NAMES[generation] || generation;
   
   const sizeClasses = {
-    sm: "px-1.5 py-0.5 text-[9px]",
+    sm: "px-1.5 py-0.5 text-[11px]",
     md: "px-2 py-1 text-xs",
   };
 

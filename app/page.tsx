@@ -3,6 +3,7 @@ import path from "path";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
 import { Metadata } from "next";
+import { getPokemonImageUrl } from "@/util/pokemonImage";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
@@ -58,8 +59,23 @@ export default async function Home() {
   const pokemons = Object.values(allPokemons);
   const jsonLd = generateHomeSchema(pokemons.length);
 
+  // Preload first 4 Pokemon images for LCP optimization
+  const preloadImages = pokemons.slice(0, 4).map((p) => getPokemonImageUrl(p.id));
+
   return (
     <>
+      {/* Preload LCP images with proper type hints */}
+      {preloadImages.map((src, index) => (
+        <link
+          key={src}
+          rel="preload"
+          as="image"
+          href={src}
+          type="image/avif"
+          // @ts-expect-error - fetchPriority is valid HTML attribute
+          fetchpriority={index === 0 ? "high" : "auto"}
+        />
+      ))}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -182,9 +182,10 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
 
             <button
               onClick={clearSelectedPokemons}
+              aria-label="Clear selected Pokemon"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" aria-hidden="true" />
               Clear
             </button>
           </div>

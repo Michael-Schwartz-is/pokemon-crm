@@ -128,6 +128,9 @@ function FilterDropdown({
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-label={`Filter by ${label}${selected.length > 0 ? `, ${selected.length} selected` : ''}`}
         className={`
           flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all
           ${selected.length > 0
@@ -138,20 +141,22 @@ function FilterDropdown({
       >
         {label}
         {selected.length > 0 && (
-          <span className="px-1.5 py-0.5 rounded-md bg-[hsl(var(--electric))] text-background text-xs font-bold">
+          <span className="px-1.5 py-0.5 rounded-md bg-[hsl(var(--electric))] text-background text-xs font-bold" aria-hidden="true">
             {selected.length}
           </span>
         )}
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 min-w-[180px] max-h-[280px] overflow-y-auto rounded-xl bg-card border border-border shadow-xl z-50 py-1">
+        <div role="listbox" aria-label={`${label} options`} className="absolute top-full left-0 mt-1 min-w-[180px] max-h-[280px] overflow-y-auto rounded-xl bg-card border border-border shadow-xl z-50 py-1">
           {options.map((option) => {
             const isSelected = selected.includes(option.value);
             return (
               <button
                 key={option.value}
+                role="option"
+                aria-selected={isSelected}
                 onClick={() => {
                   onSelect(option.value);
                   // Close after selection on mobile, or if not multiSelect
@@ -171,7 +176,7 @@ function FilterDropdown({
                   <>
                     <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                       isSelected ? "border-[hsl(var(--electric))] bg-[hsl(var(--electric))]" : "border-muted-foreground/40"
-                    }`}>
+                    }`} aria-hidden="true">
                       {isSelected && <span className="text-background text-xs">✓</span>}
                     </span>
                     {option.label}
@@ -284,6 +289,8 @@ export default function FilterSortPanel() {
         {/* Quick Toggles */}
         <button
           onClick={() => setFilters({ isLegendary: filters.isLegendary === true ? null : true })}
+          aria-label={filters.isLegendary === true ? "Remove Legendary filter" : "Filter by Legendary Pokemon"}
+          aria-pressed={filters.isLegendary === true}
           className={`
             flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
             ${filters.isLegendary === true
@@ -292,12 +299,14 @@ export default function FilterSortPanel() {
             }
           `}
         >
-          <Crown className="w-3.5 h-3.5" />
+          <Crown className="w-3.5 h-3.5" aria-hidden="true" />
           <span className="hidden sm:inline">Legendary</span>
         </button>
 
         <button
           onClick={() => setFilters({ isMythical: filters.isMythical === true ? null : true })}
+          aria-label={filters.isMythical === true ? "Remove Mythical filter" : "Filter by Mythical Pokemon"}
+          aria-pressed={filters.isMythical === true}
           className={`
             flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
             ${filters.isMythical === true
@@ -306,17 +315,18 @@ export default function FilterSortPanel() {
             }
           `}
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
           <span className="hidden sm:inline">Mythical</span>
-          </button>
+        </button>
 
         {/* Clear All */}
         {activeFilterCount > 0 && (
           <button
             onClick={clearFilters}
+            aria-label="Clear all filters"
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
             <span className="hidden sm:inline">Clear</span>
           </button>
         )}
@@ -326,9 +336,12 @@ export default function FilterSortPanel() {
 
         {/* Sort Dropdown */}
         <div className="relative">
+          <label htmlFor="sort-select" className="sr-only">Sort Pokemon by</label>
           <select
+            id="sort-select"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOption)}
+            aria-label="Sort Pokemon by"
             className="
               appearance-none pl-9 pr-8 py-2 rounded-lg font-medium text-sm
               bg-secondary/50 text-foreground border border-transparent
@@ -342,17 +355,18 @@ export default function FilterSortPanel() {
               </option>
             ))}
           </select>
-          <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+          <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" aria-hidden="true" />
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" aria-hidden="true" />
         </div>
       </div>
 
       {/* Active Filter Tags */}
       {activeFilterCount > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 mt-3">
+        <div className="flex flex-wrap items-center gap-1.5 mt-3" role="list" aria-label="Active filters">
           {filters.types.map((type) => (
             <span
               key={type}
+              role="listitem"
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium capitalize"
               style={{
                 backgroundColor: TYPE_COLORS[type] + "25",
@@ -360,19 +374,20 @@ export default function FilterSortPanel() {
               }}
             >
               {type}
-              <button onClick={() => toggleFilter("types", type)} className="hover:opacity-70">
-                <X className="w-3 h-3" />
+              <button onClick={() => toggleFilter("types", type)} aria-label={`Remove ${type} type filter`} className="hover:opacity-70">
+                <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
           ))}
           {filters.generations.map((gen) => (
             <span
               key={gen}
+              role="listitem"
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[hsl(var(--electric)/0.15)] text-[hsl(var(--electric))]"
             >
               {ALL_GENERATIONS.find((g) => g.value === gen)?.label || gen}
-              <button onClick={() => toggleFilter("generations", gen)} className="hover:opacity-70">
-                <X className="w-3 h-3" />
+              <button onClick={() => toggleFilter("generations", gen)} aria-label={`Remove ${ALL_GENERATIONS.find((g) => g.value === gen)?.label || gen} filter`} className="hover:opacity-70">
+                <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
           ))}
@@ -381,6 +396,7 @@ export default function FilterSortPanel() {
             return (
               <span
                 key={rarity}
+                role="listitem"
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium"
                 style={{
                   backgroundColor: (info?.color || "#888") + "25",
@@ -388,8 +404,8 @@ export default function FilterSortPanel() {
                 }}
               >
                 {info?.label || rarity}
-                <button onClick={() => toggleFilter("rarityTiers", rarity)} className="hover:opacity-70">
-                  <X className="w-3 h-3" />
+                <button onClick={() => toggleFilter("rarityTiers", rarity)} aria-label={`Remove ${info?.label || rarity} rarity filter`} className="hover:opacity-70">
+                  <X className="w-3 h-3" aria-hidden="true" />
                 </button>
               </span>
             );
@@ -399,28 +415,29 @@ export default function FilterSortPanel() {
             return (
               <span
                 key={cat}
+                role="listitem"
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[hsl(var(--plasma)/0.15)] text-[hsl(var(--plasma))]"
               >
                 {info?.label || cat}
-                <button onClick={() => toggleFilter("statCategories", cat)} className="hover:opacity-70">
-                  <X className="w-3 h-3" />
+                <button onClick={() => toggleFilter("statCategories", cat)} aria-label={`Remove ${info?.label || cat} role filter`} className="hover:opacity-70">
+                  <X className="w-3 h-3" aria-hidden="true" />
                 </button>
               </span>
             );
           })}
           {filters.isLegendary === true && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#ffc107]/15 text-[#ffc107]">
+            <span role="listitem" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#ffc107]/15 text-[#ffc107]">
               Legendary
-              <button onClick={() => setFilters({ isLegendary: null })} className="hover:opacity-70">
-                <X className="w-3 h-3" />
+              <button onClick={() => setFilters({ isLegendary: null })} aria-label="Remove Legendary filter" className="hover:opacity-70">
+                <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
           )}
           {filters.isMythical === true && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#e91e63]/15 text-[#e91e63]">
+            <span role="listitem" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#e91e63]/15 text-[#e91e63]">
               Mythical
-              <button onClick={() => setFilters({ isMythical: null })} className="hover:opacity-70">
-                <X className="w-3 h-3" />
+              <button onClick={() => setFilters({ isMythical: null })} aria-label="Remove Mythical filter" className="hover:opacity-70">
+                <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
           )}
