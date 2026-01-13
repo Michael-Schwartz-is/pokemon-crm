@@ -10,6 +10,7 @@ import {
   Sparkles,
   Crown,
   RotateCcw,
+  SlidersHorizontal,
 } from "lucide-react";
 
 // All Pokemon types
@@ -201,6 +202,22 @@ export default function FilterSortPanel() {
     setFilters,
   } = useStore();
 
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const mobileFiltersRef = useRef<HTMLDivElement>(null);
+
+  // Close mobile filters when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (mobileFiltersRef.current && !mobileFiltersRef.current.contains(event.target as Node)) {
+        setMobileFiltersOpen(false);
+      }
+    }
+    if (mobileFiltersOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [mobileFiltersOpen]);
+
   const activeFilterCount =
     filters.types.length +
     filters.generations.length +
@@ -214,127 +231,175 @@ export default function FilterSortPanel() {
   const rarityOptions = RARITY_TIERS.map((r) => ({ value: r.value, label: r.label, color: r.color }));
   const roleOptions = STAT_CATEGORIES.map((c) => ({ value: c.value, label: c.label }));
 
+  // Filter content - reused in both mobile and desktop views
+  const FilterContent = () => (
+    <>
+      {/* Type Filter */}
+      <FilterDropdown
+        label="Type"
+        options={typeOptions}
+        selected={filters.types}
+        onSelect={(value) => toggleFilter("types", value)}
+        renderOption={(option, isSelected) => (
+          <>
+            <span
+              className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold ${
+                isSelected ? "ring-2 ring-offset-1 ring-offset-card" : ""
+              }`}
+              style={{
+                backgroundColor: option.color,
+                color: ["electric", "normal", "ground", "ice", "steel"].includes(option.value) ? "#1a1a2e" : "#fff",
+                "--tw-ring-color": option.color,
+              } as React.CSSProperties}
+            >
+              {isSelected && "✓"}
+            </span>
+            <span className="capitalize">{option.label}</span>
+          </>
+        )}
+      />
+
+      {/* Generation Filter */}
+      <FilterDropdown
+        label="Gen"
+        options={genOptions}
+        selected={filters.generations}
+        onSelect={(value) => toggleFilter("generations", value)}
+      />
+
+      {/* Rarity Filter */}
+      <FilterDropdown
+        label="Rarity"
+        options={rarityOptions}
+        selected={filters.rarityTiers}
+        onSelect={(value) => toggleFilter("rarityTiers", value as RarityTier)}
+        renderOption={(option, isSelected) => (
+          <>
+            <span
+              className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold ${
+                isSelected ? "ring-2 ring-offset-1 ring-offset-card" : ""
+              }`}
+              style={{
+                backgroundColor: option.color,
+                color: "#fff",
+                "--tw-ring-color": option.color,
+              } as React.CSSProperties}
+            >
+              {isSelected && "✓"}
+            </span>
+            {option.label}
+          </>
+        )}
+      />
+
+      {/* Role Filter */}
+      <FilterDropdown
+        label="Role"
+        options={roleOptions}
+        selected={filters.statCategories}
+        onSelect={(value) => toggleFilter("statCategories", value as StatCategory)}
+      />
+
+      <div className="w-px h-6 bg-border/50 mx-1 hidden md:block" />
+      <div className="w-full h-px bg-border/50 my-2 md:hidden" />
+
+      {/* Quick Toggles */}
+      <button
+        onClick={() => setFilters({ isLegendary: filters.isLegendary === true ? null : true })}
+        aria-label={filters.isLegendary === true ? "Remove Legendary filter" : "Filter by Legendary Pokemon"}
+        aria-pressed={filters.isLegendary === true}
+        className={`
+          flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
+          ${filters.isLegendary === true
+            ? "bg-[#ffc107]/20 text-[#ffc107] border border-[#ffc107]/40"
+            : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
+          }
+        `}
+      >
+        <Crown className="w-3.5 h-3.5" aria-hidden="true" />
+        Legendary
+      </button>
+
+      <button
+        onClick={() => setFilters({ isMythical: filters.isMythical === true ? null : true })}
+        aria-label={filters.isMythical === true ? "Remove Mythical filter" : "Filter by Mythical Pokemon"}
+        aria-pressed={filters.isMythical === true}
+        className={`
+          flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
+          ${filters.isMythical === true
+            ? "bg-[#e91e63]/20 text-[#e91e63] border border-[#e91e63]/40"
+            : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
+          }
+        `}
+      >
+        <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+        Mythical
+      </button>
+
+      {/* Clear All - only show in mobile panel if there are active filters */}
+      {activeFilterCount > 0 && (
+        <button
+          onClick={() => {
+            clearFilters();
+            setMobileFiltersOpen(false);
+          }}
+          aria-label="Clear all filters"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
+        >
+          <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+          Clear all
+        </button>
+      )}
+    </>
+  );
+
   return (
-    <div className="w-full mb-6">
+    <div className="w-full mb-6 sticky top-[64px] md:top-[72px] z-40 bg-background/95 backdrop-blur-xl py-3 -mt-3 border-b border-border/30">
       {/* Main Filter Row */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* Type Filter */}
-        <FilterDropdown
-          label="Type"
-          options={typeOptions}
-          selected={filters.types}
-          onSelect={(value) => toggleFilter("types", value)}
-          renderOption={(option, isSelected) => (
-            <>
-              <span
-                className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold ${
-                  isSelected ? "ring-2 ring-offset-1 ring-offset-card" : ""
-                }`}
-                style={{
-                  backgroundColor: option.color,
-                  color: ["electric", "normal", "ground", "ice", "steel"].includes(option.value) ? "#1a1a2e" : "#fff",
-                  "--tw-ring-color": option.color,
-                } as React.CSSProperties}
-              >
-                {isSelected && "✓"}
-              </span>
-              <span className="capitalize">{option.label}</span>
-            </>
-          )}
-        />
-
-        {/* Generation Filter */}
-        <FilterDropdown
-          label="Gen"
-          options={genOptions}
-          selected={filters.generations}
-          onSelect={(value) => toggleFilter("generations", value)}
-        />
-
-        {/* Rarity Filter */}
-        <FilterDropdown
-          label="Rarity"
-          options={rarityOptions}
-          selected={filters.rarityTiers}
-          onSelect={(value) => toggleFilter("rarityTiers", value as RarityTier)}
-          renderOption={(option, isSelected) => (
-            <>
-              <span
-                className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold ${
-                  isSelected ? "ring-2 ring-offset-1 ring-offset-card" : ""
-                }`}
-                style={{
-                  backgroundColor: option.color,
-                  color: "#fff",
-                  "--tw-ring-color": option.color,
-                } as React.CSSProperties}
-              >
-                {isSelected && "✓"}
-              </span>
-              {option.label}
-            </>
-          )}
-        />
-
-        {/* Role Filter */}
-        <FilterDropdown
-          label="Role"
-          options={roleOptions}
-          selected={filters.statCategories}
-          onSelect={(value) => toggleFilter("statCategories", value as StatCategory)}
-        />
-
-        <div className="w-px h-6 bg-border/50 mx-1" />
-
-        {/* Quick Toggles */}
-        <button
-          onClick={() => setFilters({ isLegendary: filters.isLegendary === true ? null : true })}
-          aria-label={filters.isLegendary === true ? "Remove Legendary filter" : "Filter by Legendary Pokemon"}
-          aria-pressed={filters.isLegendary === true}
-          className={`
-            flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
-            ${filters.isLegendary === true
-              ? "bg-[#ffc107]/20 text-[#ffc107] border border-[#ffc107]/40"
-              : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
-            }
-          `}
-        >
-          <Crown className="w-3.5 h-3.5" aria-hidden="true" />
-          <span className="hidden sm:inline">Legendary</span>
-        </button>
-
-        <button
-          onClick={() => setFilters({ isMythical: filters.isMythical === true ? null : true })}
-          aria-label={filters.isMythical === true ? "Remove Mythical filter" : "Filter by Mythical Pokemon"}
-          aria-pressed={filters.isMythical === true}
-          className={`
-            flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
-            ${filters.isMythical === true
-              ? "bg-[#e91e63]/20 text-[#e91e63] border border-[#e91e63]/40"
-              : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
-            }
-          `}
-        >
-          <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-          <span className="hidden sm:inline">Mythical</span>
-        </button>
-
-        {/* Clear All */}
-        {activeFilterCount > 0 && (
+        {/* Mobile Filters Button */}
+        <div className="md:hidden relative" ref={mobileFiltersRef}>
           <button
-            onClick={clearFilters}
-            aria-label="Clear all filters"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
+            onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+            aria-expanded={mobileFiltersOpen}
+            aria-label={`Open filters${activeFilterCount > 0 ? `, ${activeFilterCount} active` : ''}`}
+            className={`
+              flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all
+              ${activeFilterCount > 0
+                ? "bg-[hsl(var(--electric)/0.15)] text-[hsl(var(--electric))] border border-[hsl(var(--electric)/0.3)]"
+                : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
+              }
+            `}
           >
-            <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-            <span className="hidden sm:inline">Clear</span>
+            <SlidersHorizontal className="w-4 h-4" aria-hidden="true" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded-md bg-[hsl(var(--electric))] text-background text-xs font-bold" aria-hidden="true">
+                {activeFilterCount}
+              </span>
+            )}
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileFiltersOpen ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
-        )}
+
+          {/* Mobile Filters Dropdown Panel */}
+          {mobileFiltersOpen && (
+            <div className="absolute top-full left-0 mt-2 min-w-[280px] max-w-[calc(100vw-2rem)] rounded-xl bg-card border border-border shadow-xl z-50 p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <FilterContent />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Filters - hidden on mobile */}
+        <div className="hidden md:flex md:flex-wrap md:items-center md:gap-2">
+          <FilterContent />
+        </div>
 
         {/* Spacer to push sort to right */}
         <div className="flex-1" />
 
-        {/* Sort Dropdown */}
+        {/* Sort Dropdown - always visible */}
         <div className="relative">
           <label htmlFor="sort-select" className="sr-only">Sort Pokemon by</label>
           <select
