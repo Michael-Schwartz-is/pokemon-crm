@@ -155,38 +155,6 @@ function PokemonCardComponent({
           />
         </div>
 
-        {/* Stats Hover Overlay - Desktop only */}
-        <div
-          className={`
-            hidden md:block absolute inset-0 rounded-xl z-20 transition-all duration-300 pointer-events-none
-            ${isHovered && !isSelected ? "opacity-100 scale-100" : "opacity-0 scale-95"}
-          `}
-        >
-          {/* Frosted glass background */}
-          <div className="absolute inset-0 bg-card/95 backdrop-blur-lg rounded-xl border border-[hsl(var(--electric)/0.4)] shadow-[0_0_30px_hsl(var(--electric)/0.15)]" />
-
-          {/* Stats content */}
-          <div className="relative h-full flex flex-col p-2 sm:p-3">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-              <div className="flex items-center gap-1.5">
-                <div className="p-1 rounded-md bg-[hsl(var(--electric)/0.15)]">
-                  <Activity className="w-3 h-3 text-[hsl(var(--electric))]" aria-hidden="true" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-[hsl(var(--electric))] uppercase tracking-widest">
-                  Base Stats
-                </span>
-              </div>
-            </div>
-
-            {/* Stat bars */}
-            <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-1.5">
-              {pokeChartData.map((stat) => (
-                <MiniStatBar key={stat.name} name={stat.name} value={Number(stat.base_stat)} />
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Pokemon Name */}
@@ -217,8 +185,8 @@ function PokemonCardComponent({
         </div>
       </div>
 
-      {/* Stats Section - Mobile only */}
-      <div className="md:hidden mt-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-2">
+      {/* Stats Section - Always visible */}
+      <div className="mt-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-2">
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">

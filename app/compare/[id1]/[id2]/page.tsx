@@ -9,6 +9,7 @@ import {
   getAllPokemonBasic,
 } from "@/util/pokemons";
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
+import FightSimulator from "@/app/components/FightSimulator";
 import { Metadata } from "next";
 import { Swords } from "lucide-react";
 import ComparisonView from "@/app/components/ComparisonView";
@@ -213,42 +214,33 @@ export default async function page({ params }: compareProps) {
 
       <div className="max-w-[60rem] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--fire)/0.1)] border border-[hsl(var(--fire)/0.2)] mb-4">
-            <Swords className="w-4 h-4 text-[hsl(var(--fire))]" />
-            <span className="text-sm font-medium text-[hsl(var(--fire))]">Battle Mode</span>
-          </div>
-
-          {/* Title */}
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground mb-3">
+        <div className="text-center mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground">
             <span className="gradient-text">{capitalize(pokemonData1?.name)}</span>
             <span className="text-[hsl(var(--fire))] mx-3 vs-badge">vs</span>
             <span className="gradient-text-plasma">{capitalize(pokemonData2?.name)}</span>
           </h1>
-
-          <p className="text-base sm:text-lg text-muted-foreground">
-            Battle of the Titans — Who will win?
-          </p>
-          <p className="text-xs sm:text-sm text-muted-foreground/70 mt-1">
-            Analyze stats, abilities, and strengths to predict the victor
-          </p>
         </div>
+
+        {/* Fight Simulator - runs entirely client-side */}
+        <FightSimulator pokemon1={pokemonData1} pokemon2={pokemonData2} />
 
         {/* Pokemon cards with info panels - always side by side */}
-        <ComparisonView pokemonData1={pokemonData1} pokemonData2={pokemonData2} />
-
-        {/* Random Battle Button */}
         <div className="mt-8 sm:mt-10">
-          <RandomBTN r1={r1} r2={r2} />
+          <ComparisonView pokemonData1={pokemonData1} pokemonData2={pokemonData2} />
         </div>
 
-        {/* Stats comparison below the cards */}
+        {/* Stats comparison below the simulator */}
         <PokemonPlot
           plotStats={plotStats}
           pokemon1Name={pokemonData1.name}
           pokemon2Name={pokemonData2.name}
         />
+
+        {/* Random Battle Button */}
+        <div className="mt-8 sm:mt-10">
+          <RandomBTN r1={r1} r2={r2} />
+        </div>
 
         <FightCombinationsSlider combinations={combinations} allPokemon={allPokemon} />
       </div>
