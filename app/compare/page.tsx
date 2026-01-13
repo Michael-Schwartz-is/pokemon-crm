@@ -1,7 +1,6 @@
 import { fetchPokemon, Stats } from "@/util/CachePokemons";
 import { PokemonPlot } from "../components/PokemonPlot";
 import {
-  getRandomPokemonName,
   getRandomPokemonCombinations,
   getAllPokemonBasic,
 } from "@/util/pokemons";
@@ -11,10 +10,15 @@ import PokemonInfoPanel from "@/app/components/PokemonInfoPanel";
 import StickyCompareHeader from "@/app/components/StickyCompareHeader";
 import { Metadata } from "next";
 
-// Force dynamic rendering to get fresh random Pokemon on each page load
-export const dynamic = "force-dynamic";
+// Static ISR: Cache this page permanently
+// Using iconic Pokemon matchup for SEO and consistent user experience
+export const revalidate = false;
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
+
+// Default iconic matchup for landing page
+const DEFAULT_POKEMON_1 = "pikachu";
+const DEFAULT_POKEMON_2 = "charizard";
 
 export const metadata: Metadata = {
   title: "Compare Pokemon - Head-to-Head Battle Analysis",
@@ -74,11 +78,9 @@ function generateCompareSchema() {
 }
 
 export default async function Page() {
-  const r1 = getRandomPokemonName();
-  const r2 = getRandomPokemonName(r1);
-
-  const pokemonData1 = await fetchPokemon(r1);
-  const pokemonData2 = await fetchPokemon(r2);
+  // Use static iconic matchup for consistent SEO and caching
+  const pokemonData1 = await fetchPokemon(DEFAULT_POKEMON_1);
+  const pokemonData2 = await fetchPokemon(DEFAULT_POKEMON_2);
 
   const combinations = getRandomPokemonCombinations(20);
   const allPokemon = getAllPokemonBasic();

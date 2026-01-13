@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
-import { getRandomPokemonName } from "@/util/pokemons";
 import { PHProvider } from './providers/posthog';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
@@ -138,8 +136,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const r1 = getRandomPokemonName();
-  const r2 = getRandomPokemonName(r1);
   const siteSchema = generateSiteSchema();
 
   return (
@@ -168,10 +164,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <PHProvider>
-          <Navigation randomR1={r1} randomR2={r2} />
+          <Navigation />
           <main className="flex-1">{children}</main>
           <Footer />
-          <Analytics />
         </PHProvider>
       </body>
     </html>

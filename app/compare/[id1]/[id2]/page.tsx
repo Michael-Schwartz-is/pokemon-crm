@@ -21,6 +21,39 @@ type compareProps = {
   }>;
 };
 
+// ISR Configuration: Cache pages permanently after first render
+// Pokemon data never changes, so pages can be cached forever
+// This dramatically reduces serverless function invocations
+export const revalidate = false;
+
+// Pre-build the most popular/iconic Pokemon matchups at build time
+// These will be available instantly with ZERO function invocations
+// Other matchups will be built on-demand and cached (ISR)
+export async function generateStaticParams() {
+  // Most iconic/searched Pokemon - pre-build all combinations
+  const iconicPokemon = [
+    'pikachu', 'charizard', 'mewtwo', 'mew', 'bulbasaur', 'charmander', 
+    'squirtle', 'eevee', 'snorlax', 'gengar', 'dragonite', 'gyarados',
+    'lucario', 'greninja', 'rayquaza', 'lugia', 'ho-oh', 'kyogre'
+  ];
+
+  const params: { id1: string; id2: string }[] = [];
+
+  // Generate all combinations of iconic Pokemon (alphabetically ordered)
+  for (let i = 0; i < iconicPokemon.length; i++) {
+    for (let j = i + 1; j < iconicPokemon.length; j++) {
+      params.push({
+        id1: iconicPokemon[i],
+        id2: iconicPokemon[j],
+      });
+    }
+  }
+
+  // This pre-builds ~153 pages at build time (18 choose 2 combinations)
+  // All other comparison pages will use ISR (built on first visit, cached forever)
+  return params;
+}
+
 // Helper to capitalize Pokemon names
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);

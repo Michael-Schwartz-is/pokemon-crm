@@ -2,14 +2,9 @@
 
 import Link from "next/link";
 import useStore from "../stores/pokemonStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Swords, Flame, Home, Menu, X, Sparkles, Crown, Zap, Layers } from "lucide-react";
-
-type NavigationProps = {
-  randomR1: string;
-  randomR2: string;
-};
 
 // Category links for the browse dropdown
 const CATEGORY_LINKS = [
@@ -19,10 +14,33 @@ const CATEGORY_LINKS = [
   { href: "/rarity", label: "Rarity", icon: Crown, description: "Common to Mythical" },
 ];
 
-export default function Navigation({ randomR1, randomR2 }: NavigationProps) {
+// Iconic Pokemon for random battles (most recognizable)
+const ICONIC_POKEMON = [
+  "pikachu", "charizard", "mewtwo", "mew", "bulbasaur", "charmander", "squirtle", 
+  "eevee", "snorlax", "gengar", "dragonite", "gyarados", "lucario", "greninja"
+];
+
+function getRandomPokemon(): string {
+  return ICONIC_POKEMON[Math.floor(Math.random() * ICONIC_POKEMON.length)];
+}
+
+export default function Navigation() {
   const { clearSelectedPokemons } = useStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [randomR1, setRandomR1] = useState("pikachu");
+  const [randomR2, setRandomR2] = useState("charizard");
   const pathname = usePathname();
+
+  // Generate random Pokemon on client-side mount
+  useEffect(() => {
+    const r1 = getRandomPokemon();
+    let r2 = getRandomPokemon();
+    while (r2 === r1) {
+      r2 = getRandomPokemon();
+    }
+    setRandomR1(r1);
+    setRandomR2(r2);
+  }, []);
 
   const isActive = (path: string) => pathname === path;
 
