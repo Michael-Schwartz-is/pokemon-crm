@@ -2,8 +2,10 @@ import * as fs from "fs";
 import path from "path";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
+import QuickBattleSearch from "./components/QuickBattleSearch";
 import { Metadata } from "next";
 import { getPokemonImageUrl } from "@/util/pokemonImage";
+import { Swords } from "lucide-react";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
 
@@ -82,15 +84,35 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[80rem] mx-auto px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8">
-        {/* Hero Section - Compact */}
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground mb-1">
-            Choose Your <span className="gradient-text">Fighters</span>
+        {/* Hero Section */}
+        <div className="text-center mb-6 sm:mb-8">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--electric)/0.1)] border border-[hsl(var(--electric)/0.2)] mb-4">
+            <Swords className="w-4 h-4 text-[hsl(var(--electric))]" />
+            <span className="text-sm font-medium text-[hsl(var(--electric))]">Pokemon Battle Simulator</span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4">
+            Settle the <span className="gradient-text">Ultimate Showdown</span>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Select 2 Pokemon to battle • <span className="font-mono">{pokemons.length}</span>{" "}
-            fighters available
+
+          {/* Description */}
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Pick two Pokemon and find out who wins. Compare stats, type matchups, and battle it out.
           </p>
+        </div>
+
+        {/* Quick Battle Search */}
+        <div className="mb-12 sm:mb-14">
+          <QuickBattleSearch pokemons={pokemons} />
+        </div>
+
+        {/* Divider with "or browse" text */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-border/50" />
+          <span className="text-sm text-muted-foreground">or browse all fighters</span>
+          <div className="flex-1 h-px bg-border/50" />
         </div>
 
         <PokemonList initialPokemons={pokemons} />
