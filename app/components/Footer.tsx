@@ -48,7 +48,7 @@ const SOCIAL_LINKS = [
     description: "Follow for updates",
   },
   {
-    href: "mailto:mike@gushon.com?subject=PokeCRM%20Contact",
+    href: "mailto:mike@gushon.com?subject=Pokemon%20Arena%20Contact",
     label: "Email",
     icon: Mail,
     description: "Get in touch",
@@ -71,7 +71,7 @@ export default function Footer() {
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-sm font-bold tracking-wider text-muted-foreground">POKE</span>
-                <span className="text-xl font-black tracking-tight gradient-text">CRM</span>
+                <span className="text-xl font-black tracking-tight gradient-text">ARENA</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-4 leading-relaxed">

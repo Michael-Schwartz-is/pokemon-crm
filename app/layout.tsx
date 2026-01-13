@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   title: {
-    default: "Pokemon CRM - Compare Pokemon Stats & Abilities",
-    template: "%s | Pokemon CRM",
+    default: "Pokemon Arena - Compare Pokemon Stats & Abilities",
+    template: "%s | Pokemon Arena",
   },
   description:
     "Compare Pokemon stats, abilities, and battle potential. Find the strongest Pokemon with detailed stat analysis and head-to-head comparisons.",
-  keywords: ["pokemon", "pokemon comparison", "pokemon stats", "pokemon battle", "pokemon CRM"],
-  authors: [{ name: "Pokemon CRM" }],
+  keywords: ["pokemon", "pokemon comparison", "pokemon stats", "pokemon battle", "pokemon arena"],
+  authors: [{ name: "Pokemon Arena" }],
   icons: {
     icon: "/icon",
     apple: "/apple-icon",
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: baseUrl,
-    siteName: "Pokemon CRM",
-    title: "Pokemon CRM - Compare Pokemon Stats & Abilities",
+    siteName: "Pokemon Arena",
+    title: "Pokemon Arena - Compare Pokemon Stats & Abilities",
     description:
       "Compare Pokemon stats, abilities, and battle potential. Find the strongest Pokemon with detailed stat analysis.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pokemon CRM - Compare Pokemon Stats & Abilities",
+    title: "Pokemon Arena - Compare Pokemon Stats & Abilities",
     description: "Compare Pokemon stats, abilities, and battle potential.",
   },
   robots: {
@@ -50,13 +50,13 @@ function generateSiteSchema() {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "Pokemon CRM",
+      name: "Pokemon Arena",
       url: baseUrl,
       logo: `${baseUrl}/favicon.ico`,
       description: "Compare Pokemon stats, abilities, and battle potential.",
       contactPoint: {
         "@type": "ContactPoint",
-        email: "contact@pokemon-crm.com",
+        email: "mike@gushon.com",
         contactType: "customer service",
       },
       sameAs: ["https://github.com", "https://twitter.com"],
@@ -64,7 +64,7 @@ function generateSiteSchema() {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Pokemon CRM",
+      name: "Pokemon Arena",
       url: baseUrl,
       description:
         "Compare Pokemon stats, abilities, and battle potential. Find the strongest Pokemon with detailed stat analysis.",
@@ -81,7 +81,7 @@ function generateSiteSchema() {
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      name: "Pokemon CRM Navigation",
+      name: "Pokemon Arena Navigation",
       url: baseUrl,
       mainEntity: [
         {
