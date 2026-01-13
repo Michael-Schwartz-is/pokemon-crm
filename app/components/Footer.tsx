@@ -7,7 +7,6 @@ import {
   Zap,
   Crown,
   Heart,
-  Github,
   Twitter,
   Mail,
   ExternalLink,
@@ -43,19 +42,13 @@ const FOOTER_LINKS = {
 
 const SOCIAL_LINKS = [
   {
-    href: "https://github.com",
-    label: "GitHub",
-    icon: Github,
-    description: "View source code",
-  },
-  {
-    href: "https://twitter.com",
+    href: "https://x.com/MichaSchwa",
     label: "Twitter",
     icon: Twitter,
     description: "Follow for updates",
   },
   {
-    href: "mailto:contact@pokemon-crm.com",
+    href: "mailto:mike@gushon.com?subject=PokeCRM%20Contact",
     label: "Email",
     icon: Mail,
     description: "Get in touch",
