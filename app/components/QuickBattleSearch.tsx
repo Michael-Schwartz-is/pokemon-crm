@@ -246,6 +246,15 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
     return available[Math.floor(Math.random() * available.length)];
   }, [pokemons]);
 
+  // Initialize with random Pokemon on mount (client-side only to ensure true randomness)
+  useEffect(() => {
+    const random1 = pokemons[Math.floor(Math.random() * pokemons.length)];
+    const available = pokemons.filter(p => p.name !== random1.name);
+    const random2 = available[Math.floor(Math.random() * available.length)];
+    setPokemon1(random1);
+    setPokemon2(random2);
+  }, [pokemons]);
+
   const handleRandom1 = useCallback(() => {
     setPokemon1(getRandomPokemon(pokemon2?.name));
   }, [getRandomPokemon, pokemon2?.name]);
