@@ -75,8 +75,7 @@ export default async function Home() {
           as="image"
           href={src}
           type="image/avif"
-          // @ts-expect-error - fetchPriority is valid HTML attribute
-          fetchpriority={index === 0 ? "high" : "low"}
+          fetchPriority={index === 0 ? "high" : "low"}
         />
       ))}
       <script
@@ -99,7 +98,7 @@ export default async function Home() {
 
           {/* Description */}
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Pick two Pokemon and find out who wins. Compare stats, type matchups, and battle it out.
+            Select a Pokemon to view detailed stats and start a battle simulation. Compare strengths, weaknesses, and abilities.
           </p>
         </div>
 

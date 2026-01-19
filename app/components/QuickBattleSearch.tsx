@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Pokemon } from "@/util/CachePokemons";
 import { getPokemonImageUrl } from "@/util/pokemonImage";
 import { Search, X, Swords, Zap, Dices } from "lucide-react";
@@ -235,7 +236,7 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
 
   const handleBattle = () => {
     if (pokemon1 && pokemon2) {
-      router.push(`/compare/${pokemon1.name}/${pokemon2.name}`);
+      router.push(`/pokemon/${pokemon1.name}/${pokemon2.name}`);
     }
   };
 
@@ -318,19 +319,26 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
           
           {/* Battle Button - Mobile */}
           <div className="flex justify-center mt-4">
-            <button
-              onClick={handleBattle}
-              disabled={!canBattle}
-              className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                canBattle
-                  ? "btn-neon cursor-pointer"
-                  : "bg-secondary/50 text-muted-foreground cursor-not-allowed border border-border/50"
-              }`}
-            >
-              <Swords className="w-4 h-4" />
-              <span>Start Battle</span>
-              <Zap className="w-4 h-4" />
-            </button>
+            {canBattle ? (
+              <Link
+                href={`/pokemon/${pokemon1.name}/${pokemon2.name}`}
+                scroll={false}
+                className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all btn-neon cursor-pointer"
+              >
+                <Swords className="w-4 h-4" />
+                <span>Start Battle</span>
+                <Zap className="w-4 h-4" />
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-secondary/50 text-muted-foreground cursor-not-allowed border border-border/50"
+              >
+                <Swords className="w-4 h-4" />
+                <span>Start Battle</span>
+                <Zap className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -362,19 +370,26 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
             </div>
             
             {/* Battle Button - Desktop */}
-            <button
-              onClick={handleBattle}
-              disabled={!canBattle}
-              className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                canBattle
-                  ? "btn-neon cursor-pointer"
-                  : "bg-secondary/50 text-muted-foreground cursor-not-allowed border border-border/50"
-              }`}
-            >
-              <Swords className="w-4 h-4" />
-              <span>Start Battle</span>
-              <Zap className="w-4 h-4" />
-            </button>
+            {canBattle ? (
+              <Link
+                href={`/pokemon/${pokemon1.name}/${pokemon2.name}`}
+                scroll={false}
+                className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all btn-neon cursor-pointer"
+              >
+                <Swords className="w-4 h-4" />
+                <span>Start Battle</span>
+                <Zap className="w-4 h-4" />
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-secondary/50 text-muted-foreground cursor-not-allowed border border-border/50"
+              >
+                <Swords className="w-4 h-4" />
+                <span>Start Battle</span>
+                <Zap className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {/* Pokemon 2 */}

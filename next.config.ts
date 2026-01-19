@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
     deviceSizes: [320, 420, 640, 750, 828, 1080],
     imageSizes: [16, 32, 48, 64, 96, 128, 200, 256],
   },
+  async redirects() {
+    return [
+      {
+        source: '/compare/:id1/:id2',
+        destination: '/pokemon/:id1/:id2',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

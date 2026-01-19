@@ -56,7 +56,7 @@ function generateSitemapXml(
     .map(([name1, name2]) => {
       const priority = getComparisonPriority(name1, name2);
       return `  <url>
-    <loc>${baseUrl}/compare/${encodeURIComponent(name1)}/${encodeURIComponent(name2)}</loc>
+    <loc>${baseUrl}/pokemon/${encodeURIComponent(name1)}/${encodeURIComponent(name2)}</loc>
     <changefreq>monthly</changefreq>
     <priority>${priority.toFixed(1)}</priority>
   </url>`;

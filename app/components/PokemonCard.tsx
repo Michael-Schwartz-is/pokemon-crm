@@ -2,9 +2,10 @@
 
 import { Pokemon, Stats } from "@/util/CachePokemons";
 import { useState, memo } from "react";
-import { Check, Zap, Activity } from "lucide-react";
+import { Check, Zap, Activity, ExternalLink } from "lucide-react";
 import TypeBadge from "./TypeBadge";
 import Image from "next/image";
+import Link from "next/link";
 import { getPokemonImageUrl, getFallbackImageUrl } from "@/util/pokemonImage";
 
 type PokemonCardProps = {
@@ -14,6 +15,10 @@ type PokemonCardProps = {
   showChart?: boolean;
   /** Set to true for LCP/hero images to disable lazy loading and add fetchpriority="high" */
   priority?: boolean;
+  /** Set to true to make the card link to the Pokemon detail page instead of triggering onSelect */
+  linkToDetail?: boolean;
+  /** Custom href for the link. If provided, linkToDetail is assumed true. */
+  href?: string;
 };
 
 // Stat color mapping - using hex values for proper inline style support
@@ -51,7 +56,7 @@ function MiniStatBar({
 
   return (
     <div className="flex items-center gap-1.5 sm:gap-2">
-      <span className="text-[11px] sm:text-xs font-mono font-medium text-muted-foreground w-10 sm:w-12 text-right uppercase tracking-tight">
+      <span className="text-[11px] sm:text-xs font-mono font-medium text-muted-foreground w-10 sm:w-12 text-left uppercase tracking-tight">
         {abbr}
       </span>
       <div className="flex-1 h-2.5 sm:h-3 bg-secondary/80 rounded-md overflow-hidden relative">
@@ -88,6 +93,8 @@ function PokemonCardComponent({
   onSelect,
   showChart = false,
   priority = false,
+  linkToDetail = true,
+  href,
 }: PokemonCardProps) {
   // Use R2-hosted optimized images - compute URL directly, no state needed
   const [imgSrc, setImgSrc] = useState(getPokemonImageUrl(poke.id));
@@ -103,22 +110,10 @@ function PokemonCardComponent({
   };
 
   const pokeChartData = handleChartData(poke.stats);
+  const totalStats = pokeChartData.reduce((sum, stat) => sum + Number(stat.base_stat), 0);
 
-  return (
-    <div
-      onClick={onSelect}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`
-        group relative p-3 sm:p-4 rounded-2xl w-full min-w-0 max-w-[320px] cursor-pointer
-        bg-card border transition-all duration-300 overflow-visible
-        ${
-          isSelected
-            ? "border-[hsl(var(--electric))] shadow-[0_0_30px_hsl(var(--electric)/0.3)] ring-pulse scale-[1.02] z-10"
-            : "border-border/50 hover:border-[hsl(var(--electric)/0.3)] card-lift"
-        }
-      `}
-    >
+  const cardContent = (
+    <>
       {/* Subtle gradient overlay on hover */}
       <div
         className={`
@@ -180,13 +175,13 @@ function PokemonCardComponent({
         {/* Type badges */}
         <div className="flex items-center gap-1">
           {poke.types.map((type) => (
-            <TypeBadge key={type} type={type} size="sm" />
+            <TypeBadge key={type} type={type} size="sm" insideLink={linkToDetail || !!href} />
           ))}
         </div>
       </div>
 
       {/* Stats Section - Always visible */}
-      <div className="mt-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-2">
+      <div className="mt-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 px-1 py-2">
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
@@ -197,6 +192,9 @@ function PokemonCardComponent({
               Base Stats
             </span>
           </div>
+          <span className="text-base sm:text-lg font-bold text-yellow-500">
+            {totalStats}
+          </span>
         </div>
 
         {/* Stat bars */}
@@ -213,6 +211,50 @@ function PokemonCardComponent({
           <Check className="w-4 h-4 sm:w-5 sm:h-5 text-background" strokeWidth={3} />
         </div>
       )}
+
+      {/* Link to detail indicator */}
+      {linkToDetail && (
+        <div className="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-secondary/80 border border-border/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
+        </div>
+      )}
+    </>
+  );
+
+  const cardClassName = `
+    group relative p-3 sm:p-4 rounded-2xl w-full min-w-0 cursor-pointer
+    bg-card border transition-all duration-300 overflow-visible
+    ${
+      isSelected
+        ? "border-[hsl(var(--electric))] shadow-[0_0_30px_hsl(var(--electric)/0.3)] ring-pulse scale-[1.02] z-10"
+        : "border-border/50 hover:border-[hsl(var(--electric)/0.3)] card-lift"
+    }
+  `;
+
+  // If linkToDetail is true or href is provided, wrap in Link component
+  if (linkToDetail || href) {
+    return (
+      <Link
+        href={href || `/pokemon/${poke.name}`}
+        className={cardClassName}
+        scroll={false}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {cardContent}
+      </Link>
+    );
+  }
+
+  // Otherwise, use div with onClick
+  return (
+    <div
+      onClick={onSelect}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={cardClassName}
+    >
+      {cardContent}
     </div>
   );
 }

@@ -184,7 +184,8 @@ export default function FightCombinationsSlider({
 
           {/* Battle Link */}
           <Link
-            href={`/compare/${currentMatchup[0].name}/${currentMatchup[1].name}`}
+            href={`/pokemon/${currentMatchup[0].name}/${currentMatchup[1].name}`}
+            scroll={false}
             className="relative mt-5 flex items-center justify-center gap-2 w-full py-3 sm:py-3.5 rounded-xl btn-neon text-sm sm:text-base overflow-hidden"
           >
             <Swords className="w-4 h-4" />
@@ -248,7 +249,8 @@ export default function FightCombinationsSlider({
           {combinations.map(([p1, p2], i) => (
             <SwiperSlide key={i}>
               <Link
-                href={`/compare/${p1.name}/${p2.name}`}
+                href={`/pokemon/${p1.name}/${p2.name}`}
+                scroll={false}
                 className="block p-3 sm:p-4 rounded-xl bg-card border border-border/50 hover:border-[hsl(var(--electric)/0.4)] hover:shadow-[0_0_25px_hsl(var(--electric)/0.15)] transition-all group relative"
               >
                 {/* VS Badge - floating above images */}

@@ -354,7 +354,7 @@ export default function FilterSortPanel() {
   );
 
   return (
-    <div className="w-full mb-6 sticky top-[64px] md:top-[72px] z-40 bg-background/95 backdrop-blur-xl py-3 -mt-3 border-b border-border/30">
+    <div className="w-full mb-6 sticky top-[64px] md:top-[72px] z-40 bg-background/80 backdrop-blur-xl pt-4 pb-3 -mt-3 border-b border-border/50">
       {/* Main Filter Row */}
       <div className="flex flex-wrap items-center gap-2">
         {/* Mobile Filters Button */}

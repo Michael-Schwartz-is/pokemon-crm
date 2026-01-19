@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import { PHProvider } from './providers/posthog';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
@@ -164,6 +165,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <PHProvider>
+          <ScrollToTop />
           <Navigation />
           <main className="flex-1">{children}</main>
           <Footer />

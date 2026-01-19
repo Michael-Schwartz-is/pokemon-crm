@@ -61,7 +61,7 @@ const GEN_NAMES: Record<string, string> = {
 
 type RarityBadgeProps = {
   rarity: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   clickable?: boolean;
 };
 
@@ -71,9 +71,10 @@ export function RarityBadge({ rarity, size = "sm", clickable = true }: RarityBad
   const sizeClasses = {
     sm: "px-1.5 py-0.5 text-[11px] gap-0.5",
     md: "px-2 py-1 text-xs gap-1",
+    lg: "px-2.5 py-1.5 text-sm gap-1.5",
   };
 
-  const iconSize = size === "sm" ? "w-2.5 h-2.5" : "w-3 h-3";
+  const iconSize = size === "sm" ? "w-2.5 h-2.5" : size === "md" ? "w-3 h-3" : "w-3.5 h-3.5";
   
   const Icon = rarity === "legendary" ? Crown : rarity === "mythical" ? Sparkles : Gem;
   
@@ -109,7 +110,7 @@ export function RarityBadge({ rarity, size = "sm", clickable = true }: RarityBad
 
 type RoleBadgeProps = {
   role: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   clickable?: boolean;
 };
 
@@ -120,6 +121,7 @@ export function RoleBadge({ role, size = "sm", clickable = true }: RoleBadgeProp
   const sizeClasses = {
     sm: "px-1.5 py-0.5 text-[11px]",
     md: "px-2 py-1 text-xs",
+    lg: "px-2.5 py-1.5 text-sm",
   };
 
   const badge = (
@@ -151,7 +153,7 @@ export function RoleBadge({ role, size = "sm", clickable = true }: RoleBadgeProp
 
 type GenerationBadgeProps = {
   generation: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   clickable?: boolean;
 };
 
@@ -162,6 +164,7 @@ export function GenerationBadge({ generation, size = "sm", clickable = true }: G
   const sizeClasses = {
     sm: "px-1.5 py-0.5 text-[11px]",
     md: "px-2 py-1 text-xs",
+    lg: "px-2.5 py-1.5 text-sm",
   };
 
   const badge = (

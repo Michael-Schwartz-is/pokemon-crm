@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getSitemapPageCount } from "@/util/sitemapGenerator";
+import allPokemonsData from "@/app/data/AllPokemons.json";
 
 /**
  * Sitemap Index - Points to paginated comparison sitemaps
@@ -11,6 +12,9 @@ import { getSitemapPageCount } from "@/util/sitemapGenerator";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.pokefightarena.com";
   const sitemaps: MetadataRoute.Sitemap = [];
+  
+  // Get all Pokemon names for individual pages
+  const allPokemonNames = Object.keys(allPokemonsData);
 
   // === Main Static Pages ===
   sitemaps.push({
@@ -20,12 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1.0,
   });
 
-  sitemaps.push({
-    url: `${baseUrl}/compare`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.9,
-  });
 
   sitemaps.push({
     url: `${baseUrl}/popular`,
@@ -139,6 +137,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
+    });
+  });
+
+  // === Individual Pokemon Detail Pages ===
+  // This adds all 1025 Pokemon pages for SEO discoverability
+  allPokemonNames.forEach((name) => {
+    sitemaps.push({
+      url: `${baseUrl}/pokemon/${name}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
     });
   });
 

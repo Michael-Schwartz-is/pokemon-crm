@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import Link from "next/link";
+import { useState, useCallback, useEffect } from "react";
 import { Lock, Unlock, Shuffle } from "lucide-react";
 import PokemonCard from "./PokemonCard";
 import { Pokemon } from "@/util/CachePokemons";
@@ -35,7 +36,9 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
     [allPokemon]
   );
 
-  const handleShuffle = useCallback(() => {
+  const [nextShuffleUrl, setNextShuffleUrl] = useState<string>("");
+
+  useEffect(() => {
     let newLeft = pokemon1.name;
     let newRight = pokemon2.name;
 
@@ -56,9 +59,14 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
         newRight = right.name;
       }
     }
+    setNextShuffleUrl(`/pokemon/${newLeft}/${newRight}`);
+  }, [lockedSide, pokemon1.name, pokemon2.name, getRandomPokemon]);
 
-    router.push(`/compare/${newLeft}/${newRight}`);
-  }, [lockedSide, pokemon1.name, pokemon2.name, getRandomPokemon, router]);
+  const handleShuffle = useCallback(() => {
+    if (nextShuffleUrl) {
+      router.push(nextShuffleUrl);
+    }
+  }, [nextShuffleUrl, router]);
 
   const toggleLock = (side: "left" | "right") => {
     setLockedSide((prev) => (prev === side ? null : side));
@@ -67,7 +75,7 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
   return (
     <div className="relative flex flex-row gap-2 sm:gap-4 md:gap-6 justify-center items-start overflow-visible">
       {/* Left Pokemon with Lock */}
-      <div className="relative overflow-visible">
+      <div className="relative overflow-visible w-full max-w-[320px]">
         <button
           onClick={() => toggleLock("left")}
           className={`absolute -top-2 -right-2 z-20 p-1.5 sm:p-2 rounded-full transition-all ${
@@ -91,21 +99,35 @@ export default function BattleArena({ pokemon1, pokemon2, allPokemon }: BattleAr
         <span className="text-xl sm:text-3xl md:text-4xl font-black text-red-500 italic drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">
           VS
         </span>
-        <button
-          onClick={handleShuffle}
-          className="p-2 sm:p-3 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/40 hover:shadow-blue-500/60 hover:scale-110 transition-all active:scale-95"
-          title={
-            lockedSide
-              ? `Shuffle ${lockedSide === "left" ? "right" : "left"} Pokemon`
-              : "Shuffle both Pokemon"
-          }
-        >
-          <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
+        {nextShuffleUrl ? (
+          <Link
+            href={nextShuffleUrl}
+            className="p-2 sm:p-3 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/40 hover:shadow-blue-500/60 hover:scale-110 transition-all active:scale-95 flex items-center justify-center"
+            title={
+              lockedSide
+                ? `Shuffle ${lockedSide === "left" ? "right" : "left"} Pokemon`
+                : "Shuffle both Pokemon"
+            }
+          >
+            <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
+          </Link>
+        ) : (
+          <button
+            onClick={handleShuffle}
+            className="p-2 sm:p-3 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/40 hover:shadow-blue-500/60 hover:scale-110 transition-all active:scale-95"
+            title={
+              lockedSide
+                ? `Shuffle ${lockedSide === "left" ? "right" : "left"} Pokemon`
+                : "Shuffle both Pokemon"
+            }
+          >
+            <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        )}
       </div>
 
       {/* Right Pokemon with Lock */}
-      <div className="relative overflow-visible">
+      <div className="relative overflow-visible w-full max-w-[320px]">
         <button
           onClick={() => toggleLock("right")}
           className={`absolute -top-2 -left-2 z-20 p-1.5 sm:p-2 rounded-full transition-all ${

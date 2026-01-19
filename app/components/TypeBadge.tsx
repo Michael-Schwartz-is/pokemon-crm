@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Type colors matching the app's theme
 const TYPE_COLORS: Record<string, string> = {
@@ -26,21 +27,26 @@ const TYPE_COLORS: Record<string, string> = {
 
 type TypeBadgeProps = {
   type: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   clickable?: boolean;
   className?: string;
+  /** Set to true when the badge is inside another link to prevent nested anchor tags */
+  insideLink?: boolean;
 };
 
 export default function TypeBadge({ 
   type, 
   size = "sm", 
   clickable = true,
-  className = "" 
+  className = "",
+  insideLink = false
 }: TypeBadgeProps) {
+  const router = useRouter();
   const color = TYPE_COLORS[type] || "#888";
   const isDarkText = ["electric", "normal", "ground", "ice", "steel"].includes(type);
   
   const sizeClasses = {
+    xs: "px-1.5 py-0.5 text-[10px]",
     sm: "px-2 py-0.5 text-[11px]",
     md: "px-2.5 py-1 text-xs",
     lg: "px-3 py-1.5 text-sm",
@@ -65,6 +71,22 @@ export default function TypeBadge({
   );
 
   if (clickable) {
+    // If inside a link, use a button/span with onClick to prevent nested anchor tags
+    if (insideLink) {
+      return (
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            router.push(`/types/${type}`);
+          }}
+        >
+          {badge}
+        </span>
+      );
+    }
+    
+    // Otherwise, use Link component normally
     return (
       <Link href={`/types/${type}`} onClick={(e) => e.stopPropagation()}>
         {badge}

@@ -5,11 +5,11 @@ import { Pokemon } from "@/util/CachePokemons";
 import PokemonCard from "./PokemonCard";
 import FilterSortPanel from "./FilterSortPanel";
 import useStore, { SortOption, Filters } from "../stores/pokemonStore";
-import { useRouter } from "next/navigation";
 import { Swords, X, Zap, Loader2 } from "lucide-react";
 
 type PokemonListProps = {
   initialPokemons: Pokemon[];
+  compareWith?: string; // If provided, clicking a card will navigate to /pokemon/[compareWith]/[clickedPokemon]
 };
 
 // Filter function
@@ -72,35 +72,16 @@ function applySorting(pokemons: Pokemon[], sortOption: SortOption): Pokemon[] {
   }
 }
 
-export default function PokemonList({ initialPokemons }: PokemonListProps) {
+export default function PokemonList({ initialPokemons, compareWith }: PokemonListProps) {
   const {
     searchQuery,
-    selectedPokemonIds,
-    toggleSelectedPokemon,
-    clearSelectedPokemons,
     sortOption,
     filters,
   } = useStore();
   // Start with 20 items for faster initial render, then load more
   const [displayLimit, setDisplayLimit] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (selectedPokemonIds.length === 2) {
-      const [id1, id2] = selectedPokemonIds;
-      router.push(`/compare/${id1}/${id2}`);
-
-      const timer = setTimeout(() => {
-        clearSelectedPokemons();
-      }, 1000);
-      return () => {
-        clearTimeout(timer);
-        clearSelectedPokemons();
-      };
-    }
-  }, [selectedPokemonIds, router, clearSelectedPokemons]);
 
   const loadMore = useCallback(() => {
     setIsLoading(true);
@@ -123,6 +104,11 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
       poke.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Filter out the "compareWith" pokemon if present
+    if (compareWith) {
+      result = result.filter(p => p.name !== compareWith);
+    }
+
     // Then apply other filters
     result = applyFilters(result, filters);
 
@@ -130,7 +116,7 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
     result = applySorting(result, sortOption);
 
     return result;
-  }, [initialPokemons, searchQuery, filters, sortOption]);
+  }, [initialPokemons, searchQuery, filters, sortOption, compareWith]);
 
   const displayed = processedPokemons.slice(0, displayLimit);
   const hasMore = processedPokemons.length > displayLimit;
@@ -166,35 +152,8 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
         </p>
       </div>
 
-      {/* Floating Selection Bar */}
-      {selectedPokemonIds.length > 0 && (
-        <div className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 animate-fade-up">
-          <div className="flex items-center gap-3 sm:gap-4 px-5 sm:px-6 py-3 sm:py-4 rounded-2xl bg-card/95 backdrop-blur-xl border border-[hsl(var(--electric)/0.3)] shadow-[0_8px_40px_hsl(var(--electric)/0.2)]">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(var(--electric))] to-[hsl(var(--fire))] flex items-center justify-center">
-                <Zap className="w-4 h-4 text-background" />
-              </div>
-              <span className="text-foreground font-semibold text-sm sm:text-base whitespace-nowrap">
-                {selectedPokemonIds.length}/2 selected
-              </span>
-            </div>
-
-            <div className="w-px h-6 bg-border" />
-
-            <button
-              onClick={clearSelectedPokemons}
-              aria-label="Clear selected Pokemon"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-[hsl(var(--fire))] hover:bg-[hsl(var(--fire)/0.1)] transition-colors"
-            >
-              <X className="w-4 h-4" aria-hidden="true" />
-              Clear
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Pokemon Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 justify-items-center w-full">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 sm:gap-4 md:gap-6 w-full">
         {displayed.map((poke, index) => (
           <div
             key={poke.name}
@@ -203,9 +162,9 @@ export default function PokemonList({ initialPokemons }: PokemonListProps) {
           >
             <PokemonCard
               poke={poke}
-              isSelected={selectedPokemonIds.includes(poke.name)}
-              onSelect={() => toggleSelectedPokemon(poke.name)}
               priority={index < 4}
+              linkToDetail={true}
+              href={compareWith ? `/pokemon/${compareWith}/${poke.name}` : undefined}
             />
           </div>
         ))}

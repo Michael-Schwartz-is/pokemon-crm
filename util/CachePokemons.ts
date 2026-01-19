@@ -30,6 +30,69 @@ export type SizeCategory =
   | "large"
   | "giant";
 
+// Enhanced types for Pokemon detail pages
+export type EvolutionNode = {
+  species: string;
+  speciesId: number;
+  trigger: string | null;  // "level-up", "trade", "use-item", etc.
+  triggerDetail: string | null;  // "level 16", "Thunder Stone", etc.
+  evolvesTo: EvolutionNode[];
+};
+
+export type MoveLearn = {
+  name: string;
+  type: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number;
+  damageClass: "physical" | "special" | "status";
+  effect: string;
+  learnMethod: "level-up" | "machine" | "egg" | "tutor";
+  levelLearned: number | null;
+};
+
+export type AbilityDetail = {
+  name: string;
+  isHidden: boolean;
+  effect: string;
+};
+
+export type PokemonForm = {
+  name: string;
+  formName: string;
+  sprites: { default: string; shiny?: string };
+};
+
+export type PokemonSprites = {
+  official: string;
+  shiny: string;
+  home: string;
+  animated?: string;
+};
+
+export type EncounterLocation = {
+  location: string;
+  games: string[];
+  levelRange?: { min: number; max: number };
+};
+
+export type PokedexEntry = {
+  dex: string;
+  number: number;
+};
+
+export type EnhancedPokemon = Pokemon & {
+  evolutionChain: EvolutionNode | null;
+  moves: MoveLearn[];
+  abilitiesDetailed: AbilityDetail[];
+  sprites: PokemonSprites;
+  forms: PokemonForm[];
+  encounters: EncounterLocation[];
+  genderRatio: number;  // -1 = genderless, 0-8 scale (0 = always male, 8 = always female)
+  hatchSteps: number;
+  pokedexNumbers: PokedexEntry[];
+};
+
 export type Pokemon = {
   // Basic info
   id: number;

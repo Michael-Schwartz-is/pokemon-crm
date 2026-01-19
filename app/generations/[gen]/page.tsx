@@ -88,7 +88,8 @@ function generateGenerationSchema(genData: typeof generationsData[0], pokemonCou
 function PokemonPreview({ pokemon }: { pokemon: Pokemon }) {
   return (
     <Link
-      href={`/compare/${pokemon.name}/${pokemon.name}`}
+      href={`/pokemon/${pokemon.name}/${pokemon.name}`}
+      scroll={false}
       className="group flex flex-col items-center p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
     >
       <div className="w-16 h-16 mb-2">
