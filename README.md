@@ -8,7 +8,7 @@ A production case study in pSEO done right. Built on Next.js 16, deployed on Net
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org) [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org) [![Tailwind](https://img.shields.io/badge/Tailwind-3-blue?logo=tailwindcss)](https://tailwindcss.com)
 
-[Live Demo](https://pokemon-crm.vercel.app) · [Case Study](case-study.md)
+[Live Site](https://www.pokefightarena.com) · [Case Study](case-study.md)
 
 </div>
 
