@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+
+# PokéFight Arena
+
+**Programmatic SEO at scale — 845,000+ Pokemon comparison pages with intelligent priority-based generation.**
+
+A production case study in pSEO done right. Built on Next.js 16, deployed on Netlify, ranking on Google.
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org) [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org) [![Tailwind](https://img.shields.io/badge/Tailwind-3-blue?logo=tailwindcss)](https://tailwindcss.com)
+
+[Live Demo](https://pokemon-crm.vercel.app) · [Case Study](case-study.md)
+
+</div>
+
+---
+
+## What is this?
+
+PokéFight Arena is a Pokemon comparison platform that demonstrates programmatic SEO at extreme scale. It generates **845,650 unique comparison pages** (every Pokemon vs every other Pokemon, plus type/generation/role/rarity taxonomies) — but instead of dumping them all into Google's index at once, it uses a priority-scoring algorithm to surface the most valuable pages first.
+
+This repo is both a working product and a case study in how to do pSEO without triggering quality penalties or wasting crawl budget.
+
+## The Problem
+
+Most pSEO sites treat every page as equal. They build 100K pages, submit them all to Google, and wonder why nothing ranks. Search engines waste crawl budget on low-value pages, quality signals get diluted, and the whole site gets de-prioritized.
+
+The solution: **build everything, but prioritize intelligently.** Not every comparison deserves the same attention. "Pikachu vs Charizard" gets searched thousands of times a month. "Exeggcute vs Lickitung" gets searched approximately never.
+
+## The Approach
+
+A three-factor scoring algorithm assigns each comparison a 0-100 priority score:
+
+| Factor | Max Points | Logic |
+|--------|-----------|-------|
+| **Brand recognition** | 50 | 50 hardcoded iconic Pokemon (Pikachu, Charizard, Mewtwo, etc.) |
+| **Generation popularity** | 20 | Gen I and Gen II carry highest nostalgic search volume |
+| **Type popularity** | 15 | Fire, Water, Electric, Psychic, Dragon dominate type queries |
+
+Score → sitemap priority. High-scoring pages get `priority: 1.0` and aggressive indexing. Low-scoring pages still exist but get `priority: 0.3` — Google can find them when relevant, but they don't compete for crawl budget.
+
+**Example scores:**
+- "Pikachu vs Charizard" → 85 points → priority 1.0
+- "Gengar vs Alakazam" → 52 points → priority 0.8
+- "Exeggcute vs Lickitung" → 0 points → priority 0.3
+
+## Features
+
+- **845K+ pages** across 5 page types (comparisons, individual Pokemon, types, generations, roles, rarity)
+- **Priority-based sitemap** with intelligent crawl budget allocation
+- **7 Schema.org structured data types** for rich snippets in search results
+- **Unique metadata per page** — no duplicate titles, descriptions, or OG tags
+- **Sitemap index architecture** that scales past Google's 50K-URL-per-sitemap limit
+- **Configuration-based gradual rollout** — enable taxonomies one at a time
+- **Image optimization pipeline** with Sharp + Cloudflare R2
+- **Lighthouse CI** in the build pipeline to enforce Core Web Vitals
+- **PostHog analytics** for measuring real user behavior
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16, React 19, TypeScript |
+| Styling | Tailwind CSS, Radix UI, Lucide icons |
+| Charts | Recharts |
+| State | Zustand |
+| Images | Sharp + AWS S3 (Cloudflare R2) |
+| AI | Groq SDK (for content generation) |
+| Analytics | PostHog |
+| Deploy | Netlify |
+| CI | Lighthouse CI |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+git clone https://github.com/Michael-Schwartz-is/pokemon-crm.git
+cd pokemon-crm
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in:
 
-## Learn More
+- AWS S3 / Cloudflare R2 credentials (for image hosting)
+- Groq API key (for AI content generation)
+- PostHog project key (for analytics)
+- `NEXT_PUBLIC_BASE_URL` — your deployed domain
 
-To learn more about Next.js, take a look at the following resources:
+### Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev          # Local dev server
+npm run build        # Production build
+npm run start        # Run production build locally
+npm run preview      # Netlify dev preview
+npm run deploy       # Deploy to Netlify
+npm run lighthouse   # Run Lighthouse CI
+npm run lint         # ESLint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Data Pipeline
 
-## Deploy on Vercel
+The Pokemon dataset is generated by scripts in [scripts/](scripts/):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `fetchEnhancedPokemonData.ts` — Pull data from PokéAPI
+- `fetchCategoryData.ts` — Build type/role/rarity taxonomies
+- `migrateImagesToR2.ts` — Upload optimized images to R2
+- `uploadPokeball.ts` — Asset uploads
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Output is cached in `app/data/` as JSON and consumed at build time for static generation.
+
+## Project Structure
+
+```
+app/
+  page.tsx                  # Homepage with priority Pokemon
+  pokemon/[name]/           # Individual Pokemon pages
+  compare/[a]-vs-[b]/       # 845K comparison pages
+  types/[type]/             # Type taxonomy pages
+  generations/[gen]/        # Generation taxonomy pages
+  roles/[role]/             # Role taxonomy pages
+  rarity/[tier]/            # Rarity taxonomy pages
+  sitemap.ts                # Priority-aware sitemap
+  sitemap-index.xml/        # Sitemap index for 50K+ URLs
+  components/               # Shared React components
+
+scripts/                    # Data fetching & migration scripts
+public/                     # Static assets
+case-study.md               # Full pSEO case study
+```
+
+## Read the Full Case Study
+
+For a deep dive into the architecture, scoring algorithm, sitemap strategy, and lessons learned, read [case-study.md](case-study.md). It covers:
+
+- The pSEO trilemma (scale × quality × resources)
+- Priority scoring algorithm in detail
+- Schema.org structured data implementation
+- Sitemap index architecture
+- Gradual rollout strategy
+- Real performance metrics
+
+## License
+
+MIT
