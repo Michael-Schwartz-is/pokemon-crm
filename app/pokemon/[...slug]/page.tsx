@@ -223,7 +223,7 @@ function generateDetailJsonLd(pokemon: Awaited<ReturnType<typeof getPokemonDetai
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-        { "@type": "ListItem", position: 2, name: "Pokedex", item: `${baseUrl}/pokemon` },
+        { "@type": "ListItem", position: 2, name: "Pokedex", item: baseUrl },
         { "@type": "ListItem", position: 3, name: capitalize(pokemon.name), item: `${baseUrl}/pokemon/${pokemon.name}` },
       ],
     },
