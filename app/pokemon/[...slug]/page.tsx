@@ -29,6 +29,7 @@ import { PokemonPlot } from "@/app/components/PokemonPlot";
 import RandomBTN from "@/app/components/RandomBTN";
 import FightCombinationsSlider from "@/app/components/FightCombinationsSlider";
 import FightSimulator from "@/app/components/FightSimulator";
+import EmailPopup from "@/app/components/EmailPopup";
 
 // Utils
 import { Pokemon, fetchPokemon, Stats } from "@/util/CachePokemons";
@@ -798,7 +799,7 @@ async function PokemonComparisonView({ id1, id2 }: { id1: string; id2: string })
         </div>
 
         {/* Fight Simulator - runs entirely client-side */}
-        <FightSimulator pokemon1={pokemonData1} pokemon2={pokemonData2} />
+        <FightSimulator pokemon1={pokemonData1} pokemon2={pokemonData2} allPokemon={allPokemon} />
 
         {/* Stats comparison below the simulator */}
         <PokemonPlot
@@ -814,6 +815,9 @@ async function PokemonComparisonView({ id1, id2 }: { id1: string; id2: string })
 
         <FightCombinationsSlider combinations={combinations} allPokemon={allPokemon} />
       </div>
+
+      {/* Email Popup - shows after 10 seconds */}
+      <EmailPopup />
     </>
   );
 }

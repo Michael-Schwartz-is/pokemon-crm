@@ -25,10 +25,17 @@ import {
   Zap,
   ChevronDown,
 } from "lucide-react";
+import NextBattlePanel from "./NextBattlePanel";
+
+type PokemonBasic = {
+  id: string;
+  name: string;
+};
 
 interface FightSimulatorProps {
   pokemon1: Pokemon;
   pokemon2: Pokemon;
+  allPokemon?: PokemonBasic[];
 }
 
 // Helper to capitalize names
@@ -335,7 +342,7 @@ function PokemonFighter({
   );
 }
 
-export default function FightSimulator({ pokemon1, pokemon2 }: FightSimulatorProps) {
+export default function FightSimulator({ pokemon1, pokemon2, allPokemon = [] }: FightSimulatorProps) {
   const [battleState, setBattleState] = useState<BattleState>(() =>
     initializeBattle(pokemon1, pokemon2)
   );
@@ -681,28 +688,34 @@ export default function FightSimulator({ pokemon1, pokemon2 }: FightSimulatorPro
               </div>
             )}
 
-            {/* Winner banner */}
-            {battleState.status === "finished" && battleState.winner && (
-              <div className="text-center py-1 animate-fade-in">
-                <p className="text-base font-black text-amber-400">
-                  🏆 {capitalize(battleState.winner.name)} Wins!
-                </p>
-              </div>
-            )}
-
             {/* Commentary Log - expands when battle starts */}
             <div className={`overflow-hidden transition-all duration-300 ease-out ${
-              turnCards.length > 0 ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+              turnCards.length > 0 && battleState.status !== "finished" ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
             }`}>
               {turnCards.length > 0 && (
                 <CommentaryLog cards={turnCards} compact maxLines={6} />
               )}
             </div>
 
-            {/* Controls */}
-            <div className={battleState.status !== "idle" ? "pt-2 border-t border-border/30" : ""}>
-              <BattleControls compact />
-            </div>
+            {/* Next Battle Panel replaces controls when finished */}
+            {battleState.status === "finished" && battleState.winner ? (
+              <div className="pt-2 animate-fade-in space-y-2">
+                <div className="text-center">
+                  <p className="text-base font-black text-amber-400">
+                    🏆 {capitalize(battleState.winner.name)} Wins!
+                  </p>
+                </div>
+                <NextBattlePanel
+                  winner={battleState.winner}
+                  allPokemon={allPokemon}
+                  onRematch={handleReset}
+                />
+              </div>
+            ) : (
+              <div className={battleState.status !== "idle" ? "pt-2 border-t border-border/30" : ""}>
+                <BattleControls compact />
+              </div>
+            )}
           </div>
         </div>
 
@@ -734,68 +747,66 @@ export default function FightSimulator({ pokemon1, pokemon2 }: FightSimulatorPro
 
             {/* Center Action Zone */}
             <div className="flex flex-col items-center justify-center min-w-[200px] md:min-w-[280px]">
-              {/* Battle status indicator - at top */}
-              {battleState.status === "idle" && (
-                <button
-                  onClick={handleStart}
-                  className="rounded-full bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/40 hover:shadow-green-500/60 hover:scale-110 transition-all cursor-pointer w-20 h-20 sm:w-24 sm:h-24 mb-4"
-                >
-                  <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
-                </button>
-              )}
-
-              {battleState.status === "fighting" && (
-                <div className="rounded-full bg-[hsl(var(--fire))] flex items-center justify-center animate-pulse shadow-lg shadow-[hsl(var(--fire)/0.4)] w-16 h-16 sm:w-20 sm:h-20 mb-4">
-                  <Zap className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+              {battleState.status === "finished" && battleState.winner ? (
+                <div className="w-full animate-fade-in">
+                  <div className="text-center mb-3">
+                    <p className="text-xl font-black text-amber-400">
+                      🏆 {capitalize(battleState.winner.name)} Wins!
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {battleState.currentTurn - 1} turns
+                    </p>
+                  </div>
+                  <NextBattlePanel
+                    winner={battleState.winner}
+                    allPokemon={allPokemon}
+                    onRematch={handleReset}
+                  />
                 </div>
-              )}
+              ) : (
+                <>
+                  {/* Battle status indicator - at top */}
+                  {battleState.status === "idle" && (
+                    <button
+                      onClick={handleStart}
+                      className="rounded-full bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/40 hover:shadow-green-500/60 hover:scale-110 transition-all cursor-pointer w-20 h-20 sm:w-24 sm:h-24 mb-4"
+                    >
+                      <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+                    </button>
+                  )}
 
-              {battleState.status === "paused" && (
-                <div className="rounded-full bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/40 w-16 h-16 sm:w-20 sm:h-20 mb-4">
-                  <Pause className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
-                </div>
-              )}
+                  {battleState.status === "fighting" && (
+                    <div className="rounded-full bg-[hsl(var(--fire))] flex items-center justify-center animate-pulse shadow-lg shadow-[hsl(var(--fire)/0.4)] w-16 h-16 sm:w-20 sm:h-20 mb-4">
+                      <Zap className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                    </div>
+                  )}
 
-              {battleState.status === "finished" && (
-                <button
-                  onClick={handleReset}
-                  className="rounded-full bg-gradient-to-br from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 flex items-center justify-center shadow-lg shadow-amber-500/40 hover:shadow-amber-500/60 hover:scale-110 transition-all cursor-pointer w-20 h-20 sm:w-24 sm:h-24 mb-4"
-                  title="Rematch"
-                >
-                  <RotateCcw className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
-                </button>
-              )}
+                  {battleState.status === "paused" && (
+                    <div className="rounded-full bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/40 w-16 h-16 sm:w-20 sm:h-20 mb-4">
+                      <Pause className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                    </div>
+                  )}
 
-              {/* Turn indicator */}
-              {battleState.status === "fighting" && (
-                <span className="text-xs font-mono text-muted-foreground mb-3">
-                  TURN {battleState.currentTurn}
-                </span>
-              )}
+                  {/* Turn indicator */}
+                  {battleState.status === "fighting" && (
+                    <span className="text-xs font-mono text-muted-foreground mb-3">
+                      TURN {battleState.currentTurn}
+                    </span>
+                  )}
 
-              {/* Winner banner */}
-              {battleState.status === "finished" && battleState.winner && (
-                <div className="text-center mb-3">
-                  <p className="text-xl font-black text-amber-400">
-                    🏆 {capitalize(battleState.winner.name)} Wins!
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {battleState.currentTurn - 1} turns
-                  </p>
-                </div>
-              )}
+                  {/* Commentary Log */}
+                  {turnCards.length > 0 && (
+                    <div className="w-full max-w-[320px] bg-card/50 rounded-lg border border-border/30">
+                      <CommentaryLog cards={turnCards} maxLines={8} />
+                    </div>
+                  )}
 
-              {/* Commentary Log */}
-              {turnCards.length > 0 && (
-                <div className="w-full max-w-[320px] bg-card/50 rounded-lg border border-border/30">
-                  <CommentaryLog cards={turnCards} maxLines={8} />
-                </div>
+                  {/* Controls - below commentary */}
+                  <div className="mt-4">
+                    <BattleControls hideStatusIndicator />
+                  </div>
+                </>
               )}
-
-              {/* Controls - below commentary */}
-              <div className="mt-4">
-                <BattleControls hideStatusIndicator />
-              </div>
             </div>
 
             {/* Pokemon 2 Side */}
