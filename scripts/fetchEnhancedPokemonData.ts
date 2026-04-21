@@ -437,67 +437,39 @@ async function main() {
 
   const pokemonNames = Object.keys(allPokemons);
   const totalCount = pokemonNames.length;
-  
+
   console.log(`Starting enhanced data fetch for ${totalCount} Pokemon...`);
   console.log("This will take approximately 2-3 hours due to API rate limiting.\n");
 
-  const enhancedPokemons: Record<string, EnhancedPokemon> = {};
-  const outputPath = path.join(process.cwd(), "app/data/PokemonDetails.json");
-
-  // Check if we have partial progress
-  if (fs.existsSync(outputPath)) {
-    try {
-      const existing = JSON.parse(fs.readFileSync(outputPath, "utf-8"));
-      Object.assign(enhancedPokemons, existing);
-      console.log(`Resuming from previous progress: ${Object.keys(enhancedPokemons).length} Pokemon already processed.\n`);
-    } catch {
-      console.log("Starting fresh...\n");
-    }
-  }
+  const outputDir = path.join(process.cwd(), "app/data/pokemon");
+  fs.mkdirSync(outputDir, { recursive: true });
 
   let processed = 0;
   let skipped = 0;
 
   for (const name of pokemonNames) {
+    const outPath = path.join(outputDir, `${name}.json`);
+
     // Skip if already processed
-    if (enhancedPokemons[name]) {
+    if (fs.existsSync(outPath)) {
       skipped++;
       continue;
     }
 
     processed++;
     const basePokemon = allPokemons[name];
-    
+
     console.log(`[${processed + skipped}/${totalCount}] Processing ${basePokemon.name}...`);
-    
+
     const enhanced = await fetchEnhancedPokemon(basePokemon);
-    enhancedPokemons[name] = enhanced;
-    
-    // Save progress every 10 Pokemon
-    if (processed % 10 === 0) {
-      fs.writeFileSync(outputPath, JSON.stringify(enhancedPokemons, null, 2));
-      console.log(`  Progress saved! (${processed} new, ${skipped} skipped)`);
-    }
-    
+    fs.writeFileSync(outPath, JSON.stringify(enhanced));
+
     // Delay between Pokemon to avoid rate limiting
     await delay(200);
   }
 
-  // Final save
-  fs.writeFileSync(outputPath, JSON.stringify(enhancedPokemons, null, 2));
-  
-  console.log(`\n✅ Done! Enhanced ${processed} Pokemon (${skipped} already processed).`);
-  console.log(`Data saved to ${outputPath}`);
-  
-  // Print stats
-  const withEvolutions = Object.values(enhancedPokemons).filter(p => p.evolutionChain).length;
-  const withMoves = Object.values(enhancedPokemons).filter(p => p.moves.length > 0).length;
-  const withForms = Object.values(enhancedPokemons).filter(p => p.forms.length > 0).length;
-  
-  console.log(`\nStats:`);
-  console.log(`- With evolution chains: ${withEvolutions}`);
-  console.log(`- With moves: ${withMoves}`);
-  console.log(`- With alternate forms: ${withForms}`);
+  console.log(`\nDone! Enhanced ${processed} Pokemon (${skipped} already processed).`);
+  console.log(`Per-Pokemon files saved to ${outputDir}`);
 }
 
 main().catch(console.error);

@@ -4,7 +4,7 @@ import Link from "next/link";
 import useStore from "../stores/pokemonStore";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Swords, Flame, Home, Menu, X, Sparkles, Crown, Zap, Layers, BookOpen } from "lucide-react";
+import { Swords, Flame, Home, Menu, X, Sparkles, Crown, Zap, Layers } from "lucide-react";
 
 // Category links for the browse dropdown
 const CATEGORY_LINKS = [
@@ -13,9 +13,6 @@ const CATEGORY_LINKS = [
   { href: "/roles", label: "Roles", icon: Zap, description: "Battle roles" },
   { href: "/rarity", label: "Rarity", icon: Crown, description: "Common to Mythical" },
 ];
-
-// Featured Pokemon for quick access from Pokedex link
-const FEATURED_POKEMON = "pikachu";
 
 // Iconic Pokemon for random battles (most recognizable)
 const ICONIC_POKEMON = [
@@ -104,18 +101,6 @@ export default function Navigation() {
           })}
 
           <Link
-            href={`/pokemon/${FEATURED_POKEMON}`}
-            className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-              pathname.startsWith("/pokemon")
-                ? "bg-[hsl(var(--grass)/0.15)] text-[hsl(var(--grass))]"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <BookOpen className="w-4 h-4" />
-            Pokedex
-          </Link>
-
-          <Link
             href={`/pokemon/${randomR1}/${randomR2}`}
             className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
               pathname.startsWith("/compare")
@@ -184,19 +169,6 @@ export default function Navigation() {
             })}
 
             <div className="my-2 border-t border-border/30" />
-
-            <Link
-              href={`/pokemon/${FEATURED_POKEMON}`}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`py-3 px-4 rounded-xl font-medium transition-all flex items-center gap-3 ${
-                pathname.startsWith("/pokemon")
-                  ? "bg-[hsl(var(--grass)/0.15)] text-[hsl(var(--grass))]"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-              }`}
-            >
-              <BookOpen className="w-5 h-5" />
-              Pokedex
-            </Link>
 
             <Link
               href={`/pokemon/${randomR1}/${randomR2}`}

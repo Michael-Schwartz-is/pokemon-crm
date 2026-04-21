@@ -1,5 +1,3 @@
-import * as fs from "fs";
-import path from "path";
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -35,6 +33,7 @@ import FightSimulator from "@/app/components/FightSimulator";
 // Utils
 import { Pokemon, fetchPokemon, Stats } from "@/util/CachePokemons";
 import { getPokemonDetail, getAllPokemonNames } from "@/util/fetchPokemonDetail";
+import allPokemonsData from "@/app/data/AllPokemons.json";
 import { getPokemonImageUrl } from "@/util/pokemonImage";
 import {
   getRandomPokemonName,
@@ -224,7 +223,7 @@ function generateDetailJsonLd(pokemon: Awaited<ReturnType<typeof getPokemonDetai
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-        { "@type": "ListItem", position: 2, name: "Pokedex", item: `${baseUrl}/pokemon` },
+        { "@type": "ListItem", position: 2, name: "Pokedex", item: baseUrl },
         { "@type": "ListItem", position: 3, name: capitalize(pokemon.name), item: `${baseUrl}/pokemon/${pokemon.name}` },
       ],
     },
@@ -354,10 +353,7 @@ async function PokemonDetailView({ name }: { name: string }) {
   const imageUrl = pokemon.sprites?.official || getPokemonImageUrl(pokemon.id);
 
   // Load all Pokemon for the battle selector
-  const filePath = path.join(process.cwd(), "app/data/AllPokemons.json");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const allPokemons: Record<string, Pokemon> = JSON.parse(fileContent);
-  const pokemonsList = Object.values(allPokemons);
+  const pokemonsList = Object.values(allPokemonsData as Record<string, Pokemon>);
 
   // Get prev/next Pokemon names for navigation (by ID)
   const findPokemonNameById = (id: number): string | null => {
