@@ -1,32 +1,57 @@
-import { 
-  Pokemon, 
-  EnhancedPokemon, 
-  EvolutionNode, 
-  MoveLearn, 
-  AbilityDetail, 
+import fs from "fs";
+import path from "path";
+import {
+  Pokemon,
+  EnhancedPokemon,
+  EvolutionNode,
+  MoveLearn,
+  AbilityDetail,
   PokemonForm,
   EncounterLocation,
   PokedexEntry,
   PokemonSprites
 } from "./CachePokemons";
 
-// Import base Pokemon data
+// Import base Pokemon data (1.9 MB, acceptable to keep resident — used everywhere)
 import allPokemonsData from "@/app/data/AllPokemons.json";
-// Import enhanced Pokemon data (empty object until build script runs)
-import enhancedPokemonDataImport from "@/app/data/PokemonDetails.json";
 
 const basePokemonData: Record<string, Pokemon> = allPokemonsData as Record<string, Pokemon>;
-const enhancedPokemonData: Record<string, EnhancedPokemon> = enhancedPokemonDataImport as unknown as Record<string, EnhancedPokemon>;
 
-// Cache for on-demand fetched data
+// Per-request in-memory cache for enhanced data so repeat reads within a single
+// render don't hit the filesystem twice. Warm Lambdas will reuse this across invocations.
+const enhancedCache: Record<string, EnhancedPokemon> = {};
+
+// Cache for on-demand API-fetched data (Pokemon not in local files)
 const fetchCache: Record<string, EnhancedPokemon> = {};
+
+const DETAILS_DIR = path.join(process.cwd(), "app/data/pokemon");
+
+/**
+ * Load enhanced Pokemon details from disk for a single Pokemon.
+ * Returns undefined if no detail file exists yet (pre-build state or unknown name).
+ */
+function loadEnhancedFromDisk(normalizedName: string): EnhancedPokemon | undefined {
+  if (enhancedCache[normalizedName]) {
+    return enhancedCache[normalizedName];
+  }
+
+  const filePath = path.join(DETAILS_DIR, `${normalizedName}.json`);
+  try {
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const parsed = JSON.parse(raw) as EnhancedPokemon;
+    enhancedCache[normalizedName] = parsed;
+    return parsed;
+  } catch {
+    return undefined;
+  }
+}
 
 /**
  * Get Pokemon by name from local data (base or enhanced)
  */
 export function getPokemonByName(name: string): Pokemon | undefined {
   const normalizedName = name.toLowerCase();
-  return enhancedPokemonData[normalizedName] || basePokemonData[normalizedName];
+  return loadEnhancedFromDisk(normalizedName) || basePokemonData[normalizedName];
 }
 
 /**
@@ -92,12 +117,13 @@ function parseEvolutionChain(chain: any): EvolutionNode {
  */
 export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPokemon | undefined> {
   const normalizedName = nameOrId.toLowerCase();
-  
+
   // Check enhanced data first
-  if (enhancedPokemonData[normalizedName]) {
-    return enhancedPokemonData[normalizedName];
+  const fromDisk = loadEnhancedFromDisk(normalizedName);
+  if (fromDisk) {
+    return fromDisk;
   }
-  
+
   // Check fetch cache
   if (fetchCache[normalizedName]) {
     return fetchCache[normalizedName];
@@ -341,12 +367,13 @@ function createEnhancedFromBase(basePokemon: Pokemon): EnhancedPokemon {
  */
 export async function getPokemonDetail(nameOrId: string): Promise<EnhancedPokemon | undefined> {
   const normalizedName = nameOrId.toLowerCase();
-  
-  // Try enhanced data first (from pre-built JSON)
-  if (enhancedPokemonData[normalizedName]) {
-    return enhancedPokemonData[normalizedName];
+
+  // Try enhanced data first (from pre-built per-Pokemon file)
+  const fromDisk = loadEnhancedFromDisk(normalizedName);
+  if (fromDisk) {
+    return fromDisk;
   }
-  
+
   // Fallback to on-demand fetch
   return fetchEnhancedPokemon(normalizedName);
 }
