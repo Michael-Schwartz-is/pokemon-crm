@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pokefightarena",
+  "name": "pokefightarena-cf",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -14,6 +14,11 @@
   "observability": {
     "enabled": true
   },
+
+  "routes": [
+    { "pattern": "www.pokefightarena.com", "custom_domain": true },
+    { "pattern": "pokefightarena.com", "custom_domain": true }
+  ],
 
   "r2_buckets": [
     {
