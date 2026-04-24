@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import path from "path";
+import allPokemonsData from "@/app/data/AllPokemons.json";
 
 type PokemonBasic = {
   id: string;
@@ -11,22 +10,15 @@ type PokemonMetadata = {
   generation: string;
 };
 
-// Load Pokemon data from CSV
-const csvPath = path.join(process.cwd(), "pokemons.csv");
-let allPokemons: PokemonBasic[] = [];
+const allPokemonsRaw = allPokemonsData as Record<
+  string,
+  { id: number | string; name: string; types?: string[]; generation?: string }
+>;
 
-try {
-  const csvContent = fs.readFileSync(csvPath, "utf-8");
-  const lines = csvContent.split("\n").slice(1); // Skip header
-  allPokemons = lines
-    .map((line) => {
-      const [id, name] = line.split(",");
-      return { id: id?.trim(), name: name?.trim()?.toLowerCase() };
-    })
-    .filter((p) => p.id && p.name);
-} catch (e) {
-  console.error("Failed to read pokemons.csv for sitemap generation", e);
-}
+const allPokemons: PokemonBasic[] = Object.entries(allPokemonsRaw).map(([, p]) => ({
+  id: String(p.id),
+  name: p.name.toLowerCase(),
+}));
 
 /**
  * Get all Pokemon names sorted alphabetically
@@ -223,23 +215,12 @@ function loadPokemonMetadata(): Map<string, PokemonMetadata> {
   }
 
   const metadata = new Map<string, PokemonMetadata>();
-  const dataPath = path.join(process.cwd(), "app", "data", "AllPokemons.json");
-
-  try {
-    const jsonData = fs.readFileSync(dataPath, "utf-8");
-    const allPokemonData = JSON.parse(jsonData);
-
-    for (const [name, data] of Object.entries(allPokemonData)) {
-      const pokemonData = data as any;
-      metadata.set(name.toLowerCase(), {
-        types: pokemonData.types || [],
-        generation: pokemonData.generation || "",
-      });
-    }
-  } catch (e) {
-    console.error("Failed to load Pokemon metadata for sitemap prioritization", e);
+  for (const [name, data] of Object.entries(allPokemonsRaw)) {
+    metadata.set(name.toLowerCase(), {
+      types: data.types || [],
+      generation: data.generation || "",
+    });
   }
-
   pokemonMetadataCache = metadata;
   return metadata;
 }

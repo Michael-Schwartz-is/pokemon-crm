@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pokefightarena",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  "routes": [
+    { "pattern": "www.pokefightarena.com", "custom_domain": true, "override_existing_dns_record": true },
+    { "pattern": "pokefightarena.com", "custom_domain": true, "override_existing_dns_record": true }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "DATA",
+      "bucket_name": "poke-arena"
+    }
+  ],
+
+  "vars": {
+    "NEXT_PUBLIC_BASE_URL": "https://www.pokefightarena.com",
+    "NEXT_PUBLIC_POSTHOG_KEY": "phc_x7hyQlabHi6yhv7i2AhVcX5MrPBnyDFKXnZQ3xO3IRY",
+    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
+    "NEXT_PUBLIC_R2_URL": "https://pub-6fc5238d5b67437dac1ad915af3ce98b.r2.dev",
+    "MAX_COMPARISON_URLS": "70"
+  }
+}

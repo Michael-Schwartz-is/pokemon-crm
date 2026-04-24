@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import path from "path";
+import { loadJSON } from "@/util/dataLoader";
 import { Pokemon } from "@/util/CachePokemons";
 import PokemonList from "./components/PokemonList";
 import QuickBattleSearch from "./components/QuickBattleSearch";
@@ -54,9 +53,7 @@ function generateHomeSchema(pokemonCount: number) {
 }
 
 export default async function Home() {
-  const filePath = path.join(process.cwd(), "app/data/AllPokemons.json");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const allPokemons: Record<string, Pokemon> = JSON.parse(fileContent);
+  const allPokemons = await loadJSON<Record<string, Pokemon>>("data/AllPokemons.json");
 
   const pokemons = Object.values(allPokemons);
   const jsonLd = generateHomeSchema(pokemons.length);

@@ -1,6 +1,8 @@
 // cache is for AI predictions and analytics
+// NOTE: currently unused; originally read/wrote ./app/data/analytics.json on disk.
+// Stubbed for Cloudflare Workers compatibility (no filesystem). Reintroduce via R2
+// or KV if analytics persistence is needed.
 
-import fs from "fs";
 import { Pokemon } from "./CachePokemons";
 
 type Analytic = {
@@ -11,7 +13,7 @@ type Analytic = {
 type Analytics = Record<string, Analytic | undefined>;
 
 export function readAnayltics(): Analytics {
-  return JSON.parse(fs.readFileSync("./app/data/analytics.json", "utf-8"));
+  return {};
 }
 
 export function generateComparisonKey(pokemon1: Pokemon, pokemon2: Pokemon) {
@@ -34,24 +36,15 @@ export function getAnalytic(pokemon1: Pokemon, pokemon2: Pokemon): Analytic {
 }
 
 export function incrementRequestCount(pokemon1: Pokemon, pokemon2: Pokemon) {
-  const key = generateComparisonKey(pokemon1, pokemon2);
-  const content = readAnayltics();
-  content[key] ? content[key].requestCount++ : createAnalytic(pokemon1, pokemon2); //?
-  fs.writeFileSync("./app/data/analytics.json", JSON.stringify(content));
+  // No-op: analytics persistence disabled on Workers.
+  void pokemon1;
+  void pokemon2;
 }
 
 export function updatePrediction(pokemon1: Pokemon, pokemon2: Pokemon, text: string) {}
 
 export function createAnalytic(pokemon1: Pokemon, pokemon2: Pokemon) {
-  const key = generateComparisonKey(pokemon1, pokemon2);
-  const content = readAnayltics();
-  const newAnalytic: Analytic = {
-    requestCount: 1,
-    description: "",
-  };
-  content[key] = newAnalytic;
-  //handle Prediction [get from outside]
-
-  fs.writeFileSync("./app/data/analytics.json", JSON.stringify(content));
-  return newAnalytic;
+  void pokemon1;
+  void pokemon2;
+  return { requestCount: 1, description: "" };
 }

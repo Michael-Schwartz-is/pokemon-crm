@@ -1,27 +1,14 @@
-import * as fs from "fs";
-import path from "path";
 import { Pokemon } from "./CachePokemons";
+import allPokemonsData from "@/app/data/AllPokemons.json";
 
-const csvPath = path.join(process.cwd(), "pokemons.csv");
 type PokemonBasic = {
   id: string;
   name: string;
 };
 
-let pokemons: PokemonBasic[] = [];
-
-try {
-  const csvContent = fs.readFileSync(csvPath, "utf-8");
-  const lines = csvContent.split("\n").slice(1);
-  pokemons = lines
-    .map((line) => {
-      const [id, name] = line.split(",");
-      return { id, name };
-    })
-    .filter((p) => p.id && p.name);
-} catch (e) {
-  console.error("Failed to read pokemons.csv", e);
-}
+const pokemons: PokemonBasic[] = Object.entries(
+  allPokemonsData as Record<string, { id: number | string; name: string }>
+).map(([, p]) => ({ id: String(p.id), name: p.name }));
 
 export function getRandomPokemonNames(count: number): string[] {
   if (pokemons.length === 0) return [];

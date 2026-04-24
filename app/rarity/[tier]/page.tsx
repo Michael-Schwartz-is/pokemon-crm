@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import path from "path";
+import { loadJSON } from "@/util/dataLoader";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -89,9 +88,7 @@ export default async function RarityTierPage({ params }: RarityPageProps) {
   }
 
   // Load Pokemon data
-  const filePath = path.join(process.cwd(), "app/data/AllPokemons.json");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const allPokemons: Record<string, Pokemon> = JSON.parse(fileContent);
+  const allPokemons = await loadJSON<Record<string, Pokemon>>("data/AllPokemons.json");
 
   // Filter Pokemon by rarity tier
   const filteredPokemons = Object.values(allPokemons)

@@ -42,3 +42,12 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Cloudflare / OpenNext
+.open-next/
+.wrangler/
+.dev.vars
+
+# Local CI artifacts
+.lighthouseci/
+.worktrees/

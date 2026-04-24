@@ -155,7 +155,8 @@ export async function fetchPokemon(id: string): Promise<Pokemon | undefined> {
   try {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${normalizedId}`);
     if (!res.ok) return undefined;
-    const data = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await res.json() as any;
 
     const pokemonDTO: Pokemon = {
       id: data.id,

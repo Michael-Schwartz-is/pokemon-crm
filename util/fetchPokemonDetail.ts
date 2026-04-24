@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import {
   Pokemon,
   EnhancedPokemon,
@@ -11,34 +9,31 @@ import {
   PokedexEntry,
   PokemonSprites
 } from "./CachePokemons";
+import { loadJSON } from "./dataLoader";
 
 // Import base Pokemon data (1.9 MB, acceptable to keep resident — used everywhere)
 import allPokemonsData from "@/app/data/AllPokemons.json";
 
 const basePokemonData: Record<string, Pokemon> = allPokemonsData as Record<string, Pokemon>;
 
-// Per-request in-memory cache for enhanced data so repeat reads within a single
-// render don't hit the filesystem twice. Warm Lambdas will reuse this across invocations.
+// Per-request in-memory cache for enhanced data. On Workers, caches survive across
+// requests within the same isolate.
 const enhancedCache: Record<string, EnhancedPokemon> = {};
 
 // Cache for on-demand API-fetched data (Pokemon not in local files)
 const fetchCache: Record<string, EnhancedPokemon> = {};
 
-const DETAILS_DIR = path.join(process.cwd(), "app/data/pokemon");
-
 /**
- * Load enhanced Pokemon details from disk for a single Pokemon.
- * Returns undefined if no detail file exists yet (pre-build state or unknown name).
+ * Load enhanced Pokemon details from R2 storage for a single Pokemon.
+ * Returns undefined if no detail file exists (unknown name).
  */
-function loadEnhancedFromDisk(normalizedName: string): EnhancedPokemon | undefined {
+async function loadEnhancedFromDisk(normalizedName: string): Promise<EnhancedPokemon | undefined> {
   if (enhancedCache[normalizedName]) {
     return enhancedCache[normalizedName];
   }
 
-  const filePath = path.join(DETAILS_DIR, `${normalizedName}.json`);
   try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    const parsed = JSON.parse(raw) as EnhancedPokemon;
+    const parsed = await loadJSON<EnhancedPokemon>(`data/pokemon/${normalizedName}.json`);
     enhancedCache[normalizedName] = parsed;
     return parsed;
   } catch {
@@ -47,11 +42,11 @@ function loadEnhancedFromDisk(normalizedName: string): EnhancedPokemon | undefin
 }
 
 /**
- * Get Pokemon by name from local data (base or enhanced)
+ * Get Pokemon by name from local base data (synchronous lookup only).
+ * For enhanced detail use getPokemonDetail.
  */
 export function getPokemonByName(name: string): Pokemon | undefined {
-  const normalizedName = name.toLowerCase();
-  return loadEnhancedFromDisk(normalizedName) || basePokemonData[normalizedName];
+  return basePokemonData[name.toLowerCase()];
 }
 
 /**
@@ -119,7 +114,7 @@ export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPo
   const normalizedName = nameOrId.toLowerCase();
 
   // Check enhanced data first
-  const fromDisk = loadEnhancedFromDisk(normalizedName);
+  const fromDisk = await loadEnhancedFromDisk(normalizedName);
   if (fromDisk) {
     return fromDisk;
   }
@@ -147,10 +142,11 @@ export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPo
       return createEnhancedFromBase(basePokemon);
     }
 
-    const [pokemonData, speciesData] = await Promise.all([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [pokemonData, speciesData] = (await Promise.all([
       pokemonRes.json(),
       speciesRes.json(),
-    ]);
+    ])) as [any, any];
 
     // Fetch evolution chain
     let evolutionChain: EvolutionNode | null = null;
@@ -158,7 +154,8 @@ export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPo
       try {
         const evoRes = await fetch(speciesData.evolution_chain.url);
         if (evoRes.ok) {
-          const evoData = await evoRes.json();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const evoData = await evoRes.json() as any;
           evolutionChain = parseEvolutionChain(evoData.chain);
         }
       } catch {
@@ -172,7 +169,8 @@ export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPo
         try {
           const abilityRes = await fetch(a.ability.url);
           if (!abilityRes.ok) throw new Error();
-          const abilityData = await abilityRes.json();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const abilityData = await abilityRes.json() as any;
           
           const effectEntry = abilityData.effect_entries?.find(
             (e: any) => e.language.name === "en"
@@ -268,8 +266,9 @@ export async function fetchEnhancedPokemon(nameOrId: string): Promise<EnhancedPo
     try {
       const encounterRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${basePokemon.id}/encounters`);
       if (encounterRes.ok) {
-        const encounterData = await encounterRes.json();
-        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const encounterData = await encounterRes.json() as any[];
+
         // Group by location
         const locationMap = new Map<string, Set<string>>();
         for (const enc of encounterData.slice(0, 20)) { // Limit to 20 locations
@@ -369,7 +368,7 @@ export async function getPokemonDetail(nameOrId: string): Promise<EnhancedPokemo
   const normalizedName = nameOrId.toLowerCase();
 
   // Try enhanced data first (from pre-built per-Pokemon file)
-  const fromDisk = loadEnhancedFromDisk(normalizedName);
+  const fromDisk = await loadEnhancedFromDisk(normalizedName);
   if (fromDisk) {
     return fromDisk;
   }
