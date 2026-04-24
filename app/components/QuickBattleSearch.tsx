@@ -6,6 +6,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Pokemon } from "@/util/CachePokemons";
 import { getPokemonImageUrl } from "@/util/pokemonImage";
 import { Search, X, Swords, Zap, Dices } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 interface QuickBattleSearchProps {
   pokemons: Pokemon[];
@@ -257,12 +258,33 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
   }, [pokemons]);
 
   const handleRandom1 = useCallback(() => {
+    track("random_clicked", { source: "quick_battle_search", slot: 1 });
     setPokemon1(getRandomPokemon(pokemon2?.name));
   }, [getRandomPokemon, pokemon2?.name]);
 
   const handleRandom2 = useCallback(() => {
+    track("random_clicked", { source: "quick_battle_search", slot: 2 });
     setPokemon2(getRandomPokemon(pokemon1?.name));
   }, [getRandomPokemon, pokemon1?.name]);
+
+  const handleSelect1 = useCallback((p: Pokemon) => {
+    track("search_used", { source: "quick_battle_search", slot: 1, pokemon: p.name });
+    setPokemon1(p);
+  }, []);
+
+  const handleSelect2 = useCallback((p: Pokemon) => {
+    track("search_used", { source: "quick_battle_search", slot: 2, pokemon: p.name });
+    setPokemon2(p);
+  }, []);
+
+  const handleBattleClick = useCallback(() => {
+    if (!pokemon1 || !pokemon2) return;
+    track("start_battle_clicked", {
+      source: "quick_battle_search",
+      pokemon1: pokemon1.name,
+      pokemon2: pokemon2.name,
+    });
+  }, [pokemon1, pokemon2]);
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -302,7 +324,7 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
             <PokemonSearchInput
               pokemons={pokemons}
               selectedPokemon={pokemon1}
-              onSelect={setPokemon1}
+              onSelect={handleSelect1}
               onRandom={handleRandom1}
               placeholder="Search fighter..."
               label="Fighter 1"
@@ -310,19 +332,20 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
             <PokemonSearchInput
               pokemons={pokemons}
               selectedPokemon={pokemon2}
-              onSelect={setPokemon2}
+              onSelect={handleSelect2}
               onRandom={handleRandom2}
               placeholder="Search opponent..."
               label="Fighter 2"
             />
           </div>
-          
+
           {/* Battle Button - Mobile */}
           <div className="flex justify-center mt-4">
             {canBattle ? (
               <Link
                 href={`/pokemon/${pokemon1.name}/${pokemon2.name}`}
                 scroll={false}
+                onClick={handleBattleClick}
                 className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all btn-neon cursor-pointer"
               >
                 <Swords className="w-4 h-4" />
@@ -353,7 +376,7 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
             <PokemonSearchInput
               pokemons={pokemons}
               selectedPokemon={pokemon1}
-              onSelect={setPokemon1}
+              onSelect={handleSelect1}
               onRandom={handleRandom1}
               placeholder="Search fighter..."
               label="Fighter 1"
@@ -368,12 +391,13 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
               </span>
               <div className="absolute -inset-3 bg-[hsl(var(--fire)/0.1)] rounded-full blur-lg -z-10" />
             </div>
-            
+
             {/* Battle Button - Desktop */}
             {canBattle ? (
               <Link
                 href={`/pokemon/${pokemon1.name}/${pokemon2.name}`}
                 scroll={false}
+                onClick={handleBattleClick}
                 className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all btn-neon cursor-pointer"
               >
                 <Swords className="w-4 h-4" />
@@ -401,7 +425,7 @@ export default function QuickBattleSearch({ pokemons }: QuickBattleSearchProps) 
             <PokemonSearchInput
               pokemons={pokemons}
               selectedPokemon={pokemon2}
-              onSelect={setPokemon2}
+              onSelect={handleSelect2}
               onRandom={handleRandom2}
               placeholder="Search opponent..."
               label="Fighter 2"

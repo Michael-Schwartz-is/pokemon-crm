@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import useStore, { SortOption } from "../stores/pokemonStore";
+import useStore, { SortOption, Filters } from "../stores/pokemonStore";
 import { StatCategory, RarityTier } from "@/util/CachePokemons";
 import {
   ArrowUpDown,
@@ -12,6 +12,7 @@ import {
   RotateCcw,
   SlidersHorizontal,
 } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 // All Pokemon types
 const ALL_TYPES = [
@@ -196,11 +197,34 @@ export default function FilterSortPanel() {
   const {
     sortOption,
     filters,
-    setSortOption,
-    toggleFilter,
-    clearFilters,
-    setFilters,
+    setSortOption: rawSetSortOption,
+    toggleFilter: rawToggleFilter,
+    clearFilters: rawClearFilters,
+    setFilters: rawSetFilters,
   } = useStore();
+
+  const setSortOption = (value: SortOption) => {
+    track("sort_changed", { sort: value });
+    rawSetSortOption(value);
+  };
+
+  const toggleFilter = <K extends keyof Filters>(
+    key: K,
+    value: Filters[K] extends (infer U)[] ? U : never
+  ) => {
+    track("filter_applied", { filter: key, value: value as unknown });
+    rawToggleFilter(key, value);
+  };
+
+  const clearFilters = () => {
+    track("filters_cleared", {});
+    rawClearFilters();
+  };
+
+  const setFilters = (partial: Partial<Filters>) => {
+    track("filter_applied", { filter: "flag", value: partial });
+    rawSetFilters(partial);
+  };
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const mobileFiltersRef = useRef<HTMLDivElement>(null);

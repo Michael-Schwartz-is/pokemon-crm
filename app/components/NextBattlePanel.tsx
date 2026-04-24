@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Pokemon } from "@/util/CachePokemons";
 import { getPokemonImageUrl, getFallbackImageUrl } from "@/util/pokemonImage";
 import { Swords, Search, RotateCcw, X } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 type PokemonBasic = {
   id: string;
@@ -68,15 +69,25 @@ export default function NextBattlePanel({
     return basePokemon.filter((p) => p.name.toLowerCase().includes(q)).slice(0, 60);
   }, [basePokemon, query]);
 
-  const goTo = (opponentName: string) => {
+  const goTo = (opponentName: string, method: "random" | "chosen" = "chosen") => {
     if (!opponentName || opponentName === winner.name) return;
+    track(method === "random" ? "next_battle_clicked" : "opponent_chosen", {
+      winner: winner.name,
+      opponent: opponentName,
+      source: "next_battle_panel",
+    });
     router.push(`/pokemon/${winner.name}/${opponentName}`, { scroll: false });
   };
 
   const handleNextBattle = () => {
     if (basePokemon.length === 0) return;
     const pick = basePokemon[Math.floor(Math.random() * basePokemon.length)];
-    goTo(pick.name);
+    goTo(pick.name, "random");
+  };
+
+  const handleRematch = () => {
+    track("rematch_clicked", { winner: winner.name });
+    onRematch();
   };
 
   return (
@@ -93,7 +104,7 @@ export default function NextBattlePanel({
 
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={onRematch}
+              onClick={handleRematch}
               className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-card border border-border hover:border-[hsl(var(--electric)/0.5)] text-foreground font-semibold text-sm transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />

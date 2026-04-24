@@ -26,6 +26,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import NextBattlePanel from "./NextBattlePanel";
+import { track } from "@/lib/analytics";
 
 type PokemonBasic = {
   id: string;
@@ -366,6 +367,25 @@ export default function FightSimulator({ pokemon1, pokemon2, allPokemon = [] }: 
     setTurnCards([]);
   }, [pokemon1, pokemon2]);
 
+  // Fire once when a battle transitions to finished.
+  const finishedKeyRef = useRef<string>("");
+  useEffect(() => {
+    if (battleState.status !== "finished" || !battleState.winner) return;
+    // De-dupe per (pokemon1, pokemon2, winner) so strict-mode double-invocation
+    // or re-renders don't send twice.
+    const key = `${pokemon1.name}|${pokemon2.name}|${battleState.winner.name}|${battleState.currentTurn}`;
+    if (finishedKeyRef.current === key) return;
+    finishedKeyRef.current = key;
+    track("battle_finished", {
+      pokemon1: pokemon1.name,
+      pokemon2: pokemon2.name,
+      winner: battleState.winner.name,
+      loser: battleState.winner === pokemon1 ? pokemon2.name : pokemon1.name,
+      turns: battleState.currentTurn - 1,
+      winner_hp_remaining: battleState.winner === pokemon1 ? battleState.hp1 : battleState.hp2,
+    });
+  }, [battleState.status, battleState.winner, battleState.currentTurn, battleState.hp1, battleState.hp2, pokemon1, pokemon2]);
+
   // Battle loop
   useEffect(() => {
     if (battleState.status !== "fighting") return;
@@ -443,21 +463,42 @@ export default function FightSimulator({ pokemon1, pokemon2, allPokemon = [] }: 
         battleState.currentAttacker
       );
       setTurnCards(startMessages.map((msg) => ({ message: msg })));
+      track("battle_simulated", {
+        mode: "animated",
+        pokemon1: pokemon1.name,
+        pokemon2: pokemon2.name,
+        pokemon1_id: pokemon1.id,
+        pokemon2_id: pokemon2.id,
+        speed: battleState.speed,
+      });
+    } else {
+      track("battle_resumed", { pokemon1: pokemon1.name, pokemon2: pokemon2.name });
     }
     setBattleState((prev) => ({ ...prev, status: "fighting" }));
-  }, [battleState.status, battleState.currentAttacker, pokemon1, pokemon2]);
+  }, [battleState.status, battleState.currentAttacker, battleState.speed, pokemon1, pokemon2]);
 
   // Pause/Resume
   const handlePause = useCallback(() => {
-    setBattleState((prev) => ({
-      ...prev,
-      status: prev.status === "fighting" ? "paused" : "fighting",
-    }));
-  }, []);
+    setBattleState((prev) => {
+      const nextStatus = prev.status === "fighting" ? "paused" : "fighting";
+      track(nextStatus === "paused" ? "battle_paused" : "battle_resumed", {
+        pokemon1: pokemon1.name,
+        pokemon2: pokemon2.name,
+        turn: prev.currentTurn,
+      });
+      return { ...prev, status: nextStatus };
+    });
+  }, [pokemon1.name, pokemon2.name]);
 
   // Skip to end
   const handleSkip = useCallback(() => {
     const result = runCompleteBattle(pokemon1, pokemon2);
+    track("battle_skipped", {
+      pokemon1: pokemon1.name,
+      pokemon2: pokemon2.name,
+      winner: result.winner.name,
+      turns: result.totalTurns,
+    });
 
     // Generate all commentary
     const cards: Array<{
@@ -520,6 +561,10 @@ export default function FightSimulator({ pokemon1, pokemon2, allPokemon = [] }: 
 
   // Reset/Rematch
   const handleReset = useCallback(() => {
+    track("battle_reset", {
+      pokemon1: pokemon1.name,
+      pokemon2: pokemon2.name,
+    });
     setBattleState(initializeBattle(pokemon1, pokemon2));
     setTurnCards([]);
     setIsShaking(null);
@@ -528,6 +573,7 @@ export default function FightSimulator({ pokemon1, pokemon2, allPokemon = [] }: 
 
   // Change speed
   const handleSpeedChange = useCallback((speed: "slow" | "normal" | "fast") => {
+    track("battle_speed_changed", { speed });
     setBattleState((prev) => ({ ...prev, speed }));
   }, []);
 

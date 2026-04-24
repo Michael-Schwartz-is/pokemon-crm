@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Zap } from "lucide-react";
 import EmailSignupForm from "./EmailSignupForm";
+import { track } from "@/lib/analytics";
 
 const POPUP_DELAY_MS = 10000; // 10 seconds
 
@@ -24,6 +25,7 @@ export default function EmailPopup() {
     // Show popup after delay
     const timer = setTimeout(() => {
       setShouldRender(true);
+      track("email_popup_shown", {});
       // Small delay for animation
       requestAnimationFrame(() => {
         setIsVisible(true);
@@ -34,6 +36,7 @@ export default function EmailPopup() {
   }, []);
 
   const handleDismiss = () => {
+    track("email_popup_dismissed", {});
     setIsVisible(false);
     // Store dismissal in localStorage
     if (typeof window !== "undefined") {
