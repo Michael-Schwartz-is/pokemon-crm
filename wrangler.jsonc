@@ -15,11 +15,6 @@
     "enabled": true
   },
 
-  "routes": [
-    { "pattern": "www.pokefightarena.com", "custom_domain": true, "override_existing_dns_record": true },
-    { "pattern": "pokefightarena.com", "custom_domain": true, "override_existing_dns_record": true }
-  ],
-
   "r2_buckets": [
     {
       "binding": "DATA",
